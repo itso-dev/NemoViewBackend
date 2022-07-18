@@ -8,6 +8,7 @@ class HomeApplicationTests {
 
     @Test
     void contextLoads() {
+        System.out.println("fdf");
     }
 
 }
