@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jamie.home.api.dao.MemberDao">
+    <select id="getMember" resultType="com.jamie.home.api.model.MEMBER">
+        SELECT *
+        FROM MEMBER
+        WHERE MEMBER = #{member}
+            AND HIDE = 0
+    </select>
+
+    <insert id="insertMember">
+        INSERT INTO MEMBER
+        (EMAIL, PASSWORD, PHONE, NAME, NICKNAME, GENDER, BIRTHDAY, JOB, MONEY, LOCATION, CODE, ROLE)
+        VALUES
+        (#{email}, #{password}, #{phone}, #{name}, #{nickname}, #{gender}, #{birthday}, #{job}, #{money}, #{location}, #{code}, #{role})
+    </insert>
+
+    <update id="updateMember">
+        UPDATE MEMBER SET
+        PHONE = #{phone}
+        ,NICKNAME = #{nickname}
+        ,JOB = #{job}
+        ,MONEY = #{money}
+        ,LOCATION = #{location}
+        <if test="PASSWORD != null">,PASSWORD = #{password}</if>
+        WHERE MEMBER = #{member}
+    </update>
+
+    <select id="checkEmail" resultType="com.jamie.home.api.model.MEMBER">
+        SELECT *
+        FROM MEMBER
+        WHERE EMAIL = #{email}
+    </select>
+
+    <select id="checkCode" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM MEMBER WHERE CODE = #{code}
+    </select>
+
+    <update id="updateLogDate">
+        UPDATE MEMBER SET LOGDATE = now() WHERE MEMBER = #{member}
+    </update>
+</mapper>

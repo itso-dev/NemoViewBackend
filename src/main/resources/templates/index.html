@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>테스트</title>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script>
+        //var urlPath = 'http://13.125.114.252:8888/'
+        var urlPath = 'http://localhost:8888/'
+
+        function login(){
+            var data = {
+                email : 'user',
+                password : '1234'
+            };
+            $.ajax({
+                type: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-HTTP-Method-Override": "POST",
+                    "Accept":"*/*"
+                },
+                url: urlPath+"member/login",
+                data: JSON.stringify(data),
+                success: function(result) {
+                    //var jsonData = JSON.parse(result);
+                    localStorage.setItem("token", result.BODY.token);
+                    alert('로그인 성공');
+                    console.log(result);
+                },
+                error: function(result) {
+                    console.log(result);
+                }
+            });
+        }
+
+        var fileNameList = [];
+        function get(){
+            //var token = localStorage.getItem("token");
+            //console.log(new FormData(document.getElementById('fileForm')));
+            $.ajax({
+                url: urlPath+ "contact/list",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-HTTP-Method-Override": "POST",
+                    "Accept":"*/*"
+                },
+                data: JSON.stringify({}),
+                type: "POST",
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    var contact = data.BODY[0];
+                    $("#contact").val(contact.contact);
+                    $("#title").val(contact.title);
+                    $("#content").val(contact.content);
+                    $("#files").val(contact.files);
+                    var files = JSON.parse(contact.files);
+                    fileNameList = files;
+                    $("#file1").val(files[0].name);
+                    $("#file2").val(files[1].name);
+                    $("#file3").val(files[2].name);
+
+                    //alert('채널 등록 성공. 데이터 확인바람');
+                },
+                error: function (e) {
+                    console.log("ERROR : ", e);
+                }
+            });
+        }
+
+        function fileTest1(){
+            //var token = localStorage.getItem("token");
+            console.log(new FormData(document.getElementById('fileForm')));
+            $.ajax({
+                url: urlPath+ "contact/save",
+                headers: {
+                    "X-HTTP-Method-Override": "POST",
+                    //"Authorization":"Bearer "+ token
+                },
+                processData: false,  // file전송시 필수
+                contentType: false,  // file전송시 필수
+                data: new FormData(document.getElementById('fileForm')),
+                type: "POST",
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    alert('채널 등록 성공. 데이터 확인바람');
+                },
+                error: function (e) {
+                    console.log("ERROR : ", e);
+                }
+            });
+        }
+
+        var delList = [];
+        function del(name){
+            for(var i=0; i<fileNameList.length; i++){
+                if(fileNameList[i].name == name){
+                    delList.push(fileNameList.splice(i,1)[0]);
+                    break;
+                }
+            }
+            $("#after").val(JSON.stringify(fileNameList));
+            $("#delFiles").val(JSON.stringify(delList));
+        }
+
+        function fileTest2(){
+            //var token = localStorage.getItem("token");
+            $("#files").val(JSON.stringify(fileNameList));
+            var formData = new FormData(document.getElementById('fileForm'))
+            //formData.append("modiFiles",modiList);
+            formData.append("deleteFiles",JSON.stringify(delList));
+            $.ajax({
+                url: urlPath+ "contact/"+$("#contact").val(),
+                headers: {
+                    "X-HTTP-Method-Override": "PUT",
+                    //"Authorization":"Bearer "+ token
+                },
+                processData: false,  // file전송시 필수
+                contentType: false,  // file전송시 필수
+                data: formData,
+                type: "PUT",
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    //alert('채널 등록 성공. 데이터 확인바람');
+                },
+                error: function (e) {
+                    console.log("ERROR : ", e);
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<!--
+<p><a href="javascript:void(0)" onclick="login()">login</a> </p>
+<p>email : <input type="text" name="email" id="email"/></p>
+-->
+<form id="fileForm" method="post" enctype="multipart/form-data">
+    <p>contact : <input type="text" name="contact" id="contact" /></p>
+    <p>member : <input type="text" name="member" value="1"/></p>
+    <p>title : <input type="text" name="title" id="title" /></p>
+    <p>content : <input type="text" name="content" id="content" /></p>
+    files : <textarea name="files" id="files" style="width: 400px; height:100px;" ></textarea>
+    <p>saveFiles :
+        <input type="file" name="saveFiles" />
+        <input type="file" name="saveFiles" />
+        <input type="file" name="saveFiles" />
+        <input type="file" name="modiFilesTest" id="modiFilesTest" onchange="addModiFile(this)"/>
+    </p>
+    <p>file1 : <input type="text" name="file1" id="file1" style="width: 400px;" onclick="del(this.value)" /></p>
+    <p>file2 : <input type="text" name="file2" id="file2" style="width: 400px;" onclick="del(this.value)" /></p>
+    <p>file3 : <input type="text" name="file3" id="file3" style="width: 400px;" onclick="del(this.value)" /></p>
+
+    <p><a href="javascript:void(0)" onclick="get()">get</a> </p>
+    <p><a href="javascript:void(0)" onclick="fileTest1()">insert</a> </p>
+    <p><a href="javascript:void(0)" onclick="fileTest2()">update</a> </p>
+    filesAfter : <textarea name="files" id="after" style="width: 400px; height:100px;"></textarea>
+    delFiles : <textarea name="files" id="delFiles" style="width: 400px; height:100px;"></textarea>
+</form>
+</body>
+</html>

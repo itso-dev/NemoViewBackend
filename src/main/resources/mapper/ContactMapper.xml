@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jamie.home.api.dao.ContactDao">
+    <sql id="contactList">
+        <if test="member != null">
+            AND MEMBER = #{member}
+        </if>
+    </sql>
+    <select id="getListContact" resultType="com.jamie.home.api.model.CONTACT">
+        SELECT *
+        FROM CONTACT
+        WHERE 1=1
+        <include refid="contactList"></include>
+        ORDER BY CONTACT DESC
+        <if test="start != null">
+            LIMIT #{start}, #{page_block}
+        </if>
+    </select>
+
+    <select id="getListContactCnt" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM CONTACT
+        WHERE 1=1
+        <include refid="contactList"></include>
+    </select>
+    
+    <insert id="insertContact">
+        INSERT CONTACT
+            (MEMBER, TITLE, CONTENT, FILES)
+        VALUES
+            (#{member},#{title},#{content},#{files});
+    </insert>
+
+    <update id="updateContact">
+        UPDATE CONTACT SET
+            TITLE = #{title}
+            ,CONTENT = #{content}
+            ,ANSWER = #{answer}
+            ,FILES = #{files}
+        WHERE CONTACT = #{contact}
+    </update>
+</mapper>

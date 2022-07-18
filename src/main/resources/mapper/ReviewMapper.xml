@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jamie.home.api.dao.ReviewDao">
+    <resultMap id="ReplyMap" type="com.jamie.home.api.model.REVIEW_REPLY">
+        <result column="REPLY" property="reply"/>
+        <result column="REVIEW" property="review"/>
+        <result column="MEMBER" property="member"/>
+        <result column="CONTENT" property="content"/>
+        <association property="memberVO" column="MEMBER" javaType="com.jamie.home.api.model.MEMBER">
+            <result column="MEMBER_PROFILE" property="profile"/>
+            <result column="MEMBER_NAME" property="name"/>
+            <result column="MEMBER_NICKNAME" property="nickname"/>
+            <collection property="keywordList" ofType="com.jamie.home.api.model.KEYWORD">
+                <result column="KEYWORD_NAME" property="name"/>
+            </collection>
+        </association>
+    </resultMap>
+
+    <select id="getListReview" resultType="com.jamie.home.api.model.REVIEW">
+        SELECT *
+        FROM REVIEW
+        WHERE 1=1
+        ORDER BY REVIEW DESC
+        <if test="start != null">
+            LIMIT #{start}, #{page_block}
+        </if>
+    </select>
+
+    <select id="getListReviewCnt" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM REVIEW
+        WHERE 1=1
+    </select>
+
+    <select id="getReview" resultType="com.jamie.home.api.model.REVIEW">
+        SELECT *
+        FROM REVIEW
+        WHERE 1=1
+            AND REVIEW = #{review}
+    </select>
+
+    <update id="updateReviewHits">
+        UPDATE REVIEW SET
+            HITS = HITS + 1
+        WHERE REVIEW = #{review}
+    </update>
+
+    <insert id="insertReview">
+        INSERT INTO REVIEW (
+            MEMBER, CATEGORY, BRAND, NAME, MNUMBER, PHOTO, VIDEO,
+            MOTIVE, PLUS, MINUS, PROPOSER, STORE, PRICE, LINK,
+            USETIME, TIP, KEYWORDS, STATE
+        ) VALUES (
+            #{member}, #{category}, #{brand}, #{name}, #{mnumber}, #{photo}, #{video},
+            #{motive}, #{plus}, #{minus}, #{proposer}, #{store}, #{price}, #{link},
+            #{usetime}, #{tip}, #{keywords}, #{state}
+        )
+    </insert>
+
+    <update id="updateReview">
+        UPDATE REVIEW SET
+            CATEGORY = #{category}
+            ,BRAND = #{brand}
+            ,NAME = #{name}
+            ,MNUMBER = #{mnumber}
+            ,PHOTO = #{photo}
+            ,VIDEO = #{video}
+            ,MOTIVE = #{motive}
+            ,PLUS = #{plus}
+            ,MINUS = #{minus}
+            ,PROPOSER = #{proposer}
+            ,STORE = #{store}
+            ,PRICE = #{price}
+            ,LINK = #{link}
+            ,USETIME = #{usetime}
+            ,TIP = #{tip}
+            ,KEYWORDS = #{keywords}
+            ,STATE = #{state}
+        WHERE REVIEW = #{review}
+    </update>
+
+    <update id="upsertReviewlike">
+        INSERT INTO REVIEW_LIKE (REVIEW, MEMBER)
+        VALUES (#{review}, #{member})
+        ON DUPLICATE KEY UPDATE DEL = !DEL
+    </update>
+
+    <select id="getListReviewReply" resultMap="ReplyMap">
+        SELECT RR.*,
+            M.MEMBER AS MEMBER_MEMBER,
+            M.PROFILE AS MEMBER_PROFILE,
+            M.NAME AS MEMBER_NAME,
+            M.NICKNAME AS MEMBER_NICKNAME,
+            CK.NAME AS KEYWORD_NAME
+        FROM REVIEW_REPLY RR
+            LEFT JOIN MEMBER M on RR.MEMBER = M.MEMBER
+            LEFT JOIN MEMBER_KEYWORD MK on M.MEMBER = MK.MEMBER
+            LEFT JOIN CATEGORY_KEYWORD CK on MK.KEYWORD = CK.KEYWORD
+        WHERE 1=1
+            AND RR.REVIEW = #{review}
+        ORDER BY RR.REPLY DESC
+        <if test="start != null">
+            LIMIT #{start}, #{page_block}
+        </if>
+    </select>
+
+    <select id="getListReviewReplyCnt" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM REVIEW_REPLY
+        WHERE 1=1
+            AND REVIEW = #{review}
+    </select>
+
+    <insert id="insertReviewReply">
+        INSERT INTO REVIEW_REPLY (
+            REVIEW, MEMBER, CONTENT
+        ) VALUES (
+            #{review}, #{member}, #{content}
+        )
+    </insert>
+
+    <select id="getListReviewKeword" resultType="com.jamie.home.api.model.KEYWORD">
+        SELECT CK.*
+        FROM REVIEW_KEYWORD RK
+            LEFT JOIN CATEGORY_KEYWORD CK on RK.KEYWORD = CK.KEYWORD
+        WHERE 1 = 1
+        AND REVIEW = #{review}
+    </select>
+
+    <select id="getListReviewLikeCnt" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM REVIEW_LIKE
+        WHERE 1=1
+            AND REVIEW = #{review}
+            AND DEL = 0
+    </select>
+
+    <select id="getListReviewLikeYn" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM REVIEW_LIKE
+        WHERE 1=1
+            AND REVIEW = #{review}
+            AND MEMBER = #{member}
+            AND DEL = 0
+    </select>
+</mapper>

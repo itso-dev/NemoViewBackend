@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!--<link rel="icon" href="../../favicon.ico">-->
+
+    <title>Welcome to Jamie's lotto page</title>
+    <script type="text/javascript" src="../js/jquery-3.1.0.min.js"></script>
+    <script type="text/javascript" src="../js/lotto.js"></script>
+    <style>
+        table {
+            width: 100%;
+            border: 0.5px solid #444444;
+        }
+        th, td {
+            border: 0.5px solid #444444;
+        }
+    </style>
+    <script>
+        var ServerUrl = "http://localhost:9999/"
+        function getNums(){
+            var data = {
+                size:$("#size").val()
+            };
+            $.ajax({
+                type: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-HTTP-Method-Override": "POST"
+                },
+                url: ServerUrl+"/lotto/recommend",
+                data: JSON.stringify(data),
+                success: function(result) {
+                    console.log(result);
+                },
+                error: function(result) {
+                    console.log(result);
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<div class="row">
+    <input type="number" id="size" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" placeholder="숫자를 반드시 입력하세요">
+    <input type="button" id="getLotto" value="검색">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Num1</th>
+            <th>Num2</th>
+            <th>Num3</th>
+            <th>Num4</th>
+            <th>Num5</th>
+            <th>Num6</th>
+        </tr>
+        </thead>
+        <tbody id="lottoList">
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
