@@ -18,12 +18,13 @@
 
     <update id="updateMember">
         UPDATE MEMBER SET
-        PHONE = #{phone}
-        ,NICKNAME = #{nickname}
-        ,JOB = #{job}
-        ,MONEY = #{money}
-        ,LOCATION = #{location}
-        <if test="PASSWORD != null">,PASSWORD = #{password}</if>
+            PHONE = #{phone}
+            ,NICKNAME = #{nickname}
+            ,JOB = #{job}
+            ,MONEY = #{money}
+            ,LOCATION = #{location}
+            ,KEYWORDS = #{keywords}
+        <if test="password != null">,PASSWORD = #{password}</if>
         WHERE MEMBER = #{member}
     </update>
 
