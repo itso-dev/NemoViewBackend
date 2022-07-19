@@ -1,7 +1,6 @@
 package com.jamie.home.api.dao;
 
 import com.jamie.home.api.model.MEMBER;
-import com.jamie.home.api.model.SEARCH;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -10,13 +9,13 @@ import org.springframework.stereotype.Repository;
 public interface MemberDao {
     MEMBER getMember(MEMBER member);
 
-    int insertMember(MEMBER member);
+    Integer insertMember(MEMBER member);
 
-    int updateMember(MEMBER member);
+    Integer updateMember(MEMBER member);
 
     MEMBER checkEmail(MEMBER member);
 
-    int checkCode(MEMBER member);
+    Integer checkCode(MEMBER member);
 
-    int updateLogDate(MEMBER member);
+    Integer updateLogDate(MEMBER member);
 }

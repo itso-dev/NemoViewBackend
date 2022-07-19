@@ -11,9 +11,9 @@
 
     <insert id="insertMember">
         INSERT INTO MEMBER
-        (EMAIL, PASSWORD, PHONE, NAME, NICKNAME, GENDER, BIRTHDAY, JOB, MONEY, LOCATION, CODE, ROLE)
+            (EMAIL, PASSWORD, PHONE, NAME, NICKNAME, GENDER, BIRTHDAY, JOB, MONEY, LOCATION, CODE, ROLE, KEYWORDS)
         VALUES
-        (#{email}, #{password}, #{phone}, #{name}, #{nickname}, #{gender}, #{birthday}, #{job}, #{money}, #{location}, #{code}, #{role})
+            (#{email}, #{password}, #{phone}, #{name}, #{nickname}, #{gender}, #{birthday}, #{job}, #{money}, #{location}, #{code}, #{role}, #{keywords})
     </insert>
 
     <update id="updateMember">

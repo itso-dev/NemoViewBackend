@@ -1,7 +1,6 @@
 package com.jamie.home.api.controller;
 
 import com.jamie.home.api.model.*;
-import com.jamie.home.api.service.ContactService;
 import com.jamie.home.api.service.ReviewService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,20 +27,10 @@ public class ReviewController {
             search.calStart();
             List<REVIEW> list = reviewService.list(search);
 
-            // 필수키워드 정보, 댓글 정보, 도움수 정보, 회원키 있을 시 도움 했는 지 정보
-            for(int i=0; i<list.size(); i++){
-                REVIEW review = new REVIEW();
-                review.setReview(list.get(i).getReview());
-                list.get(i).setKeywordList(reviewService.keywordList(review));
-                list.get(i).setReplyCnt(reviewService.replyListCnt(review));
-                list.get(i).setLikeCnt(reviewService.likeListCnt(review));
-                list.get(i).setLikeYn(reviewService.likeYn(review));
-            }
-            Integer cnt = reviewService.listCnt(search);
-            VoList<REVIEW> result = new VoList<>(cnt, list);
-            result.setPage(search.getPage(), search.getPage_block());
-
-            if(result != null){
+            if(list != null){
+                Integer cnt = reviewService.listCnt(search);
+                VoList<REVIEW> result = new VoList<>(cnt, list);
+                result.setPage(search.getPage(), search.getPage_block());
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_REVIEW_SUCCESS", result);
             } else {
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_REVIEW_NULL", null);
@@ -118,14 +107,14 @@ public class ReviewController {
     }
 
     @RequestMapping(value="/{key}/reply/list", method= RequestMethod.POST)
-    public ResponseOverlays replyList(@PathVariable("key") int key, @Validated @RequestBody REVIEW review) {
+    public ResponseOverlays listReply(@PathVariable("key") int key, @Validated @RequestBody REVIEW review) {
         try {
             review.setReview(key);
-            List<REVIEW_REPLY> list = reviewService.replyList(review);
-            Integer cnt = reviewService.replyListCnt(review);
-            VoList<REVIEW_REPLY> result = new VoList<>(cnt, list);
+            List<REVIEW_REPLY> list = reviewService.listReply(review);
 
-            if(result != null){
+            if(list != null){
+                Integer cnt = reviewService.listReplyCnt(review);
+                VoList<REVIEW_REPLY> result = new VoList<>(cnt, list);
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_REVIEW_REPLY_SUCCESS", result);
             } else {
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_REVIEW_REPLY_NULL", null);

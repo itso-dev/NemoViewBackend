@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jamie.home.api.dao.ReportDao">
+    <insert id="insertReport">
+        INSERT REPORT
+            (MEMBER, `KEY`, TYPE, TITLE, CONTENT, FILES)
+        VALUES
+            (#{member},#{key},#{type},#{title},#{content},#{files});
+    </insert>
+</mapper>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jamie.home.api.dao.QuestionDao">
+    <select id="getListQuestion" resultType="com.jamie.home.api.model.QUESTION">
+        SELECT *
+        FROM QUESTION
+        WHERE 1=1
+        ORDER BY QUESTION DESC
+        <if test="start != null">
+            LIMIT #{start}, #{page_block}
+        </if>
+    </select>
+
+    <select id="getListQuestionCnt" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM QUESTION
+        WHERE 1=1
+    </select>
+
+    <select id="getQuestion" resultType="com.jamie.home.api.model.QUESTION">
+        SELECT *
+        FROM QUESTION
+        WHERE 1=1
+            AND QUESTION = #{question}
+    </select>
+
+    <update id="updateQuestionHits">
+        UPDATE QUESTION SET
+            HITS = HITS + 1
+        WHERE QUESTION = #{question}
+    </update>
+
+    <insert id="insertQuestion">
+        INSERT INTO QUESTION
+            (MEMBER, TYPE, TITLE, CONTENT, POINT, STATE, KEYWORDS)
+        VALUES
+            (#{member}, #{type}, #{title}, #{content}, #{point}, #{state}, #{keywords})
+    </insert>
+
+    <update id="updateQuestion">
+        UPDATE QUESTION SET
+            TYPE = #{type}
+            ,TITLE = #{title}
+            ,CONTENT = #{content}
+            ,POINT = #{point}
+            ,STATE = #{state}
+            ,KEYWORDS = #{keywords}
+        WHERE QUESTION = #{question}
+    </update>
+
+    <select id="getListQuestionAnswer" resultType="com.jamie.home.api.model.QUESTION_ANSWER">
+        SELECT *
+        FROM QUESTION_ANSWER
+        WHERE 1=1
+            AND QUESTION = #{question}
+        ORDER BY ANSWER DESC
+        <if test="start != null">
+            LIMIT #{start}, #{page_block}
+        </if>
+    </select>
+
+    <select id="getListQuestionAnswerCnt" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM QUESTION_ANSWER
+        WHERE 1=1
+            AND QUESTION = #{question}
+    </select>
+
+    <insert id="insertQuestionAnswer">
+        INSERT INTO QUESTION_ANSWER
+            (QUESTION, MEMBER, CONTENT)
+        VALUES
+            (#{question}, #{member}, #{content})
+    </insert>
+
+    <update id="updateQuestionAnswerChoose">
+        UPDATE QUESTION_ANSWER SET
+        CHOOSE = !CHOOSE
+        WHERE ANSWER = #{answer}
+    </update>
+</mapper>

@@ -19,6 +19,9 @@ public class SEARCH {
     // 리뷰
     private Integer review;
 
+    // 질문
+    private Integer question;
+
     public void calStart(){
         this.start = (this.page-1) * this.page_block;
     }

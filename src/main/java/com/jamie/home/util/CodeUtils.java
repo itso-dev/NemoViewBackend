@@ -1,8 +1,5 @@
 package com.jamie.home.util;
 
-import com.jamie.home.api.model.FILE;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.util.UUID;
 
 public class CodeUtils {

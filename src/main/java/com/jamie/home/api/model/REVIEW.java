@@ -30,9 +30,9 @@ public class REVIEW {
     private String link;
     private String usetime;
     private String tip;
-    private String keywords;
     private Integer hits;
     private String state;
+    private String keywords;
 
     private ArrayList<MultipartFile> savePhotos;
     private ArrayList<MultipartFile> saveVideos;
@@ -45,5 +45,4 @@ public class REVIEW {
     private Integer replyCnt;
     private String categoryName;
     private MEMBER memberVO;
-    private List<KEYWORD> keywordList;
 }

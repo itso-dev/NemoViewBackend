@@ -32,7 +32,7 @@
         </rollingPolicy>
     </appender>
 
-    <logger name="com.jamie.home.api.controller" level="DEBUG">
+    <logger name="com.jamie.home.*" level="DEBUG">
         <appender-ref ref="SAMPLE" />
     </logger>
     <logger name="com.jamie.home.api.controller" level="DEBUG">

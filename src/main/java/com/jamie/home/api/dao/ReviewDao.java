@@ -15,23 +15,17 @@ public interface ReviewDao {
 
     REVIEW getReview(REVIEW review);
 
-    int updateReviewHits(REVIEW review);
+    Integer updateReviewHits(REVIEW review);
 
-    int insertReview(REVIEW review);
+    Integer insertReview(REVIEW review);
 
-    int updateReview(REVIEW review);
+    Integer updateReview(REVIEW review);
 
-    int upsertReviewlike(REVIEW_LIKE like);
+    Integer upsertReviewlike(REVIEW_LIKE like);
+
+    Integer insertReviewReply(REVIEW_REPLY reply);
 
     List<REVIEW_REPLY> getListReviewReply(REVIEW review);
 
-    int insertReviewReply(REVIEW_REPLY reply);
-
-    List<KEYWORD> getListReviewKeword(REVIEW review);
-
     Integer getListReviewReplyCnt(REVIEW review);
-
-    Integer getListReviewLikeCnt(REVIEW review);
-
-    Integer getListReviewLikeYn(REVIEW review);
 }

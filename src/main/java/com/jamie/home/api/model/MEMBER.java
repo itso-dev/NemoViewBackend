@@ -26,7 +26,6 @@ public class MEMBER {
     private String job;
     private String money;
     private String location;
-    private String keywords;
     private Integer point;
     private String code;
     private String swords;
@@ -34,6 +33,7 @@ public class MEMBER {
     private String profile;
     private Boolean hide;
     private Date logDate;
+    private String keywords;
     @Enumerated(EnumType.STRING)
     private ROLE role;
     private Date regDate;
@@ -41,6 +41,4 @@ public class MEMBER {
 
     //파일업로드
     private ArrayList<MultipartFile> saveFiles;
-
-    private List<KEYWORD> keywordList;
 }

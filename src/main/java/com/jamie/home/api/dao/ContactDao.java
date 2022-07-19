@@ -1,7 +1,6 @@
 package com.jamie.home.api.dao;
 
 import com.jamie.home.api.model.CONTACT;
-import com.jamie.home.api.model.FAQ;
 import com.jamie.home.api.model.SEARCH;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -15,7 +14,7 @@ public interface ContactDao {
 
     Integer getListContactCnt(SEARCH search);
 
-    int insertContact(CONTACT contact);
+    Integer insertContact(CONTACT contact);
 
-    int updateContact(CONTACT contact);
+    Integer updateContact(CONTACT contact);
 }

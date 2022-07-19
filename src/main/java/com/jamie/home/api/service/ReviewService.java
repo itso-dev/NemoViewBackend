@@ -1,15 +1,10 @@
 package com.jamie.home.api.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jamie.home.api.model.*;
 import com.jamie.home.util.FileUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -27,11 +22,11 @@ public class ReviewService extends BasicService{
         return reviewDao.getReview(review);
     }
 
-    public int upHits(REVIEW review){
+    public Integer upHits(REVIEW review){
         return reviewDao.updateReviewHits(review);
     }
 
-    public int save(REVIEW review) throws Exception {
+    public Integer save(REVIEW review) throws Exception {
         review.setPhoto(
                 FileUtils.saveFiles(
                         review.getSavePhotos(),
@@ -50,7 +45,7 @@ public class ReviewService extends BasicService{
         return reviewDao.insertReview(review);
     }
 
-    public int modi(REVIEW review) throws Exception {
+    public Integer modi(REVIEW review) throws Exception {
         review.setPhoto(
                 FileUtils.modiFiles(
                         review.getPhoto(),
@@ -73,31 +68,19 @@ public class ReviewService extends BasicService{
         return reviewDao.updateReview(review);
     }
 
-    public int like(REVIEW_LIKE like) {
+    public Integer like(REVIEW_LIKE like) {
         return reviewDao.upsertReviewlike(like);
     }
 
-    public List<REVIEW_REPLY> replyList(REVIEW review) {
-        return reviewDao.getListReviewReply(review);
-    }
-
-    public int saveReply(REVIEW_REPLY reply) {
+    public Integer saveReply(REVIEW_REPLY reply) {
         return reviewDao.insertReviewReply(reply);
     }
 
-    public List<KEYWORD> keywordList(REVIEW review) {
-        return reviewDao.getListReviewKeword(review);
+    public List<REVIEW_REPLY> listReply(REVIEW review) {
+        return reviewDao.getListReviewReply(review);
     }
 
-    public Integer replyListCnt(REVIEW review) {
+    public Integer listReplyCnt(REVIEW review) {
         return reviewDao.getListReviewReplyCnt(review);
-    }
-
-    public Integer likeListCnt(REVIEW review) {
-        return reviewDao.getListReviewLikeCnt(review);
-    }
-
-    public Integer likeYn(REVIEW review) {
-        return reviewDao.getListReviewLikeYn(review);
     }
 }

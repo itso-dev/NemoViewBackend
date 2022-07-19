@@ -20,7 +20,11 @@ public class CorsConfig {
 
       source.registerCorsConfiguration("/member/**", config);
       source.registerCorsConfiguration("/faq/**", config);
+      source.registerCorsConfiguration("/review/**", config);
+      source.registerCorsConfiguration("/report/**", config);
       source.registerCorsConfiguration("/contact/**", config);
+      source.registerCorsConfiguration("/question/**", config);
+      source.registerCorsConfiguration("/info/**", config);
       return new CorsFilter(source);
    }
 

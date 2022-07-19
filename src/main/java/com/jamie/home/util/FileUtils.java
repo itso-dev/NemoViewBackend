@@ -14,6 +14,7 @@ import java.util.*;
 public class FileUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(FileUtils.class);
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     public static FILE fileUpload(MultipartFile file, String uploadDir) {
         try {
@@ -96,7 +97,6 @@ public class FileUtils {
             }
 
             if(fileList.size() != 0){
-                ObjectMapper mapper = new ObjectMapper();
                 result = mapper.writeValueAsString(fileList);
             } else {
                 // 모든 input file에서 파일을 선택하지 않은경우
@@ -110,9 +110,11 @@ public class FileUtils {
 
     public static String modiFiles(String files, String deleteFiles, ArrayList<MultipartFile> saveFiles, String uploadDir) throws Exception{
         String result = "[]";
-        ObjectMapper mapper = new ObjectMapper();
         // 사진 수정
-        List<FILE> fileList = Arrays.asList(mapper.readValue(files, FILE[].class));
+        List<FILE> fileList = new ArrayList<>();
+        if("[]".equals(files)){
+            fileList = Arrays.asList(mapper.readValue(files, FILE[].class));
+        }
         List<FILE> newFileList = new ArrayList<>();
         if(deleteFiles != null){
             // 기존 파일 삭제

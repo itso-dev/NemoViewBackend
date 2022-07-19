@@ -1,8 +1,10 @@
 package com.jamie.home.api.controller;
 
-import com.jamie.home.api.model.*;
+import com.jamie.home.api.model.CONTACT;
+import com.jamie.home.api.model.ResponseOverlays;
+import com.jamie.home.api.model.SEARCH;
+import com.jamie.home.api.model.VoList;
 import com.jamie.home.api.service.ContactService;
-import com.jamie.home.api.service.FaqService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +28,10 @@ public class ContactController {
     public ResponseOverlays list(@Validated @RequestBody SEARCH search) {
         try {
             List<CONTACT> list = contactService.list(search);
-            Integer cnt = contactService.listCnt(search);
-            VoList<CONTACT> result = new VoList<>(cnt, list);
 
-            if(result != null){
+            if(list != null){
+                Integer cnt = contactService.listCnt(search);
+                VoList<CONTACT> result = new VoList<>(cnt, list);
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_CONTACT_SUCCESS", result);
             } else {
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CONTACT_NULL", null);
