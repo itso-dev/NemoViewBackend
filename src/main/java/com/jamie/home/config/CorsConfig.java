@@ -25,6 +25,7 @@ public class CorsConfig {
       source.registerCorsConfiguration("/contact/**", config);
       source.registerCorsConfiguration("/question/**", config);
       source.registerCorsConfiguration("/info/**", config);
+      source.registerCorsConfiguration("/point/**", config);
       return new CorsFilter(source);
    }
 

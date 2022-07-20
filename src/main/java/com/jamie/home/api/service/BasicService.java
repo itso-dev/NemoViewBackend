@@ -26,4 +26,8 @@ public class BasicService {
     ReportDao reportDao;
     @Autowired
     QuestionDao questionDao;
+    @Autowired
+    PointDao pointDao;
+    @Autowired
+    InfoDao infoDao;
 }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jamie.home.api.dao.InfoDao">
+    <sql id="infoList">
+        <if test="member != null">
+            AND MEMBER = #{member}
+        </if>
+        <if test="del != null">
+            AND DEL = #{del}
+        </if>
+    </sql>
+    <select id="getListInfo" resultType="com.jamie.home.api.model.INFO">
+        SELECT *
+        FROM INFO
+        WHERE 1=1
+        <include refid="infoList"></include>
+        ORDER BY INFO DESC
+    </select>
+
+    <select id="getListInfoCnt" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM INFO
+        WHERE 1=1
+        <include refid="infoList"></include>
+    </select>
+    
+    <insert id="insertInfo">
+        INSERT INTO INFO
+            (MEMBER, `KEY`, TITLE, CONTENT, THUMB, TYPE)
+        VALUES
+            (#{member}, #{key}, #{title}, #{content}, #{thumb}, #{type})
+    </insert>
+
+    <update id="updateInfoDel">
+        UPDATE INFO SET
+            DEL = true
+        WHERE 1=1
+            AND MEMBER = #{member}
+        <if test="info != null">
+            AND INFO = #{info}
+        </if>
+    </update>
+</mapper>

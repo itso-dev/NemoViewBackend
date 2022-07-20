@@ -22,6 +22,9 @@ public class SEARCH {
     // 질문
     private Integer question;
 
+    // 알림
+    private Boolean del;
+
     public void calStart(){
         this.start = (this.page-1) * this.page_block;
     }

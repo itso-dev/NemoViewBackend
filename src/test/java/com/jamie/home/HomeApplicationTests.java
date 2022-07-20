@@ -15,7 +15,7 @@ class HomeApplicationTests {
 
     @Test
     void contextLoads() {
-        Keywords k1 = new Keywords("1","test1");
+        /*Keywords k1 = new Keywords("1","test1");
         Keywords k2 = new Keywords("1","test2");
         Keywords k3 = new Keywords("1","test3");
         Keywords k4 = new Keywords("2","test4");
@@ -37,7 +37,7 @@ class HomeApplicationTests {
             System.out.println("::::::::::::::result" + result);
         } catch (Exception e){
 
-        }
+        }*/
 
     }
 
