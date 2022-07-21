@@ -46,6 +46,7 @@
             ,POINT = #{point}
             ,STATE = #{state}
             ,KEYWORDS = #{keywords}
+            ,UPDDATE = now()
         WHERE QUESTION = #{question}
     </update>
 
@@ -76,7 +77,12 @@
 
     <update id="updateQuestionAnswerChoose">
         UPDATE QUESTION_ANSWER SET
-        CHOOSE = !CHOOSE
+            CHOOSE = !CHOOSE
+            ,UPDDATE = now()
         WHERE ANSWER = #{answer}
+    </update>
+
+    <update id="updateQuestionState">
+        UPDATE QUESTION SET STATE = #{state} WHERE QUESTION = #{question}
     </update>
 </mapper>

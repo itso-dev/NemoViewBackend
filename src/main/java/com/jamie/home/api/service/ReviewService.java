@@ -83,4 +83,8 @@ public class ReviewService extends BasicService{
     public Integer listReplyCnt(REVIEW review) {
         return reviewDao.getListReviewReplyCnt(review);
     }
+
+    public Integer modiReviewState(REVIEW review){
+        return reviewDao.updateReviewState(review);
+    }
 }

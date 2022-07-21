@@ -30,4 +30,6 @@ public class BasicService {
     PointDao pointDao;
     @Autowired
     InfoDao infoDao;
+    @Autowired
+    CategoryDao categoryDao;
 }

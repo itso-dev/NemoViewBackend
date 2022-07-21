@@ -51,4 +51,8 @@ public class QuestionService extends BasicService{
     public Integer choose(QUESTION_ANSWER answer) {
         return questionDao.updateQuestionAnswerChoose(answer);
     }
+
+    public Integer modiQuestionState(QUESTION question) {
+        return questionDao.updateQuestionState(question);
+    }
 }

@@ -16,12 +16,12 @@ public class VoList<T> {
     @JsonProperty("PAGE_BLOCK")
     public int PAGE_BLOCK;
     @SuppressWarnings({"unused", "WeakerAccess"})
-    @JsonProperty("BODY")
-    public List<T> BODY;
+    @JsonProperty("LIST")
+    public List<T> LIST;
 
-    public VoList(int CNT, List<T> BODY) {
+    public VoList(int CNT, List<T> LIST) {
         this.CNT = CNT;
-        this.BODY = BODY;
+        this.LIST = LIST;
     }
 
     public void setPage(int PAGE, int PAGE_BLOCK){

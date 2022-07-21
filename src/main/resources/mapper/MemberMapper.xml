@@ -2,11 +2,34 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
 
 <mapper namespace="com.jamie.home.api.dao.MemberDao">
+    <sql id="memberList">
+        AND MEMBER != 1
+        <if test="admin == null">
+            AND HIDE = 0
+        </if>
+    </sql>
+    <select id="getListMember" resultType="com.jamie.home.api.model.MEMBER">
+        SELECT *
+        FROM MEMBER
+        WHERE 1=1
+        <include refid="memberList"></include>
+        ORDER BY MEMBER DESC
+        <if test="start != null">
+            LIMIT #{start}, #{page_block}
+        </if>
+    </select>
+
+    <select id="getListMemberCnt" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM MEMBER
+        WHERE 1=1
+        <include refid="memberList"></include>
+    </select>
+
     <select id="getMember" resultType="com.jamie.home.api.model.MEMBER">
         SELECT *
         FROM MEMBER
         WHERE MEMBER = #{member}
-            AND HIDE = 0
     </select>
 
     <insert id="insertMember">
@@ -24,6 +47,7 @@
             ,MONEY = #{money}
             ,LOCATION = #{location}
             ,KEYWORDS = #{keywords}
+            ,UPDDATE = now()
         <if test="password != null">,PASSWORD = #{password}</if>
         WHERE MEMBER = #{member}
     </update>
@@ -40,5 +64,13 @@
 
     <update id="updateLogDate">
         UPDATE MEMBER SET LOGDATE = now() WHERE MEMBER = #{member}
+    </update>
+
+    <update id="updateMemberKeywords">
+        UPDATE MEMBER SET KEYWORDS = #{keywords} WHERE MEMBER = #{member}
+    </update>
+
+    <update id="updateMemberHide">
+        UPDATE MEMBER SET HIDE = TRUE WHERE MEMBER = #{member}
     </update>
 </mapper>

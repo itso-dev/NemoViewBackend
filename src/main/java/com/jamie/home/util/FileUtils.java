@@ -112,7 +112,7 @@ public class FileUtils {
         String result = "[]";
         // 사진 수정
         List<FILE> fileList = new ArrayList<>();
-        if("[]".equals(files)){
+        if(files != null){
             fileList = Arrays.asList(mapper.readValue(files, FILE[].class));
         }
         List<FILE> newFileList = new ArrayList<>();

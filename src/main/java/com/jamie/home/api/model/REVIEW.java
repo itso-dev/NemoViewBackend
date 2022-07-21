@@ -34,10 +34,15 @@ public class REVIEW {
     private String state;
     private String keywords;
 
+    // 파일업로드
     private ArrayList<MultipartFile> savePhotos;
     private ArrayList<MultipartFile> saveVideos;
     private String deletePhotos;
     private String deleteVideos;
+
+    // 키워드
+    List<KEYWORD> keywordList;
+    List<String> keywordInputList;
 
     // 추가로 필요한 값들
     private Integer likeYn;

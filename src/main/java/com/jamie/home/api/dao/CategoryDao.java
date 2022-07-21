@@ -1,7 +1,7 @@
 package com.jamie.home.api.dao;
 
+import com.jamie.home.api.model.CATEGORY;
 import com.jamie.home.api.model.CONTACT;
-import com.jamie.home.api.model.POINT;
 import com.jamie.home.api.model.SEARCH;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -10,12 +10,8 @@ import java.util.List;
 
 @Mapper
 @Repository
-public interface PointDao {
-    List<POINT> getListPoint(SEARCH search);
+public interface CategoryDao {
+    List<CATEGORY> getListCategory(SEARCH search);
 
-    Integer getListPointCnt(SEARCH search);
-
-    Integer insertPoint(POINT point);
-
-    Integer updatePointState(POINT point);
+    Integer getListCategoryCnt(SEARCH search);
 }

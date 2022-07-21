@@ -30,4 +30,6 @@ public interface QuestionDao {
     Integer insertQuestionAnswer(QUESTION_ANSWER answer);
 
     Integer updateQuestionAnswerChoose(QUESTION_ANSWER answer);
+
+    Integer updateQuestionState(QUESTION question);
 }

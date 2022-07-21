@@ -38,6 +38,7 @@
             ,CONTENT = #{content}
             ,ANSWER = #{answer}
             ,FILES = #{files}
+            ,UPDDATE = now()
         WHERE CONTACT = #{contact}
     </update>
 </mapper>

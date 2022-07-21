@@ -75,7 +75,7 @@ public class MemberController {
     }
 
     @RequestMapping(value="/{key}", method= RequestMethod.PUT)
-    public ResponseOverlays get(@PathVariable("key") int key, @Validated @RequestBody MEMBER member) {
+    public ResponseOverlays modi(@PathVariable("key") int key, @Validated @RequestBody MEMBER member) {
         try {
             member.setMember(key);
             int result = memberService.modi(member);
@@ -130,6 +130,22 @@ public class MemberController {
         } catch (Exception e){
             logger.error(e.getLocalizedMessage());
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_MEMBER_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/{key}/keywords", method= RequestMethod.PUT)
+    public ResponseOverlays modiKeywords(@PathVariable("key") int key, @Validated @RequestBody MEMBER member) {
+        try {
+            member.setMember(key);
+            int result = memberService.modiKeywords(member);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_MEMBER_NOT_SAVE", null);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_MEMBER_SUCCESS", member);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_MEMBER_FAIL", null);
         }
     }
 }

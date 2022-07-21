@@ -25,6 +25,10 @@ public class SEARCH {
     // 알림
     private Boolean del;
 
+    // 관리자
+    private Boolean state;
+    private Boolean admin;
+
     public void calStart(){
         this.start = (this.page-1) * this.page_block;
     }

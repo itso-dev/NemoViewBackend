@@ -69,6 +69,7 @@
             ,TIP = #{tip}
             ,STATE = #{state}
             ,KEYWORDS = #{keywords}
+            ,UPDDATE = now()
         WHERE REVIEW = #{review}
     </update>
 
@@ -106,6 +107,10 @@
         WHERE 1=1
             AND REVIEW = #{review}
     </select>
+
+    <update id="updateReviewState">
+        UPDATE REVIEW SET STATE = #{state} WHERE REVIEW = #{review}
+    </update>
 
     <resultMap id="ReviewMap" type="com.jamie.home.api.model.REVIEW">
         <result column="REVIEW" property="review"/>

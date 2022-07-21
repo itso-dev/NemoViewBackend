@@ -2,13 +2,14 @@ package com.jamie.home.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jamie.home.api.model.KEYWORD;
 import com.jamie.home.api.model.Keywords;
 import com.jamie.home.api.model.MEMBER;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-import java.util.UUID;
 
 public class KeywordUtils {
     public static final String commonType = "1";        // 공통
@@ -72,5 +73,30 @@ public class KeywordUtils {
         if (Integer.parseInt(month) * 100 + Integer.parseInt(day) > currentMonth * 100 + currentDay) age--;
 */
         return  result;
+    }
+
+    public static List<Keywords> getKeywordInMemberByType(String type, String keywords) throws JsonProcessingException {
+        List<Keywords> result = new ArrayList<>();
+        List<Keywords> keywordsList = new ArrayList<>();
+        if(keywords != null){
+            keywordsList = Arrays.asList(mapper.readValue(keywords, Keywords[].class));
+        }
+        for(Keywords k : keywordsList){
+            if(type.equals(k.getType())){
+                result.add(k);
+            }
+        }
+        return result;
+    }
+
+    public static List<Keywords> getMandatoryKeyword(List<KEYWORD> keywordList) {
+        List<Keywords> list = new ArrayList<>();
+
+        if(keywordList != null){
+            for(KEYWORD k : keywordList){
+                list.add(new Keywords(mandatoryType, k.getName()));
+            }
+        }
+        return list;
     }
 }

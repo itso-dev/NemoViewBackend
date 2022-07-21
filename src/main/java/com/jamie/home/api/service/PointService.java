@@ -23,4 +23,7 @@ public class PointService extends BasicService{
     public Integer save(POINT point) throws Exception {
         return pointDao.insertPoint(point);
     }
+    public Integer modiPointState(POINT point) {
+        return pointDao.updatePointState(point);
+    }
 }

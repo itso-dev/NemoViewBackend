@@ -31,4 +31,8 @@
         VALUES
             (#{member},#{type},#{value},#{content},#{state});
     </insert>
+
+    <update id="updatePointState">
+        UPDATE POINT SET STATE = #{state} WHERE POINT = #{point}
+    </update>
 </mapper>

@@ -35,6 +35,7 @@
     <update id="updateInfoDel">
         UPDATE INFO SET
             DEL = true
+            ,UPDDATE = now()
         WHERE 1=1
             AND MEMBER = #{member}
         <if test="info != null">
