@@ -17,4 +17,24 @@
         FROM FAQ
         WHERE 1=1
     </select>
+
+    <insert id="insertFaq">
+        INSERT INTO FAQ
+            (TYPE, STATE, TITLE, CONTENT)
+        VALUES
+            (#{type}, #{state}, #{title}, #{content})
+    </insert>
+
+    <select id="getFaq" resultType="com.jamie.home.api.model.FAQ">
+        SELECT * FROM FAQ WHERE FAQ = #{faq}
+    </select>
+
+    <update id="updateFaq">
+        UPDATE FAQ SET
+            TYPE = #{type}
+            ,STATE = #{state}
+            ,TITLE = #{title}
+            ,CONTENT = #{content}
+        WHERE FAQ = #{faq}
+    </update>
 </mapper>

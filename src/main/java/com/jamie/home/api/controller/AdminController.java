@@ -27,6 +27,10 @@ public class AdminController {
     @Autowired
     private PointService pointService;
     @Autowired
+    private CategoryService categoryService;
+    @Autowired
+    private BannerService bannerService;
+    @Autowired
     private ContactService contactService;
     @Autowired
     private FaqService faqService;
@@ -198,7 +202,6 @@ public class AdminController {
         try {
             QUESTION question = new QUESTION();
             question.setQuestion(key);
-            questionService.upHits(question);
             QUESTION result = questionService.get(question);
             if(result != null){
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_QUESTION_SUCCESS", result);
@@ -276,6 +279,123 @@ public class AdminController {
         } catch (Exception e){
             logger.error(e.getLocalizedMessage());
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_POINT_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/category/list", method= RequestMethod.POST)
+    public ResponseOverlays listCategory(@Validated @RequestBody SEARCH search) {
+        try {
+            List<CATEGORY> list = categoryService.list(search);
+
+            if(list != null){
+                Integer cnt = categoryService.listCnt(search);
+                VoList<CATEGORY> result = new VoList<>(cnt, list);
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_CATEGORY_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CATEGORY_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CATEGORY_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/contact/list", method= RequestMethod.POST)
+    public ResponseOverlays listContact(@Validated @RequestBody SEARCH search) {
+        try {
+            List<CONTACT> list = contactService.list(search);
+
+            if(list != null){
+                Integer cnt = contactService.listCnt(search);
+                VoList<CONTACT> result = new VoList<>(cnt, list);
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_CONTACT_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CONTACT_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CONTACT_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/contact/{key}", method= RequestMethod.PUT)
+    public ResponseOverlays modiContactAnswer(@PathVariable("key") int key, @Validated @RequestBody CONTACT contact) {
+        try {
+            contact.setContact(key);
+            int result = contactService.modiContactAnswer(contact);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_CONTACT_NOT_SAVE", null);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_CONTACT_SUCCESS", contact);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_CONTACT_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/faq/list", method= RequestMethod.POST)
+    public ResponseOverlays listFaq(@Validated @RequestBody SEARCH search) {
+        try {
+            List<FAQ> list = faqService.list(search);
+            if(list != null){
+                Integer cnt = faqService.listCnt(search);
+                VoList<FAQ> result = new VoList<>(cnt, list);
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_FAQ_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_FAQ_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_FAQ_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/faq/save", method= RequestMethod.POST)
+    public ResponseOverlays save(@Validated @RequestBody FAQ faq) {
+        try {
+            int result = faqService.save(faq);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_FAQ_NOT_SAVE", null);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_FAQ_SUCCESS", faq);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_FAQ_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/faq/{key}", method= RequestMethod.GET)
+    public ResponseOverlays getFaq(@PathVariable("key") int key) {
+        try {
+            FAQ faq = new FAQ();
+            faq.setFaq(key);
+            FAQ result = faqService.get(faq);
+            if(result != null){
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_FAQ_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_FAQ_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_FAQ_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/faq/{key}", method= RequestMethod.PUT)
+    public ResponseOverlays modiFaq(@PathVariable("key") int key, @Validated @RequestBody FAQ faq) {
+        try {
+            faq.setFaq(key);
+            int result = faqService.modi(faq);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_FAQ_NOT_SAVE", null);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_FAQ_SUCCESS", faq);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_FAQ_FAIL", null);
         }
     }
 }

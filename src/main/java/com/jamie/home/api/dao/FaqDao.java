@@ -1,6 +1,7 @@
 package com.jamie.home.api.dao;
 
 import com.jamie.home.api.model.FAQ;
+import com.jamie.home.api.model.QUESTION;
 import com.jamie.home.api.model.SEARCH;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -13,4 +14,10 @@ public interface FaqDao {
     List<FAQ> getListFaq(SEARCH search);
 
     Integer getListFaqCnt(SEARCH search);
+
+    Integer insertFaq(FAQ faq);
+
+    FAQ getFaq(FAQ faq);
+
+    Integer updateFaq(FAQ faq);
 }

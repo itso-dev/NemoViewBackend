@@ -17,4 +17,6 @@ public interface ContactDao {
     Integer insertContact(CONTACT contact);
 
     Integer updateContact(CONTACT contact);
+
+    Integer updateContactAnswer(CONTACT contact);
 }

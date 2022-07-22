@@ -36,9 +36,12 @@
         UPDATE CONTACT SET
             TITLE = #{title}
             ,CONTENT = #{content}
-            ,ANSWER = #{answer}
             ,FILES = #{files}
             ,UPDDATE = now()
         WHERE CONTACT = #{contact}
+    </update>
+
+    <update id="updateContactAnswer">
+        UPDATE CONTACT SET ANSWER = #{answer} WHERE CONTACT = #{contact}
     </update>
 </mapper>

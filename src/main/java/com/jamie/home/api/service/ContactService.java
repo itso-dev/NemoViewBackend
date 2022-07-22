@@ -43,4 +43,8 @@ public class ContactService extends BasicService{
         contact.setSaveFiles(null);
         return contactDao.updateContact(contact);
     }
+
+    public Integer modiContactAnswer(CONTACT contact){
+        return contactDao.updateContactAnswer(contact);
+    }
 }
