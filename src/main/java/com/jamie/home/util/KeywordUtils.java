@@ -75,7 +75,7 @@ public class KeywordUtils {
         return  result;
     }
 
-    public static List<Keywords> getKeywordInMemberByType(String type, String keywords) throws JsonProcessingException {
+    public static List<Keywords> getKeywordInTableType(String type, String keywords) throws JsonProcessingException {
         List<Keywords> result = new ArrayList<>();
         List<Keywords> keywordsList = new ArrayList<>();
         if(keywords != null){
@@ -89,14 +89,33 @@ public class KeywordUtils {
         return result;
     }
 
-    public static List<Keywords> getMandatoryKeyword(List<KEYWORD> keywordList) {
-        List<Keywords> list = new ArrayList<>();
-
+    public static List<Keywords> getMandatoryKeyword(String keywordList) throws JsonProcessingException {
+        List<KEYWORD> list = null;
         if(keywordList != null){
-            for(KEYWORD k : keywordList){
-                list.add(new Keywords(mandatoryType, k.getName()));
+            list = Arrays.asList(mapper.readValue(keywordList, KEYWORD[].class));
+        }
+        List<Keywords> result = new ArrayList<>();
+
+        if(list != null){
+            for(KEYWORD k : list){
+                result.add(new Keywords(mandatoryType, k.getName()));
             }
         }
-        return list;
+        return result;
+    }
+
+    public static List<Keywords> getInputKeyword(String keywordInputList) throws JsonProcessingException {
+        List<String> list = null;
+        if(keywordInputList != null){
+            list = Arrays.asList(mapper.readValue(keywordInputList, String[].class));
+        }
+        List<Keywords> result = new ArrayList<>();
+
+        if(list != null){
+            for(String k : list){
+                result.add(new Keywords(inputType, k));
+            }
+        }
+        return result;
     }
 }

@@ -32,12 +32,12 @@
         </rollingPolicy>
     </appender>
 
-    <logger name="com.jamie.home.*" level="DEBUG">
+<!--    <logger name="com.jamie.home.*" level="DEBUG">
         <appender-ref ref="SAMPLE" />
     </logger>
     <logger name="com.jamie.home.api.controller" level="DEBUG">
         <appender-ref ref="DAILY_ROLLING_FILE_APPENDER" />
-    </logger>
+    </logger>-->
     <root level="INFO">
         <appender-ref ref="DAILY_ROLLING_FILE_APPENDER" />
         <appender-ref ref="STDOUT" />

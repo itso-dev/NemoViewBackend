@@ -41,8 +41,8 @@ public class REVIEW {
     private String deleteVideos;
 
     // 키워드
-    List<KEYWORD> keywordList;
-    List<String> keywordInputList;
+    String keywordList;
+    String keywordInputList;
 
     // 추가로 필요한 값들
     private Integer likeYn;

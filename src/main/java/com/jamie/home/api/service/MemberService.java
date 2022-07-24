@@ -53,7 +53,7 @@ public class MemberService extends BasicService{
         List<Keywords> common = KeywordUtils.getCommonKeyword(member);
 
         // 수정 시 키워드 안에 있는 필수 키워드 값을 가져온다
-        List<Keywords> mandatory = KeywordUtils.getKeywordInMemberByType(KeywordUtils.mandatoryType, member.getKeywords());
+        List<Keywords> mandatory = KeywordUtils.getKeywordInTableType(KeywordUtils.mandatoryType, member.getKeywords());
 
         member.setKeywords(KeywordUtils.getKeywordsValue(common, mandatory, null));
 
@@ -70,10 +70,10 @@ public class MemberService extends BasicService{
 
     public Integer modiKeywords(MEMBER member) throws JsonProcessingException {
         MEMBER memberInfo = memberDao.getMember(member);
-        //공통키워드 추출
+        // 회원정보에서 공통키워드 추출
         List<Keywords> common = KeywordUtils.getCommonKeyword(memberInfo);
 
-        //필수키워드 추출
+        // 직접 선택한 필수키워드 추출
         List<Keywords> mandatory = KeywordUtils.getMandatoryKeyword(member.getKeywordList());
 
         member.setKeywords(KeywordUtils.getKeywordsValue(common, mandatory, null));

@@ -39,13 +39,13 @@
 
     <insert id="insertReview">
         INSERT INTO REVIEW (
-            MEMBER, CATEGORY, BRAND, NAME, MNUMBER, PHOTO, VIDEO, GRADE,
-            MOTIVE, PLUS, MINUS, PROPOSER, STORE, PRICE, LINK,
-            USETIME, TIP, KEYWORDS, STATE
+            MEMBER, CATEGORY, BRAND, NAME, MNUMBER, PHOTO, VIDEO,
+            GRADE, MOTIVE, PLUS, MINUS,
+            PROPOSER, STORE, PRICE, LINK, USETIME, TIP, KEYWORDS
         ) VALUES (
-            #{member}, #{category}, #{brand}, #{name}, #{mnumber}, #{photo}, #{video}, #{grade},
-            #{motive}, #{plus}, #{minus}, #{proposer}, #{store}, #{price}, #{link},
-            #{usetime}, #{tip}, #{state}, #{keywords}
+            #{member}, #{category}, #{brand}, #{name}, #{mnumber}, #{photo}, #{video},
+            #{grade}, #{motive}, #{plus}, #{minus},
+            #{proposer}, #{store}, #{price}, #{link}, #{usetime}, #{tip}, #{keywords}
         )
     </insert>
 
@@ -67,7 +67,6 @@
             ,LINK = #{link}
             ,USETIME = #{usetime}
             ,TIP = #{tip}
-            ,STATE = #{state}
             ,KEYWORDS = #{keywords}
             ,UPDDATE = now()
         WHERE REVIEW = #{review}

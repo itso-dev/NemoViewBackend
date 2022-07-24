@@ -2,6 +2,7 @@ package com.jamie.home.api.service;
 
 import com.jamie.home.api.model.*;
 import com.jamie.home.util.FileUtils;
+import com.jamie.home.util.KeywordUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,7 @@ public class ReviewService extends BasicService{
     }
 
     public Integer save(REVIEW review) throws Exception {
+        // 파일 저장
         review.setPhoto(
                 FileUtils.saveFiles(
                         review.getSavePhotos(),
@@ -39,6 +41,16 @@ public class ReviewService extends BasicService{
                         uploadDir
                 )
         );
+
+        MEMBER param = new MEMBER();
+        param.setMember(review.getMember());
+        List<Keywords> common = KeywordUtils.getCommonKeyword(memberDao.getMember(param));
+
+        List<Keywords> mandatory = KeywordUtils.getMandatoryKeyword(review.getKeywordList());
+
+        List<Keywords> input = KeywordUtils.getInputKeyword(review.getKeywordInputList());
+        // 키워드 저장
+        review.setKeywords(KeywordUtils.getKeywordsValue(common, mandatory, input));
 
         review.setSavePhotos(null);
         review.setSaveVideos(null);
