@@ -6,6 +6,7 @@ import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -33,6 +34,8 @@ public class REVIEW {
     private Integer hits;
     private String state;
     private String keywords;
+    private Date regdate;
+    private Date upddate;
 
     // 파일업로드
     private ArrayList<MultipartFile> savePhotos;

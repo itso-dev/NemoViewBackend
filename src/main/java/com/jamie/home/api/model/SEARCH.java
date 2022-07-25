@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @ToString
 @Getter
 @Setter
@@ -12,12 +14,19 @@ public class SEARCH {
     private Integer page;
     private Integer page_block;
     private Integer start;
+    private String orderType;
+    private String searchType;
+    private String searchKeyword;
 
     // 회원
     private Integer member;
 
     // 리뷰
     private Integer review;
+    private Integer category;
+    private Boolean videoYn;
+    private String keywords;
+    private List<String> keywordList;
 
     // 질문
     private Integer question;

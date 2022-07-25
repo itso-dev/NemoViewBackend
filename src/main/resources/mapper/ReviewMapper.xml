@@ -2,6 +2,31 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
 
 <mapper namespace="com.jamie.home.api.dao.ReviewDao">
+    <sql id="reviewList">
+        <if test="category != null">
+            AND CATEGORY = #{category}
+        </if>
+        <if test="videoYn">
+            AND VIDEO != '[]'
+        </if>
+        <if test="keywordList != null">
+            AND
+            <foreach collection="keywordList" item="keyword" separator="AND">
+                KEYWORDS LIKE CONCAT('%"',#{keyword},'"%')
+            </foreach>
+        </if>
+    </sql>
+    <sql id="reviewListOrder">
+        <if test="orderType != null">
+            ORDER BY
+            <choose>
+                <when test="orderType == 'reg_date_desc'.toString()">REGDATE DESC, </when>
+                <when test="orderType == 'like_desc'.toString()">LIKE_TOT DESC, </when>
+                <when test="orderType == 'hits_desc'.toString()">HITS DESC, </when>
+            </choose>
+            REVIEW DESC
+        </if>
+    </sql>
     <select id="getListReview" resultMap="ReviewMap">
         SELECT R.*
         <if test="member != null">
@@ -12,7 +37,8 @@
             ,(SELECT NAME FROM CATEGORY C WHERE C.CATEGORY = R.CATEGORY) CATEGORY_NAME
         FROM REVIEW R
         WHERE 1=1
-        ORDER BY R.REVIEW DESC
+        <include refid="reviewList"></include>
+        <include refid="reviewListOrder"></include>
         <if test="start != null">
             LIMIT #{start}, #{page_block}
         </if>
@@ -22,6 +48,7 @@
         SELECT COUNT(*)
         FROM REVIEW
         WHERE 1=1
+        <include refid="reviewList"></include>
     </select>
 
     <select id="getReview" resultType="com.jamie.home.api.model.REVIEW">
@@ -133,6 +160,8 @@
         <result column="HITS" property="hits"/>
         <result column="STATE" property="state"/>
         <result column="KEYWORDS" property="keywords"/>
+        <result column="REGDATE" property="regdate"/>
+        <result column="UPDDATE" property="upddate"/>
         <result column="LIKE_YN" property="likeYn"/>
         <result column="LIKE_TOT" property="likeCnt"/>
         <result column="REPLY_TOT" property="replyCnt"/>

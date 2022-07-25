@@ -118,4 +118,12 @@ public class KeywordUtils {
         }
         return result;
     }
+
+    public static List<String> getKeywordListFromSearch(String keywords) throws JsonProcessingException {
+        List<String> result = Arrays.asList(mapper.readValue(keywords, String[].class));
+        if(result.size() == 0){
+            return null;
+        }
+        return result;
+    }
 }

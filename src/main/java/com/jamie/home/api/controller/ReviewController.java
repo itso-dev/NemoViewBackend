@@ -24,13 +24,11 @@ public class ReviewController {
     @RequestMapping(value="/list", method= RequestMethod.POST)
     public ResponseOverlays list(@Validated @RequestBody SEARCH search) {
         try {
-            search.calStart();
             List<REVIEW> list = reviewService.list(search);
 
             if(list != null){
                 Integer cnt = reviewService.listCnt(search);
                 VoList<REVIEW> result = new VoList<>(cnt, list);
-                result.setPage(search.getPage(), search.getPage_block());
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_REVIEW_SUCCESS", result);
             } else {
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_REVIEW_NULL", null);

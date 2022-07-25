@@ -11,7 +11,8 @@ import java.util.List;
 @Service
 @Transactional
 public class ReviewService extends BasicService{
-    public List<REVIEW> list(SEARCH search) {
+    public List<REVIEW> list(SEARCH search) throws Exception {
+        search.setKeywordList(KeywordUtils.getKeywordListFromSearch(search.getKeywords()));
         return reviewDao.getListReview(search);
     }
 
