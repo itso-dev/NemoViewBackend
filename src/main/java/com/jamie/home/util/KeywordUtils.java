@@ -126,4 +126,12 @@ public class KeywordUtils {
         }
         return result;
     }
+
+    public static List<KEYWORD> getMandatoryKeywordForSave(String keywordList) throws JsonProcessingException {
+        List<KEYWORD> list = null;
+        if(keywordList != null){
+            list = Arrays.asList(mapper.readValue(keywordList, KEYWORD[].class));
+        }
+        return list;
+    }
 }

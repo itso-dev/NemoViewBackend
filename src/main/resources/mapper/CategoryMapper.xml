@@ -20,6 +20,39 @@
         <include refid="categoryList"></include>
     </select>
 
+    <select id="getCategoryWithKeyword" resultMap="CategoryMap">
+        SELECT C.CATEGORY, C.NAME, C.SEQ, C.STATE ,C.ICON,
+            CC.CLASSIFICATION AS CC_CLASSIFICATION, CC.NAME AS CC_NAME, CC.SEQ AS CC_SEQ, CC.STATE AS CC_STATE,
+            CK.KEYWORD AS CK_KEYWORD, CK.NAME AS CK_NAME
+        FROM CATEGORY C
+            LEFT JOIN CATEGORY_CLASSIFICATION CC on C.CATEGORY = CC.CATEGORY
+            LEFT JOIN CATEGORY_KEYWORD CK on C.CATEGORY = CK.CATEGORY AND CC.CLASSIFICATION = CK.CLASSIFICATION
+        WHERE C.CATEGORY = #{category}
+        <if test="state != null">
+            AND C.STATE = #{state}
+            AND CC.STATE = #{state}
+        </if>
+        ORDER BY C.SEQ, CC.SEQ, CK.KEYWORD
+    </select>
+
+    <resultMap id="CategoryMap" type="com.jamie.home.api.model.CATEGORY">
+        <result column="CATEGORY" property="category"/>
+        <result column="NAME" property="name"/>
+        <result column="SEQ" property="seq"/>
+        <result column="STATE" property="state"/>
+        <result column="ICON" property="icon"/>
+        <collection property="classifications" ofType="com.jamie.home.api.model.CATEGORY_CLASSIFICATION">
+            <result column="CC_CLASSIFICATION" property="classification"/>
+            <result column="CC_NAME" property="name"/>
+            <result column="CC_SEQ" property="seq"/>
+            <result column="CC_STATE" property="state"/>
+            <collection property="keywords" ofType="com.jamie.home.api.model.CATEGORY_KEYWORD">
+                <result column="CK_KEYWORD" property="keyword"/>
+                <result column="CK_NAME" property="name"/>
+            </collection>
+        </collection>
+    </resultMap>
+
     <sql id="categoryList">
         <if test="state != null">
             AND STATE = #{state}

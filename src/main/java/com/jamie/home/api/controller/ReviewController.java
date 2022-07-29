@@ -138,4 +138,20 @@ public class ReviewController {
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_REVIEW_REPLY_FAIL", null);
         }
     }
+
+    @RequestMapping(value="/category/{key}/keyword", method= RequestMethod.POST)
+    public ResponseOverlays getCategory(@PathVariable("key") int key, @Validated @RequestBody CATEGORY category) {
+        try {
+            category.setCategory(key);
+            CATEGORY result = reviewService.getCategory(category);
+            if(result != null){
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_REVIEW_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_REVIEW_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_REVIEW_FAIL", null);
+        }
+    }
 }

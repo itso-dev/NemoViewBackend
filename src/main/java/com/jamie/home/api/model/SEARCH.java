@@ -27,6 +27,7 @@ public class SEARCH {
     private Boolean videoYn;
     private String keywords;
     private List<String> keywordList;
+    private List<KEYWORD> review_keywords;
 
     // 질문
     private Integer question;

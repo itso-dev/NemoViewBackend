@@ -9,12 +9,11 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class CATEGORY {
-    private Integer category;
+public class CATEGORY_CLASSIFICATION {
+    private Integer classification;
     private String name;
     private Integer seq;
     private String state;
-    private String icon;
 
-    private List<CATEGORY_CLASSIFICATION> classifications;
+    private List<CATEGORY_KEYWORD> keywords;
 }

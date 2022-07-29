@@ -18,4 +18,5 @@ public class CategoryService extends BasicService{
     public Integer listCnt(SEARCH search) {
         return categoryDao.getListCategoryCnt(search);
     }
+
 }

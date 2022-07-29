@@ -52,10 +52,21 @@ public class ReviewService extends BasicService{
         List<Keywords> input = KeywordUtils.getInputKeyword(review.getKeywordInputList());
         // 키워드 저장
         review.setKeywords(KeywordUtils.getKeywordsValue(common, mandatory, input));
+        List<KEYWORD> keywords = KeywordUtils.getMandatoryKeywordForSave(review.getKeywordList());
 
         review.setSavePhotos(null);
         review.setSaveVideos(null);
-        return reviewDao.insertReview(review);
+        int result = reviewDao.insertReview(review);
+
+        // 리뷰 키워드 저장
+        if(keywords != null && keywords.size() != 0){
+            SEARCH search = new SEARCH();
+            search.setReview(review.getReview());
+            search.setReview_keywords(keywords);
+            reviewDao.insertReviewKeywrod(search);
+        }
+
+        return result;
     }
 
     public Integer modi(REVIEW review) throws Exception {
@@ -99,5 +110,9 @@ public class ReviewService extends BasicService{
 
     public Integer modiReviewState(REVIEW review){
         return reviewDao.updateReviewState(review);
+    }
+
+    public CATEGORY getCategory(CATEGORY category) {
+        return categoryDao.getCategoryWithKeyword(category);
     }
 }

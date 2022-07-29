@@ -64,7 +64,7 @@
         WHERE REVIEW = #{review}
     </update>
 
-    <insert id="insertReview">
+    <insert id="insertReview" parameterType="com.jamie.home.api.model.REVIEW" useGeneratedKeys="true" keyProperty="review">
         INSERT INTO REVIEW (
             MEMBER, CATEGORY, BRAND, NAME, MNUMBER, PHOTO, VIDEO,
             GRADE, MOTIVE, PLUS, MINUS,
@@ -137,6 +137,13 @@
     <update id="updateReviewState">
         UPDATE REVIEW SET STATE = #{state} WHERE REVIEW = #{review}
     </update>
+
+    <insert id="insertReviewKeywrod">
+        INSERT INTO REVIEW_KEYWORD (REVIEW, KEYWORD) VALUES
+        <foreach collection="review_keywords" item="keyword" separator=",">
+            (#{review}, #{keyword.keyword})
+        </foreach>
+    </insert>
 
     <resultMap id="ReviewMap" type="com.jamie.home.api.model.REVIEW">
         <result column="REVIEW" property="review"/>
