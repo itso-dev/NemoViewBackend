@@ -85,4 +85,7 @@ public class MemberService extends BasicService{
         return memberDao.updateMemberHide(member);
     }
 
+    public Integer modiSearchKeywords(MEMBER member) {
+        return memberDao.updateMemberSearchKeywords(member);
+    }
 }

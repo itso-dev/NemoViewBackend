@@ -3,6 +3,14 @@
 
 <mapper namespace="com.jamie.home.api.dao.ReviewDao">
     <sql id="reviewList">
+        <if test="searchKeyword != null">
+            AND (
+                NAME LIKE CONCAT('%',#{searchKeyword},'%') OR
+                MNUMBER LIKE CONCAT('%',#{searchKeyword},'%') OR
+                BRAND LIKE CONCAT('%',#{searchKeyword},'%') OR
+                KEYWORDS LIKE CONCAT('%"',#{searchKeyword},'"%')
+            )
+        </if>
         <if test="category != null">
             AND CATEGORY = #{category}
         </if>
