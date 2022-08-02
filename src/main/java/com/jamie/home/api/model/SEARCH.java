@@ -36,7 +36,7 @@ public class SEARCH {
     private Boolean del;
 
     // 관리자
-    private Boolean state;
+    private String state;
     private Boolean admin;
 
     public void calStart(){

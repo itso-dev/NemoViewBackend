@@ -17,6 +17,9 @@
         <if test="videoYn">
             AND VIDEO != '[]'
         </if>
+        <if test="state != null">
+            AND STATE = #{state}
+        </if>
         <if test="keywordList != null">
             AND
             <foreach collection="keywordList" item="keyword" separator="AND">
@@ -110,7 +113,7 @@
     <update id="upsertReviewlike">
         INSERT INTO REVIEW_LIKE (REVIEW, MEMBER)
         VALUES (#{review}, #{member})
-        ON DUPLICATE KEY UPDATE DEL = !DEL
+        ON DUPLICATE KEY UPDATE DEL = !DEL, UPDDATE = NOW()
     </update>
 
     <insert id="insertReviewReply">

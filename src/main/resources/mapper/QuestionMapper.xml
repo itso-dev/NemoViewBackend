@@ -2,11 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
 
 <mapper namespace="com.jamie.home.api.dao.QuestionDao">
+    <sql id="questionList">
+        <if test="type != null">
+            AND TYPE = #{type}
+        </if>
+    </sql>
+    <sql id="questionListOrder">
+        <if test="orderType != null">
+            ORDER BY
+            <choose>
+                <when test="orderType == 'reg_date_desc'.toString()">REGDATE DESC, </when>
+            </choose>
+            QUESTION DESC
+        </if>
+    </sql>
     <select id="getListQuestion" resultType="com.jamie.home.api.model.QUESTION">
         SELECT *
         FROM QUESTION
         WHERE 1=1
-        ORDER BY QUESTION DESC
+        <include refid="questionList"></include>
+        <include refid="questionListOrder"></include>
         <if test="start != null">
             LIMIT #{start}, #{page_block}
         </if>
@@ -16,6 +31,7 @@
         SELECT COUNT(*)
         FROM QUESTION
         WHERE 1=1
+        <include refid="questionList"></include>
     </select>
 
     <select id="getQuestion" resultType="com.jamie.home.api.model.QUESTION">
