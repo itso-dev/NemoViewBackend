@@ -15,7 +15,14 @@ public class POINT {
     private Integer member;
     private String type;
     private Integer value;
-    private Integer accrue;
     private String content;
     private String state;
+
+    public void setValues(Integer member, String type, Integer value, String content, String state) {
+        this.member = member;
+        this.type = type;
+        this.value = value;
+        this.content = content;
+        this.state = state;
+    }
 }

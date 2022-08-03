@@ -18,4 +18,6 @@ public interface PointDao {
     Integer insertPoint(POINT point);
 
     Integer updatePointState(POINT point);
+
+    Integer getPointWhenMemberInsert();
 }

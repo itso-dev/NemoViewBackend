@@ -24,13 +24,11 @@ public class QuestionController {
     @RequestMapping(value="/list", method= RequestMethod.POST)
     public ResponseOverlays list(@Validated @RequestBody SEARCH search) {
         try {
-            search.calStart();
             List<QUESTION> list = questionService.list(search);
 
             if(list != null){
                 Integer cnt = questionService.listCnt(search);
                 VoList<QUESTION> result = new VoList<>(cnt, list);
-                result.setPage(search.getPage(), search.getPage_block());
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_QUESTION_SUCCESS", result);
             } else {
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_QUESTION_NULL", null);

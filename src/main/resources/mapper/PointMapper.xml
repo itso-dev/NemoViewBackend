@@ -35,4 +35,8 @@
     <update id="updatePointState">
         UPDATE POINT SET STATE = #{state} WHERE POINT = #{point}
     </update>
+
+    <select id="getPointWhenMemberInsert" resultType="java.lang.Integer">
+        SELECT VALUE FROM ADMIN WHERE TYPE = 2
+    </select>
 </mapper>

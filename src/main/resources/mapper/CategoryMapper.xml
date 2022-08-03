@@ -30,7 +30,7 @@
         WHERE C.CATEGORY = #{category}
         <if test="state != null">
             AND C.STATE = #{state}
-            AND CC.STATE = #{state}
+            AND IFNULL(CC.STATE,1) = #{state}
         </if>
         ORDER BY C.SEQ, CC.SEQ, CK.KEYWORD
     </select>

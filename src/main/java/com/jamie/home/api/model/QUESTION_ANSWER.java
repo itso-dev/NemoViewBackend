@@ -16,4 +16,6 @@ public class QUESTION_ANSWER {
     private Integer member;
     private String content;
     private Boolean choose;
+
+    private MEMBER memberVO;
 }

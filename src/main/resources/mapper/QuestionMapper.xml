@@ -4,21 +4,28 @@
 <mapper namespace="com.jamie.home.api.dao.QuestionDao">
     <sql id="questionList">
         <if test="type != null">
-            AND TYPE = #{type}
+            AND Q.TYPE = #{type}
         </if>
     </sql>
     <sql id="questionListOrder">
         <if test="orderType != null">
             ORDER BY
             <choose>
-                <when test="orderType == 'reg_date_desc'.toString()">REGDATE DESC, </when>
+                <when test="orderType == 'reg_date_desc'.toString()">Q.REGDATE DESC, </when>
             </choose>
-            QUESTION DESC
+            Q.QUESTION DESC
         </if>
     </sql>
-    <select id="getListQuestion" resultType="com.jamie.home.api.model.QUESTION">
-        SELECT *
-        FROM QUESTION
+    <select id="getListQuestion" resultMap="QuestionMap">
+        SELECT Q.*
+            ,(SELECT COUNT(*) FROM QUESTION_ANSWER QA WHERE QA.QUESTION = Q.QUESTION AND CHOOSE = TRUE) AS ANSWER_YN
+            ,(SELECT COUNT(*) FROM QUESTION_ANSWER QA WHERE QA.QUESTION = Q.QUESTION) AS ANSWER_CNT
+            , M.MEMBER AS MEMBER_MEMBER
+            , M.PROFILE AS MEMBER_PROFILE
+            , M.NAME AS MEMBER_NAME
+            , M.NICKNAME AS MEMBER_NICKNAME
+        FROM QUESTION Q
+            LEFT JOIN MEMBER M on Q.MEMBER = M.MEMBER
         WHERE 1=1
         <include refid="questionList"></include>
         <include refid="questionListOrder"></include>
@@ -29,14 +36,21 @@
 
     <select id="getListQuestionCnt" resultType="java.lang.Integer">
         SELECT COUNT(*)
-        FROM QUESTION
+        FROM QUESTION Q
         WHERE 1=1
         <include refid="questionList"></include>
     </select>
 
-    <select id="getQuestion" resultType="com.jamie.home.api.model.QUESTION">
-        SELECT *
-        FROM QUESTION
+    <select id="getQuestion" resultMap="QuestionMap">
+        SELECT Q.*
+            ,(SELECT COUNT(*) FROM QUESTION_ANSWER QA WHERE QA.QUESTION = Q.QUESTION AND CHOOSE = TRUE) AS ANSWER_YN
+            ,(SELECT COUNT(*) FROM QUESTION_ANSWER QA WHERE QA.QUESTION = Q.QUESTION) AS ANSWER_CNT
+            , M.MEMBER AS MEMBER_MEMBER
+            , M.PROFILE AS MEMBER_PROFILE
+            , M.NAME AS MEMBER_NAME
+            , M.NICKNAME AS MEMBER_NICKNAME
+        FROM QUESTION Q
+            LEFT JOIN MEMBER M on Q.MEMBER = M.MEMBER
         WHERE 1=1
             AND QUESTION = #{question}
     </select>
@@ -49,9 +63,9 @@
 
     <insert id="insertQuestion">
         INSERT INTO QUESTION
-            (MEMBER, TYPE, TITLE, CONTENT, POINT, STATE, KEYWORDS)
+            (MEMBER, TYPE, TITLE, CONTENT, NOKEYWORD, POINT, STATE, KEYWORDS)
         VALUES
-            (#{member}, #{type}, #{title}, #{content}, #{point}, #{state}, #{keywords})
+            (#{member}, #{type}, #{title}, #{content}, #{nokeyword}, #{point}, #{state}, #{keywords})
     </insert>
 
     <update id="updateQuestion">
@@ -59,6 +73,7 @@
             TYPE = #{type}
             ,TITLE = #{title}
             ,CONTENT = #{content}
+            ,NOKEYWORD = #{nokeyword}
             ,POINT = #{point}
             ,STATE = #{state}
             ,KEYWORDS = #{keywords}
@@ -66,12 +81,18 @@
         WHERE QUESTION = #{question}
     </update>
 
-    <select id="getListQuestionAnswer" resultType="com.jamie.home.api.model.QUESTION_ANSWER">
-        SELECT *
-        FROM QUESTION_ANSWER
+    <select id="getListQuestionAnswer" resultMap="AnswerMap">
+        SELECT QA.*
+            , M.MEMBER AS MEMBER_MEMBER
+            , M.PROFILE AS MEMBER_PROFILE
+            , M.NAME AS MEMBER_NAME
+            , M.NICKNAME AS MEMBER_NICKNAME
+            , M.KEYWORDS AS MEMBER_KEYWORDS
+        FROM QUESTION_ANSWER QA
+            LEFT JOIN MEMBER M on QA.MEMBER = M.MEMBER
         WHERE 1=1
-            AND QUESTION = #{question}
-        ORDER BY ANSWER DESC
+            AND QA.QUESTION = #{question}
+        ORDER BY QA.ANSWER DESC
         <if test="start != null">
             LIMIT #{start}, #{page_block}
         </if>
@@ -101,4 +122,39 @@
     <update id="updateQuestionState">
         UPDATE QUESTION SET STATE = #{state} WHERE QUESTION = #{question}
     </update>
+
+    <resultMap id="QuestionMap" type="com.jamie.home.api.model.QUESTION">
+        <result column="QUESTION" property="question"/>
+        <result column="MEMBER" property="member"/>
+        <result column="TYPE" property="type"/>
+        <result column="TITLE" property="title"/>
+        <result column="CONTENT" property="content"/>
+        <result column="HITS" property="hits"/>
+        <result column="NOKEYWORD" property="nokeyword"/>
+        <result column="POINT" property="point"/>
+        <result column="STATE" property="state"/>
+        <result column="KEYWORDS" property="keywords"/>
+        <result column="ANSWER_YN" property="answerYn"/>
+        <result column="ANSWER_CNT" property="answerCnt"/>
+        <association property="memberVO" column="MEMBER" javaType="com.jamie.home.api.model.MEMBER">
+            <result column="MEMBER_PROFILE" property="profile"/>
+            <result column="MEMBER_NAME" property="name"/>
+            <result column="MEMBER_NICKNAME" property="nickname"/>
+            <result column="MEMBER_KEYWORDS" property="keywords"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="AnswerMap" type="com.jamie.home.api.model.QUESTION_ANSWER">
+        <result column="ANSWER" property="answer"/>
+        <result column="QUESTION" property="question"/>
+        <result column="MEMBER" property="member"/>
+        <result column="CONTENT" property="content"/>
+        <result column="CHOOSE" property="choose"/>
+        <association property="memberVO" column="MEMBER" javaType="com.jamie.home.api.model.MEMBER">
+            <result column="MEMBER_PROFILE" property="profile"/>
+            <result column="MEMBER_NAME" property="name"/>
+            <result column="MEMBER_NICKNAME" property="nickname"/>
+            <result column="MEMBER_KEYWORDS" property="keywords"/>
+        </association>
+    </resultMap>
 </mapper>

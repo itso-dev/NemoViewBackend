@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.jamie.home.api.model.*;
 import com.jamie.home.util.CodeUtils;
 import com.jamie.home.util.KeywordUtils;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,12 +37,31 @@ public class MemberService extends BasicService{
         member.setPassword(encoder.encode(member.getPassword()));
         member.setRole(ROLE.ROLE_USER);
 
-        //공통키워드 추출
+        // 공통키워드 추출
         List<Keywords> common = KeywordUtils.getCommonKeyword(member);
 
         member.setKeywords(KeywordUtils.getKeywordsValue(common, null, null));
 
-        return memberDao.insertMember(member);
+        MEMBER codeMember = memberDao.getMemberByCode(member);
+
+        Integer result = memberDao.insertMember(member);
+
+        // 회원코드 입력시 TODO
+        if(codeMember != null) {
+            Integer pointValue = pointDao.getPointWhenMemberInsert();
+            POINT point = new POINT();
+            point.setValues(member.getMember(), "1", pointValue, "회원가입", "1");
+            pointDao.insertPoint(point);
+            member.setPoint(pointValue);
+            memberDao.updateMemberPoint(member);
+            // 코드주인도 적립
+            point.setMember(codeMember.getMember());
+            pointDao.insertPoint(point);
+            codeMember.setPoint(pointValue);
+            memberDao.updateMemberPoint(codeMember);
+        }
+
+        return result;
     }
 
     public Integer modi(MEMBER member) throws JsonProcessingException {

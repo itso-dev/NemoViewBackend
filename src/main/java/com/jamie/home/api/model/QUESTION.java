@@ -17,7 +17,12 @@ public class QUESTION {
     private String title;
     private String content;
     private Integer hits;
+    private Boolean nokeyword;
     private Integer point;
     private String state;
     private String keywords;
+
+    private Integer answerYn;
+    private Integer answerCnt;
+    private MEMBER memberVO;
 }

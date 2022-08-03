@@ -31,4 +31,8 @@ public interface MemberDao {
     Integer updateMemberHide(MEMBER member);
 
     Integer updateMemberSearchKeywords(MEMBER member);
+
+    MEMBER getMemberByCode(MEMBER member);
+
+    Integer updateMemberPoint(MEMBER member);
 }

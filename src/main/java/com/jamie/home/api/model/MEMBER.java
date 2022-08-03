@@ -42,5 +42,6 @@ public class MEMBER {
     //파일업로드
     private ArrayList<MultipartFile> saveFiles;
 
-    String keywordList;
+    private String keywordList;
+    private String inputCode;
 }
