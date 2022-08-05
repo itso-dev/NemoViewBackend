@@ -87,4 +87,8 @@
     <update id="updateMemberPoint">
         UPDATE MEMBER SET POINT = POINT + #{point} WHERE MEMBER = #{member}
     </update>
+
+    <update id="updateMemberAccount">
+        UPDATE MEMBER SET ACCOUNT = #{account} WHERE MEMBER = #{member}
+    </update>
 </mapper>

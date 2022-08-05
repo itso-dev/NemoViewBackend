@@ -17,4 +17,10 @@ public class MainService extends BasicService{
     public Integer listCategoryCnt(SEARCH search) {
         return categoryDao.getListCategoryCnt(search);
     }
+
+    public Integer getAdminValue(SEARCH search) {
+        Integer pointTot = pointDao.getAdminValue(search);
+        Integer minusPoint = pointDao.getListPointMinusTot();
+        return pointTot - minusPoint;
+    }
 }

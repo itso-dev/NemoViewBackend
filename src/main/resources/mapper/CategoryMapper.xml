@@ -2,6 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
 
 <mapper namespace="com.jamie.home.api.dao.CategoryDao">
+    <sql id="categoryList">
+        <if test="state != null">
+            AND STATE = #{state}
+        </if>
+    </sql>
+
     <select id="getListCategory" resultType="com.jamie.home.api.model.CATEGORY">
         SELECT *
         FROM CATEGORY
@@ -52,10 +58,4 @@
             </collection>
         </collection>
     </resultMap>
-
-    <sql id="categoryList">
-        <if test="state != null">
-            AND STATE = #{state}
-        </if>
-    </sql>
 </mapper>

@@ -48,7 +48,9 @@ public class MemberService extends BasicService{
 
         // 회원코드 입력시 TODO
         if(codeMember != null) {
-            Integer pointValue = pointDao.getPointWhenMemberInsert();
+            SEARCH search = new SEARCH();
+            search.setType("2");
+            Integer pointValue = pointDao.getAdminValue(search);
             POINT point = new POINT();
             point.setValues(member.getMember(), "1", pointValue, "회원가입", "1");
             pointDao.insertPoint(point);
@@ -56,6 +58,7 @@ public class MemberService extends BasicService{
             memberDao.updateMemberPoint(member);
             // 코드주인도 적립
             point.setMember(codeMember.getMember());
+            point.setContent("코드입력");
             pointDao.insertPoint(point);
             codeMember.setPoint(pointValue);
             memberDao.updateMemberPoint(codeMember);
@@ -107,5 +110,9 @@ public class MemberService extends BasicService{
 
     public Integer modiSearchKeywords(MEMBER member) {
         return memberDao.updateMemberSearchKeywords(member);
+    }
+
+    public int modiAccount(MEMBER member) {
+        return memberDao.updateMemberAccount(member);
     }
 }

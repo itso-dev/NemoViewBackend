@@ -19,5 +19,7 @@ public interface PointDao {
 
     Integer updatePointState(POINT point);
 
-    Integer getPointWhenMemberInsert();
+    Integer getAdminValue(SEARCH search);
+
+    Integer getListPointMinusTot();
 }

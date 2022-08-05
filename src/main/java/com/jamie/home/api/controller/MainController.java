@@ -42,4 +42,19 @@ public class MainController {
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CATEGORY_FAIL", null);
         }
     }
+
+    @RequestMapping(value="/admin/value", method= RequestMethod.POST)
+    public ResponseOverlays getAdminValue(@Validated @RequestBody SEARCH search) {
+        try {
+            Integer result = mainService.getAdminValue(search);
+            if(result != null){
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_CATEGORY_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CATEGORY_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CATEGORY_FAIL", null);
+        }
+    }
 }

@@ -36,7 +36,16 @@
         UPDATE POINT SET STATE = #{state} WHERE POINT = #{point}
     </update>
 
-    <select id="getPointWhenMemberInsert" resultType="java.lang.Integer">
-        SELECT VALUE FROM ADMIN WHERE TYPE = 2
+    <select id="getAdminValue" resultType="java.lang.Integer">
+        SELECT VALUE FROM ADMIN WHERE TYPE = #{type}
+    </select>
+
+    <select id="getListPointMinusTot" resultType="java.lang.Integer">
+        SELECT IFNULL(SUM(VALUE),0)
+            FROM POINT
+        WHERE 1=1
+            AND REGDATE >= LAST_DAY(NOW() - interval 1 month) + interval 1 DAY
+            AND STATE = '1'
+            AND TYPE = '2'
     </select>
 </mapper>

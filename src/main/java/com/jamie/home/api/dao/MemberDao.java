@@ -35,4 +35,6 @@ public interface MemberDao {
     MEMBER getMemberByCode(MEMBER member);
 
     Integer updateMemberPoint(MEMBER member);
+
+    int updateMemberAccount(MEMBER member);
 }

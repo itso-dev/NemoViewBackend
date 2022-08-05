@@ -6,6 +6,7 @@ import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -17,6 +18,8 @@ public class POINT {
     private Integer value;
     private String content;
     private String state;
+    private Date regdate;
+    private Date upddate;
 
     public void setValues(Integer member, String type, Integer value, String content, String state) {
         this.member = member;
