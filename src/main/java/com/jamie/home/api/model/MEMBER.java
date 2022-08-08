@@ -41,6 +41,7 @@ public class MEMBER {
 
     //파일업로드
     private ArrayList<MultipartFile> saveFiles;
+    private String deleteFiles;
 
     private String keywordList;
     private String inputCode;

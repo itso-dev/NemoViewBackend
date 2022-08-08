@@ -6,15 +6,18 @@
         <if test="type != null">
             AND Q.TYPE = #{type}
         </if>
+        <if test="questionMember != null">
+            AND Q.MEMBER = #{questionMember}
+        </if>
     </sql>
     <sql id="questionListOrder">
+        ORDER BY
         <if test="orderType != null">
-            ORDER BY
             <choose>
                 <when test="orderType == 'reg_date_desc'.toString()">Q.REGDATE DESC, </when>
             </choose>
-            Q.QUESTION DESC
         </if>
+        Q.QUESTION DESC
     </sql>
     <select id="getListQuestion" resultMap="QuestionMap">
         SELECT Q.*

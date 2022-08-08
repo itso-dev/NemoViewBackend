@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -74,15 +75,16 @@ public class MemberController {
         }
     }
 
-    @RequestMapping(value="/{key}", method= RequestMethod.PUT)
-    public ResponseOverlays modi(@PathVariable("key") int key, @Validated @RequestBody MEMBER member) {
+    @RequestMapping(value="/{key}", method= RequestMethod.PUT, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseOverlays modi(@PathVariable("key") int key, @Validated @ModelAttribute MEMBER member) {
         try {
             member.setMember(key);
             int result = memberService.modi(member);
             if(result == 0){
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_MEMBER_NOT_SAVE", null);
             } else {
-                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_MEMBER_SUCCESS", member);
+                MEMBER newMember = memberService.get(member);
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_MEMBER_SUCCESS", newMember);
             }
         } catch (Exception e){
             logger.error(e.getLocalizedMessage());
@@ -180,4 +182,21 @@ public class MemberController {
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_MEMBER_FAIL", null);
         }
     }
+
+    @RequestMapping(value="/{key}/code", method= RequestMethod.PUT)
+    public ResponseOverlays inputCode(@PathVariable("key") int key, @Validated @RequestBody MEMBER member) {
+        try {
+            member.setMember(key);
+            int result = memberService.inputCode(member);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_MEMBER_NOT_SAVE", "없는 코드값입니다.");
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_MEMBER_SUCCESS", member);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_MEMBER_FAIL", null);
+        }
+    }
+
 }

@@ -5,38 +5,44 @@
     <sql id="reviewList">
         <if test="searchKeyword != null">
             AND (
-                NAME LIKE CONCAT('%',#{searchKeyword},'%') OR
-                MNUMBER LIKE CONCAT('%',#{searchKeyword},'%') OR
-                BRAND LIKE CONCAT('%',#{searchKeyword},'%') OR
-                KEYWORDS LIKE CONCAT('%"',#{searchKeyword},'"%')
+                R.NAME LIKE CONCAT('%',#{searchKeyword},'%') OR
+                R.MNUMBER LIKE CONCAT('%',#{searchKeyword},'%') OR
+                R.BRAND LIKE CONCAT('%',#{searchKeyword},'%') OR
+                R.KEYWORDS LIKE CONCAT('%"',#{searchKeyword},'"%')
             )
         </if>
         <if test="category != null">
-            AND CATEGORY = #{category}
+            AND R.CATEGORY = #{category}
         </if>
         <if test="videoYn">
-            AND VIDEO != '[]'
+            AND R.VIDEO != '[]'
         </if>
         <if test="state != null">
-            AND STATE = #{state}
+            AND R.STATE = #{state}
         </if>
         <if test="keywordList != null">
             AND
             <foreach collection="keywordList" item="keyword" separator="AND">
-                KEYWORDS LIKE CONCAT('%"',#{keyword},'"%')
+                R.KEYWORDS LIKE CONCAT('%"',#{keyword},'"%')
             </foreach>
+        </if>
+        <if test="reviewMember != null">
+            AND R.MEMBER = #{reviewMember}
+        </if>
+        <if test="likeMember != null">
+            AND R.REVIEW IN (SELECT REVIEW FROM REVIEW_LIKE WHERE MEMBER = #{likeMember})
         </if>
     </sql>
     <sql id="reviewListOrder">
+        ORDER BY
         <if test="orderType != null">
-            ORDER BY
             <choose>
-                <when test="orderType == 'reg_date_desc'.toString()">REGDATE DESC, </when>
-                <when test="orderType == 'like_desc'.toString()">LIKE_TOT DESC, </when>
-                <when test="orderType == 'hits_desc'.toString()">HITS DESC, </when>
+                <when test="orderType == 'reg_date_desc'.toString()">R.REGDATE DESC, </when>
+                <when test="orderType == 'like_desc'.toString()">R.LIKE_TOT DESC, </when>
+                <when test="orderType == 'hits_desc'.toString()">R.HITS DESC, </when>
             </choose>
-            REVIEW DESC
         </if>
+        R.REVIEW DESC
     </sql>
     <select id="getListReview" resultMap="ReviewMap">
         SELECT R.*
@@ -57,7 +63,7 @@
 
     <select id="getListReviewCnt" resultType="java.lang.Integer">
         SELECT COUNT(*)
-        FROM REVIEW
+        FROM REVIEW R
         WHERE 1=1
         <include refid="reviewList"></include>
     </select>

@@ -41,14 +41,11 @@
 
     <update id="updateMember">
         UPDATE MEMBER SET
-            PHONE = #{phone}
-            ,NICKNAME = #{nickname}
-            ,JOB = #{job}
-            ,MONEY = #{money}
-            ,LOCATION = #{location}
-            ,KEYWORDS = #{keywords}
-            ,UPDDATE = now()
+            NICKNAME = #{nickname}
         <if test="password != null">,PASSWORD = #{password}</if>
+        <if test="phone != null">,PHONE = #{phone}</if>
+        <if test="profile != null">,PROFILE = #{profile}</if>
+            ,UPDDATE = now()
         WHERE MEMBER = #{member}
     </update>
 

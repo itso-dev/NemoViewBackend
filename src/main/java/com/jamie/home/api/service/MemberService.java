@@ -3,6 +3,7 @@ package com.jamie.home.api.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.jamie.home.api.model.*;
 import com.jamie.home.util.CodeUtils;
+import com.jamie.home.util.FileUtils;
 import com.jamie.home.util.KeywordUtils;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
@@ -67,19 +68,31 @@ public class MemberService extends BasicService{
         return result;
     }
 
-    public Integer modi(MEMBER member) throws JsonProcessingException {
+    public Integer modi(MEMBER member) throws Exception {
         if(member.getPassword() != null){
             member.setPassword(encoder.encode(member.getPassword()));
         }
 
-        //공통키워드 추출
-        List<Keywords> common = KeywordUtils.getCommonKeyword(member);
-
-        // 수정 시 키워드 안에 있는 필수 키워드 값을 가져온다
-        List<Keywords> mandatory = KeywordUtils.getKeywordInTableType(KeywordUtils.mandatoryType, member.getKeywords());
-
-        member.setKeywords(KeywordUtils.getKeywordsValue(common, mandatory, null));
-
+        if(member.getSaveFiles() !=  null){
+            if(member.getProfile() == null){
+                member.setProfile(
+                        FileUtils.saveFiles(
+                                member.getSaveFiles(),
+                                uploadDir
+                        )
+                );
+            } else {
+                member.setProfile(
+                        FileUtils.modiFiles(
+                                member.getProfile(),
+                                member.getDeleteFiles(),
+                                member.getSaveFiles(),
+                                uploadDir
+                        )
+                );
+            }
+            member.setSaveFiles(null);
+        }
         return memberDao.updateMember(member);
     }
 
@@ -114,5 +127,24 @@ public class MemberService extends BasicService{
 
     public int modiAccount(MEMBER member) {
         return memberDao.updateMemberAccount(member);
+    }
+
+    public int inputCode(MEMBER member) {
+        int result = 0;
+        MEMBER codeMember = memberDao.getMemberByCode(member);
+        if(codeMember != null) {
+            POINT point = new POINT();
+            point.setValues(member.getMember(), "1", 1000, "코드입력", "1");
+            pointDao.insertPoint(point);
+            member.setPoint(1000);
+            memberDao.updateMemberPoint(member);
+            // 코드주인도 적립
+            point.setMember(codeMember.getMember());
+            pointDao.insertPoint(point);
+            codeMember.setPoint(1000);
+            memberDao.updateMemberPoint(codeMember);
+            result = 1;
+        }
+        return result;
     }
 }

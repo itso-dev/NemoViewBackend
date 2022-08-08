@@ -28,10 +28,13 @@ public class SEARCH {
     private String keywords;
     private List<String> keywordList;
     private List<KEYWORD> review_keywords;
+    private Integer reviewMember;
+    private Integer likeMember;
 
     // 질문
     private Integer question;
     private String type;
+    private Integer questionMember;
 
     // 알림
     private Boolean del;
