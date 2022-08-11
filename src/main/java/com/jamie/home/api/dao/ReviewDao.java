@@ -22,4 +22,5 @@ public interface ReviewDao {
     Integer insertReviewKeywrod(SEARCH search);
     //관리자
     Integer updateReviewState(REVIEW review);
+    void deleteAllReviewKeywrod(SEARCH search);
 }

@@ -6,6 +6,7 @@ import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,4 +26,7 @@ public class QUESTION {
     private Integer answerYn;
     private Integer answerCnt;
     private MEMBER memberVO;
+    private List<QUESTION_ANSWER> answer;
+
+    private String keywordList;
 }

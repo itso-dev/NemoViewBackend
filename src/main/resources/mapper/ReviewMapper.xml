@@ -31,6 +31,7 @@
         </if>
         <if test="likeMember != null">
             AND R.REVIEW IN (SELECT REVIEW FROM REVIEW_LIKE WHERE MEMBER = #{likeMember})
+            AND R.STATE = '2'
         </if>
     </sql>
     <sql id="reviewListOrder">
@@ -161,6 +162,10 @@
             (#{review}, #{keyword.keyword})
         </foreach>
     </insert>
+
+    <delete id="deleteAllReviewKeywrod">
+        DELETE FROM REVIEW_KEYWORD WHERE REVIEW = #{review}
+    </delete>
 
     <resultMap id="ReviewMap" type="com.jamie.home.api.model.REVIEW">
         <result column="REVIEW" property="review"/>

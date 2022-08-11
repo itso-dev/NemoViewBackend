@@ -88,4 +88,15 @@
     <update id="updateMemberAccount">
         UPDATE MEMBER SET ACCOUNT = #{account} WHERE MEMBER = #{member}
     </update>
+
+    <insert id="insertMemberKeywrod">
+        INSERT INTO MEMBER_KEYWORD (MEMBER, KEYWORD) VALUES
+        <foreach collection="review_keywords" item="keyword" separator=",">
+            (#{member}, #{keyword.keyword})
+        </foreach>
+    </insert>
+
+    <delete id="deleteAllMemberKeywrod">
+        DELETE FROM MEMBER_KEYWORD WHERE MEMBER = #{member}
+    </delete>
 </mapper>

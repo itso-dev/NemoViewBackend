@@ -41,6 +41,21 @@
         ORDER BY C.SEQ, CC.SEQ, CK.KEYWORD
     </select>
 
+    <select id="getCategoryWithKeywordList" resultMap="CategoryMap">
+        SELECT C.CATEGORY, C.NAME, C.SEQ, C.STATE ,C.ICON,
+        CC.CLASSIFICATION AS CC_CLASSIFICATION, CC.NAME AS CC_NAME, CC.SEQ AS CC_SEQ, CC.STATE AS CC_STATE,
+        CK.KEYWORD AS CK_KEYWORD, CK.NAME AS CK_NAME
+        FROM CATEGORY C
+        LEFT JOIN CATEGORY_CLASSIFICATION CC on C.CATEGORY = CC.CATEGORY
+        LEFT JOIN CATEGORY_KEYWORD CK on C.CATEGORY = CK.CATEGORY AND CC.CLASSIFICATION = CK.CLASSIFICATION
+        WHERE 1=1
+        <if test="state != null">
+            AND C.STATE = #{state}
+            AND IFNULL(CC.STATE,1) = #{state}
+        </if>
+        ORDER BY C.SEQ, CC.SEQ, CK.KEYWORD
+    </select>
+
     <resultMap id="CategoryMap" type="com.jamie.home.api.model.CATEGORY">
         <result column="CATEGORY" property="category"/>
         <result column="NAME" property="name"/>

@@ -35,6 +35,7 @@ public class SEARCH {
     private Integer question;
     private String type;
     private Integer questionMember;
+    private Integer answerMember;
 
     // 알림
     private Boolean del;

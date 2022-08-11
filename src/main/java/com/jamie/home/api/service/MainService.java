@@ -23,4 +23,8 @@ public class MainService extends BasicService{
         Integer minusPoint = pointDao.getListPointMinusTot();
         return pointTot - minusPoint;
     }
+
+    public List<CATEGORY> listCategoryKeyword(SEARCH search) {
+        return categoryDao.getCategoryWithKeywordList(search);
+    }
 }

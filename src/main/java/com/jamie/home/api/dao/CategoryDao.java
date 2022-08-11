@@ -16,4 +16,6 @@ public interface CategoryDao {
     Integer getListCategoryCnt(SEARCH search);
 
     CATEGORY getCategoryWithKeyword(CATEGORY category);
+
+    List<CATEGORY> getCategoryWithKeywordList(SEARCH search);
 }

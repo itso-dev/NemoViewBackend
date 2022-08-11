@@ -2,10 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
 
 <mapper namespace="com.jamie.home.api.dao.FaqDao">
+    <sql id="faqList">
+        <if test="state != null">
+            AND STATE = #{state}
+        </if>
+    </sql>
     <select id="getListFaq" resultType="com.jamie.home.api.model.FAQ">
         SELECT *
         FROM FAQ
         WHERE 1=1
+        <include refid="faqList"></include>
         ORDER BY FAQ DESC
         <if test="start != null">
             LIMIT #{start}, #{page_block}
@@ -16,6 +22,7 @@
         SELECT COUNT(*)
         FROM FAQ
         WHERE 1=1
+        <include refid="faqList"></include>
     </select>
 
     <insert id="insertFaq">

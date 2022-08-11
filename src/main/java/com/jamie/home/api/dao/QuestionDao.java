@@ -32,4 +32,7 @@ public interface QuestionDao {
     Integer updateQuestionAnswerChoose(QUESTION_ANSWER answer);
 
     Integer updateQuestionState(QUESTION question);
+
+    Integer insertQuestionKeywrod(SEARCH search);
+    void deleteAllQuestionKeywrod(SEARCH search);
 }

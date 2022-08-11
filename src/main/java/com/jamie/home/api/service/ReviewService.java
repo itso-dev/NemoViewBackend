@@ -94,7 +94,32 @@ public class ReviewService extends BasicService{
 
         review.setSavePhotos(null);
         review.setSaveVideos(null);
-        return reviewDao.updateReview(review);
+
+        MEMBER param = new MEMBER();
+        param.setMember(review.getMember());
+        List<Keywords> common = KeywordUtils.getCommonKeyword(memberDao.getMember(param));
+
+        List<Keywords> mandatory = KeywordUtils.getMandatoryKeyword(review.getKeywordList());
+
+        List<Keywords> input = KeywordUtils.getInputKeyword(review.getKeywordInputList());
+        // 키워드 저장
+        review.setKeywords(KeywordUtils.getKeywordsValue(common, mandatory, input));
+        List<KEYWORD> keywords = KeywordUtils.getMandatoryKeywordForSave(review.getKeywordList());
+
+        review.setSavePhotos(null);
+        review.setSaveVideos(null);
+        review.setState("1"); // 검수단계로 변경
+        int result = reviewDao.updateReview(review);
+
+        // 리뷰 키워드 저장
+        SEARCH search = new SEARCH();
+        search.setReview(review.getReview());
+        reviewDao.deleteAllReviewKeywrod(search);
+        if(keywords != null && keywords.size() != 0){
+            search.setReview_keywords(keywords);
+            reviewDao.insertReviewKeywrod(search);
+        }
+        return result;
     }
 
     public Integer like(REVIEW_LIKE like) {

@@ -114,7 +114,19 @@ public class MemberService extends BasicService{
 
         member.setKeywords(KeywordUtils.getKeywordsValue(common, mandatory, null));
 
-        return memberDao.updateMemberKeywords(member);
+        int result = memberDao.updateMemberKeywords(member);
+
+        // MEMBER_KEYWORD 저장
+        List<KEYWORD> keywords = KeywordUtils.getMandatoryKeywordForSave(member.getKeywordList());
+
+        SEARCH search = new SEARCH();
+        search.setMember(member.getMember());
+        memberDao.deleteAllMemberKeywrod(search);
+        if(keywords != null && keywords.size() != 0){
+            search.setReview_keywords(keywords);
+            memberDao.insertMemberKeywrod(search);
+        }
+        return result;
     }
 
     public Integer hideMember(MEMBER member) {

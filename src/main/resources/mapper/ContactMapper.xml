@@ -27,14 +27,15 @@
     
     <insert id="insertContact">
         INSERT CONTACT
-            (MEMBER, TITLE, CONTENT, FILES)
+            (MEMBER, TYPE, TITLE, CONTENT, FILES)
         VALUES
-            (#{member},#{title},#{content},#{files});
+            (#{member},#{type},#{title},#{content},#{files});
     </insert>
 
     <update id="updateContact">
         UPDATE CONTACT SET
-            TITLE = #{title}
+            TYPE = #{type}
+            ,TITLE = #{title}
             ,CONTENT = #{content}
             ,FILES = #{files}
             ,UPDDATE = now()
@@ -42,6 +43,9 @@
     </update>
 
     <update id="updateContactAnswer">
-        UPDATE CONTACT SET ANSWER = #{answer} WHERE CONTACT = #{contact}
+        UPDATE CONTACT SET
+            ANSWER = #{answer}
+            ,UPDDATE = now()
+        WHERE CONTACT = #{contact}
     </update>
 </mapper>
