@@ -82,6 +82,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 // ------------ api 모두 허락 ---------------------
                 .antMatchers("/member/login").permitAll()
+                .antMatchers("/member/email/check").permitAll()
                 .antMatchers("/member/save").permitAll()
                 .antMatchers("/review/list").permitAll()
                 .antMatchers("/main/category/list").permitAll()

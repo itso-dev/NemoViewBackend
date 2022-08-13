@@ -39,7 +39,7 @@
         <if test="orderType != null">
             <choose>
                 <when test="orderType == 'reg_date_desc'.toString()">R.REGDATE DESC, </when>
-                <when test="orderType == 'like_desc'.toString()">R.LIKE_TOT DESC, </when>
+                <when test="orderType == 'like_desc'.toString()">LIKE_TOT DESC, </when>
                 <when test="orderType == 'hits_desc'.toString()">R.HITS DESC, </when>
             </choose>
         </if>

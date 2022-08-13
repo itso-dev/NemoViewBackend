@@ -92,11 +92,11 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(value="member/{key}/hide", method= RequestMethod.PUT)
+    @RequestMapping(value="member/{key}/state", method= RequestMethod.PUT)
     public ResponseOverlays hideMember(@PathVariable("key") int key, @Validated @RequestBody MEMBER member) {
         try {
             member.setMember(key);
-            int result = memberService.hideMember(member);
+            int result = memberService.modiStateMember(member);
             if(result == 0){
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_MEMBER_NOT_SAVE", null);
             } else {

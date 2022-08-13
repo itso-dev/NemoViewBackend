@@ -5,7 +5,7 @@
     <sql id="memberList">
         AND MEMBER != 1
         <if test="admin == null">
-            AND HIDE = 0
+            AND STATE == '0'
         </if>
     </sql>
     <select id="getListMember" resultType="com.jamie.home.api.model.MEMBER">
@@ -67,8 +67,8 @@
         UPDATE MEMBER SET KEYWORDS = #{keywords} WHERE MEMBER = #{member}
     </update>
 
-    <update id="updateMemberHide">
-        UPDATE MEMBER SET HIDE = TRUE WHERE MEMBER = #{member}
+    <update id="updateStateMember">
+        UPDATE MEMBER SET STATE = #{state} WHERE MEMBER = #{member}
     </update>
 
     <update id="updateMemberSearchKeywords">

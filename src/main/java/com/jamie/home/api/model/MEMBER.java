@@ -31,7 +31,7 @@ public class MEMBER {
     private String swords;
     private String account;
     private String profile;
-    private Boolean hide;
+    private String state;
     private Date logDate;
     private String keywords;
     @Enumerated(EnumType.STRING)

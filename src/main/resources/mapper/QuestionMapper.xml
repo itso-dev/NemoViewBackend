@@ -6,6 +6,9 @@
         <if test="type != null">
             AND Q.TYPE = #{type}
         </if>
+        <if test="state != null">
+            AND Q.STATE != #{state}
+        </if>
         <if test="questionMember != null">
             AND Q.MEMBER = #{questionMember}
             AND Q.STATE != '4'

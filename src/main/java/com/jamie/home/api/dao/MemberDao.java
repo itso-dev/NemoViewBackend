@@ -29,7 +29,7 @@ public interface MemberDao {
 
     Integer getListMemberCnt(SEARCH search);
 
-    Integer updateMemberHide(MEMBER member);
+    Integer updateStateMember(MEMBER member);
 
     Integer updateMemberSearchKeywords(MEMBER member);
 

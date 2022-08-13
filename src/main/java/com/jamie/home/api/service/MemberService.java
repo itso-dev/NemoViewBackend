@@ -129,8 +129,8 @@ public class MemberService extends BasicService{
         return result;
     }
 
-    public Integer hideMember(MEMBER member) {
-        return memberDao.updateMemberHide(member);
+    public Integer modiStateMember(MEMBER member) {
+        return memberDao.updateStateMember(member);
     }
 
     public Integer modiSearchKeywords(MEMBER member) {
