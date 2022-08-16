@@ -41,4 +41,6 @@ public interface MemberDao {
 
     Integer insertMemberKeywrod(SEARCH search);
     void deleteAllMemberKeywrod(SEARCH search);
+
+    MEMBER find(SEARCH search);
 }

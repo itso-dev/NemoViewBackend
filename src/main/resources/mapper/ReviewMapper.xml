@@ -69,11 +69,17 @@
         <include refid="reviewList"></include>
     </select>
 
-    <select id="getReview" resultType="com.jamie.home.api.model.REVIEW">
-        SELECT *
-        FROM REVIEW
+    <select id="getReview" resultMap="ReviewMap">
+        SELECT R.*
+        <if test="member != null">
+            ,(SELECT COUNT(*) FROM REVIEW_LIKE RL WHERE RL.REVIEW = R.REVIEW AND RL.MEMBER = #{member} AND DEL = 0) LIKE_YN
+        </if>
+            ,(SELECT COUNT(*) FROM REVIEW_LIKE RL WHERE RL.REVIEW = R.REVIEW AND DEL = 0) LIKE_TOT
+            ,(SELECT COUNT(*) FROM REVIEW_REPLY RR WHERE RR.REVIEW = R.REVIEW) REPLY_TOT
+            ,(SELECT NAME FROM CATEGORY C WHERE C.CATEGORY = R.CATEGORY) CATEGORY_NAME
+        FROM REVIEW R
         WHERE 1=1
-            AND REVIEW = #{review}
+            AND R.REVIEW = #{review}
     </select>
 
     <update id="updateReviewHits">

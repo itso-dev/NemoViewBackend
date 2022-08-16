@@ -102,11 +102,35 @@ public class QuestionService extends BasicService{
     }
 
     public Integer saveAnswer(QUESTION_ANSWER answer) {
-        return questionDao.insertQuestionAnswer(answer);
+        int result = questionDao.insertQuestionAnswer(answer);
+
+        // 답변채택 알림 TYPE 8
+        if(result != 0) {
+            QUESTION param = new QUESTION();
+            param.setQuestion(answer.getQuestion());
+            QUESTION question = questionDao.getQuestion(param);
+
+            INFO info = new INFO();
+            info.setValues(question.getMember(), "8", question.getQuestion(), "내 질문에 댓글이 달렸어요! 지금 댓글을 확인해 보세요!", "");
+            infoDao.insertInfo(info);
+        }
+
+        return result;
     }
 
     public Integer choose(QUESTION_ANSWER answer) {
-        return questionDao.updateQuestionAnswerChoose(answer);
+        // 답변채택
+        int result = questionDao.updateQuestionAnswerChoose(answer);
+
+        if(result != 0) {
+            QUESTION_ANSWER infoAnswer = questionDao.getAnswer(answer);
+            // 답변채택 알림 TYPE 7
+            INFO info = new INFO();
+            info.setValues(infoAnswer.getMember(), "7", infoAnswer.getQuestion(), "내 댓글이 채택되었어요! 지급된 포인트를 확인해 보세요!", "");
+            infoDao.insertInfo(info);
+        }
+
+        return result;
     }
 
     public Integer modiQuestionState(QUESTION question) {

@@ -57,6 +57,25 @@ public class ReviewController {
         }
     }
 
+    @RequestMapping(value="/{key}", method= RequestMethod.POST)
+    public ResponseOverlays getForPost(@PathVariable("key") int key, @Validated @RequestBody SEARCH search) {
+        try {
+            REVIEW review = new REVIEW();
+            review.setReview(key);
+            review.setMember(search.getMember());
+            reviewService.upHits(review);
+            REVIEW result = reviewService.get(review);
+            if(result != null){
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_REVIEW_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_REVIEW_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_REVIEW_FAIL", null);
+        }
+    }
+
     @RequestMapping(value="/save", method= RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseOverlays save(@Validated @ModelAttribute REVIEW review) {
         try {

@@ -1,6 +1,7 @@
 package com.jamie.home.api.service;
 
 import com.jamie.home.api.model.CATEGORY;
+import com.jamie.home.api.model.MEMBER;
 import com.jamie.home.api.model.SEARCH;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,5 +27,9 @@ public class MainService extends BasicService{
 
     public List<CATEGORY> listCategoryKeyword(SEARCH search) {
         return categoryDao.getCategoryWithKeywordList(search);
+    }
+
+    public MEMBER find(SEARCH search) {
+        return memberDao.find(search);
     }
 }

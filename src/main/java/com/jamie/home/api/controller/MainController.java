@@ -1,9 +1,6 @@
 package com.jamie.home.api.controller;
 
-import com.jamie.home.api.model.CATEGORY;
-import com.jamie.home.api.model.ResponseOverlays;
-import com.jamie.home.api.model.SEARCH;
-import com.jamie.home.api.model.VoList;
+import com.jamie.home.api.model.*;
 import com.jamie.home.api.service.MainService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,6 +68,21 @@ public class MainController {
         } catch (Exception e){
             logger.error(e.getLocalizedMessage());
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CATEGORY_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/find", method= RequestMethod.POST)
+    public ResponseOverlays findPassword(@Validated @RequestBody SEARCH search) {
+        try {
+            MEMBER result = mainService.find(search);
+            if(result != null){
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_MEMBER_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_MEMBER_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_MEMBER_FAIL", null);
         }
     }
 }

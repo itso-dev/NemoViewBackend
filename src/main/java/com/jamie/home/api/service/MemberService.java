@@ -47,22 +47,28 @@ public class MemberService extends BasicService{
 
         Integer result = memberDao.insertMember(member);
 
-        // 회원코드 입력시 TODO
-        if(codeMember != null) {
-            SEARCH search = new SEARCH();
-            search.setType("2");
-            Integer pointValue = pointDao.getAdminValue(search);
-            POINT point = new POINT();
-            point.setValues(member.getMember(), "1", pointValue, "회원가입", "1");
-            pointDao.insertPoint(point);
-            member.setPoint(pointValue);
-            memberDao.updateMemberPoint(member);
-            // 코드주인도 적립
-            point.setMember(codeMember.getMember());
-            point.setContent("코드입력");
-            pointDao.insertPoint(point);
-            codeMember.setPoint(pointValue);
-            memberDao.updateMemberPoint(codeMember);
+        if(result != 0){
+            if(codeMember != null) {
+                SEARCH search = new SEARCH();
+                search.setType("2");
+                Integer pointValue = pointDao.getAdminValue(search);
+                POINT point = new POINT();
+                point.setValues(member.getMember(), "1", pointValue, "회원가입", "1");
+                pointDao.insertPoint(point);
+                member.setPoint(pointValue);
+                memberDao.updateMemberPoint(member);
+                // 코드주인도 적립
+                point.setMember(codeMember.getMember());
+                point.setContent("코드입력");
+                pointDao.insertPoint(point);
+                codeMember.setPoint(pointValue);
+                memberDao.updateMemberPoint(codeMember);
+
+                // 답변채택 알림 TYPE 10
+                INFO info = new INFO();
+                info.setValues(codeMember.getMember(), "10", codeMember.getMember(), "내 초대코드로 친구가 가입하여 포인트가 지급되었어요! 지급된 포인트를 확인해 보세요!", "");
+                infoDao.insertInfo(info);
+            }
         }
 
         return result;

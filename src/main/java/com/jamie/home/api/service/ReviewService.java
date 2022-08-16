@@ -127,7 +127,20 @@ public class ReviewService extends BasicService{
     }
 
     public Integer saveReply(REVIEW_REPLY reply) {
-        return reviewDao.insertReviewReply(reply);
+        int result = reviewDao.insertReviewReply(reply);
+
+        if(result != 0){
+            REVIEW param = new REVIEW();
+            param.setReview(reply.getReview());
+            REVIEW review = reviewDao.getReview(param);
+
+            // 답변채택 알림 TYPE 9
+            INFO info = new INFO();
+            info.setValues(review.getMember(), "9", review.getReview(), "내 리뷰에 댓글이 달렸어요! 지금 댓글을 확인해 보세요!", "");
+            infoDao.insertInfo(info);
+        }
+
+        return result;
     }
 
     public List<REVIEW_REPLY> listReply(REVIEW review) {

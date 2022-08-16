@@ -35,4 +35,6 @@ public interface QuestionDao {
 
     Integer insertQuestionKeywrod(SEARCH search);
     void deleteAllQuestionKeywrod(SEARCH search);
+
+    QUESTION_ANSWER getAnswer(QUESTION_ANSWER answer);
 }

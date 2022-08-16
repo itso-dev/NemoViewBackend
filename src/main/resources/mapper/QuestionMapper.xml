@@ -148,6 +148,13 @@
         DELETE FROM QUESTION_KEYWORD WHERE QUESTION = #{question}
     </delete>
 
+    <select id="getAnswer" resultType="com.jamie.home.api.model.QUESTION_ANSWER">
+        SELECT *
+        FROM QUESTION_ANSWER
+        WHERE 1=1
+            AND ANSWER = #{answer}
+    </select>
+
     <resultMap id="QuestionMap" type="com.jamie.home.api.model.QUESTION">
         <result column="QUESTION" property="question"/>
         <result column="MEMBER" property="member"/>

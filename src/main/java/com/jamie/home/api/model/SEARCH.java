@@ -20,6 +20,9 @@ public class SEARCH {
 
     // 회원
     private Integer member;
+    private String name;
+    private String birthday;
+    private String email;
 
     // 리뷰
     private Integer review;
