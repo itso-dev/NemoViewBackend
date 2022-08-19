@@ -21,6 +21,11 @@ public class POINT {
     private Date regdate;
     private Date upddate;
 
+    //관리자
+    private String nickname;
+    private String account;
+    private String reject;
+
     public void setValues(Integer member, String type, Integer value, String content, String state) {
         this.member = member;
         this.type = type;

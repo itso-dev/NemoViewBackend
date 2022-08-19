@@ -4,12 +4,27 @@
 <mapper namespace="com.jamie.home.api.dao.PointDao">
     <sql id="pointList">
         <if test="member != null">
-            AND MEMBER = #{member}
+            AND P.MEMBER = #{member}
+        </if>
+        <if test="type != null">
+            AND P.TYPE = #{type}
+        </if>
+        <if test="state != null">
+            AND P.STATE = #{state}
+        </if>
+        <if test="searchKeyword != null">
+            <if test="searchType == 'nickname'.toString()">
+                AND M.NICKNAME LIKE CONCAT('%',#{searchKeyword},'%')
+            </if>
         </if>
     </sql>
     <select id="getListPoint" resultType="com.jamie.home.api.model.POINT">
-        SELECT *
-        FROM POINT
+        SELECT
+            P.*
+            ,(SELECT NICKNAME FROM MEMBER WHERE MEMBER = P.MEMBER) AS NICKNAME
+            ,(SELECT ACCOUNT FROM MEMBER WHERE MEMBER = P.MEMBER) AS ACCOUNT
+        FROM POINT P
+            LEFT JOIN MEMBER M on P.MEMBER = M.MEMBER
         WHERE 1=1
         <include refid="pointList"></include>
         ORDER BY POINT DESC
@@ -20,7 +35,8 @@
 
     <select id="getListPointCnt" resultType="java.lang.Integer">
         SELECT COUNT(*)
-        FROM POINT
+        FROM POINT P
+            LEFT JOIN MEMBER M on P.MEMBER = M.MEMBER
         WHERE 1=1
         <include refid="pointList"></include>
     </select>
@@ -33,7 +49,10 @@
     </insert>
 
     <update id="updatePointState">
-        UPDATE POINT SET STATE = #{state} WHERE POINT = #{point}
+        UPDATE POINT SET
+            STATE = #{state}
+            ,UPDDATE = now()
+        WHERE POINT = #{point}
     </update>
 
     <select id="getAdminValue" resultType="java.lang.Integer">
@@ -47,5 +66,9 @@
             AND REGDATE >= LAST_DAY(NOW() - interval 1 month) + interval 1 DAY
             AND STATE = '1'
             AND TYPE = '2'
+    </select>
+
+    <select id="getPoint" resultType="com.jamie.home.api.model.POINT">
+        SELECT * FROM POINT WHERE POINT = #{point}
     </select>
 </mapper>

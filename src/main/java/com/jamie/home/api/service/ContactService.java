@@ -47,4 +47,8 @@ public class ContactService extends BasicService{
     public Integer modiContactAnswer(CONTACT contact){
         return contactDao.updateContactAnswer(contact);
     }
+
+    public CONTACT get(CONTACT contact) {
+        return contactDao.getContact(contact);
+    }
 }

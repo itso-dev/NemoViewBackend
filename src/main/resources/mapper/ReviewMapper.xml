@@ -4,12 +4,30 @@
 <mapper namespace="com.jamie.home.api.dao.ReviewDao">
     <sql id="reviewList">
         <if test="searchKeyword != null">
-            AND (
-                R.NAME LIKE CONCAT('%',#{searchKeyword},'%') OR
-                R.MNUMBER LIKE CONCAT('%',#{searchKeyword},'%') OR
-                R.BRAND LIKE CONCAT('%',#{searchKeyword},'%') OR
-                R.KEYWORDS LIKE CONCAT('%"',#{searchKeyword},'"%')
-            )
+            <if test="searchType != null">
+                <choose>
+                    <when test="searchType == 'review'.toString()">
+                        AND R.REVIEW LIKE CONCAT('%',#{searchKeyword},'%')
+                    </when>
+                    <when test="searchType == 'brand'.toString()">
+                        AND R.BRAND LIKE CONCAT('%',#{searchKeyword},'%')
+                    </when>
+                    <when test="searchType == 'name'.toString()">
+                        AND R.NAME LIKE CONCAT('%',#{searchKeyword},'%')
+                    </when>
+                    <when test="searchType == 'nickname'.toString()">
+                        AND M.NICKNAME LIKE CONCAT('%',#{searchKeyword},'%')
+                    </when>
+                </choose>
+            </if>
+            <if test="searchType == null">
+                AND (
+                    R.NAME LIKE CONCAT('%',#{searchKeyword},'%') OR
+                    R.MNUMBER LIKE CONCAT('%',#{searchKeyword},'%') OR
+                    R.BRAND LIKE CONCAT('%',#{searchKeyword},'%') OR
+                    R.KEYWORDS LIKE CONCAT('%"',#{searchKeyword},'"%')
+                )
+            </if>
         </if>
         <if test="category != null">
             AND R.CATEGORY = #{category}
@@ -41,6 +59,7 @@
                 <when test="orderType == 'reg_date_desc'.toString()">R.REGDATE DESC, </when>
                 <when test="orderType == 'like_desc'.toString()">LIKE_TOT DESC, </when>
                 <when test="orderType == 'hits_desc'.toString()">R.HITS DESC, </when>
+                <when test="orderType == 'report_desc'.toString()">REPORT_CNT DESC, </when>
             </choose>
         </if>
         R.REVIEW DESC
@@ -53,7 +72,10 @@
             ,(SELECT COUNT(*) FROM REVIEW_LIKE RL WHERE RL.REVIEW = R.REVIEW AND DEL = 0) LIKE_TOT
             ,(SELECT COUNT(*) FROM REVIEW_REPLY RR WHERE RR.REVIEW = R.REVIEW) REPLY_TOT
             ,(SELECT NAME FROM CATEGORY C WHERE C.CATEGORY = R.CATEGORY) CATEGORY_NAME
+            ,(SELECT COUNT(*) FROM REPORT WHERE `KEY` = 3 AND TYPE = '1') REPORT_CNT
+            ,M.NICKNAME MEMBER_NICKNAME
         FROM REVIEW R
+            LEFT JOIN MEMBER M on R.MEMBER = M.MEMBER
         WHERE 1=1
         <include refid="reviewList"></include>
         <include refid="reviewListOrder"></include>
@@ -65,6 +87,7 @@
     <select id="getListReviewCnt" resultType="java.lang.Integer">
         SELECT COUNT(*)
         FROM REVIEW R
+            LEFT JOIN MEMBER M on R.MEMBER = M.MEMBER
         WHERE 1=1
         <include refid="reviewList"></include>
     </select>
@@ -77,7 +100,9 @@
             ,(SELECT COUNT(*) FROM REVIEW_LIKE RL WHERE RL.REVIEW = R.REVIEW AND DEL = 0) LIKE_TOT
             ,(SELECT COUNT(*) FROM REVIEW_REPLY RR WHERE RR.REVIEW = R.REVIEW) REPLY_TOT
             ,(SELECT NAME FROM CATEGORY C WHERE C.CATEGORY = R.CATEGORY) CATEGORY_NAME
+            ,M.NICKNAME MEMBER_NICKNAME
         FROM REVIEW R
+            LEFT JOIN MEMBER M on R.MEMBER = M.MEMBER
         WHERE 1=1
             AND R.REVIEW = #{review}
     </select>
@@ -200,6 +225,7 @@
         <result column="LIKE_YN" property="likeYn"/>
         <result column="LIKE_TOT" property="likeCnt"/>
         <result column="REPLY_TOT" property="replyCnt"/>
+        <result column="REPORT_CNT" property="reportCnt"/>
         <result column="CATEGORY_NAME" property="categoryName"/>
         <association property="memberVO" column="MEMBER" javaType="com.jamie.home.api.model.MEMBER">
             <result column="MEMBER_PROFILE" property="profile"/>

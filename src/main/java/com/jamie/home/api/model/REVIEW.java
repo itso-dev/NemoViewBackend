@@ -51,6 +51,9 @@ public class REVIEW {
     private Integer likeYn;
     private Integer likeCnt;
     private Integer replyCnt;
+    private Integer reportCnt;
     private String categoryName;
     private MEMBER memberVO;
+    private Integer point;
+    private String reject;
 }

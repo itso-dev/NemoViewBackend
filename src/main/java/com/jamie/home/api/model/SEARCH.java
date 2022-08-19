@@ -23,6 +23,7 @@ public class SEARCH {
     private String name;
     private String birthday;
     private String email;
+    private Boolean stopMember;
 
     // 리뷰
     private Integer review;
@@ -41,11 +42,13 @@ public class SEARCH {
     private Integer answerMember;
 
     // 알림
+    private Integer key;
     private Boolean del;
 
     // 관리자
     private String state;
     private Boolean admin;
+    private Boolean needAnswer;
 
     public void calStart(){
         this.start = (this.page-1) * this.page_block;

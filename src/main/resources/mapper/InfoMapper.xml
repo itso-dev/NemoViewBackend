@@ -6,6 +6,10 @@
         <if test="member != null">
             AND MEMBER = #{member}
         </if>
+        <if test="type != null">
+            AND `KEY` = #{key}
+            AND TYPE = #{type}
+        </if>
         <if test="del != null">
             AND DEL = #{del}
         </if>

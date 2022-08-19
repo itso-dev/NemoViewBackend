@@ -25,4 +25,6 @@ public class CONTACT {
 
     private ArrayList<MultipartFile> saveFiles;
     private String deleteFiles;
+
+    private MEMBER memberVO;
 }

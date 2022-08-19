@@ -22,4 +22,6 @@ public interface PointDao {
     Integer getAdminValue(SEARCH search);
 
     Integer getListPointMinusTot();
+
+    POINT getPoint(POINT point);
 }

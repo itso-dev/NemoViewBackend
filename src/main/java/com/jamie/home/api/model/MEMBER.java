@@ -32,12 +32,12 @@ public class MEMBER {
     private String account;
     private String profile;
     private String state;
-    private Date logDate;
+    private Date logdate;
     private String keywords;
     @Enumerated(EnumType.STRING)
     private ROLE role;
-    private Date regDate;
-    private Date updDate;
+    private Date regdate;
+    private Date upddate;
 
     //파일업로드
     private ArrayList<MultipartFile> saveFiles;

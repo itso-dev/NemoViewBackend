@@ -152,6 +152,31 @@ public class ReviewService extends BasicService{
     }
 
     public Integer modiReviewState(REVIEW review){
+        REVIEW reviewInfo = reviewDao.getReview(review);
+        if("2".equals(review.getState())){ // 리뷰 승인
+            // 포인트 적립
+            POINT point = new POINT();
+            point.setValues(reviewInfo.getMember(), "1", review.getPoint(), "리뷰승인", "1");
+            pointDao.insertPoint(point);
+
+            // 회원 포인트 업데이트
+            MEMBER member = new MEMBER();
+            member.setMember(reviewInfo.getMember());
+            MEMBER memberInfo = memberDao.getMember(member);
+            memberInfo.setPoint(review.getPoint());
+            memberDao.updateMemberPoint(memberInfo);
+
+            // 답변채택 알림 TYPE 1
+            INFO info = new INFO();
+            info.setValues(reviewInfo.getMember(), "1", reviewInfo.getReview(), "리뷰가 승인되어 "+review.getPoint()+"포인트가 지급 되었어요! 지금 등록된 리뷰를 확인해 보세요.", "");
+            infoDao.insertInfo(info);
+
+        } else if("4".equals(review.getState())) { // 리뷰 반려
+            // 답변채택 알림 TYPE 2
+            INFO info = new INFO();
+            info.setValues(reviewInfo.getMember(), "2", reviewInfo.getReview(), "리뷰 등록이 거절되었어요. 사유를 확인 후 다시 등록해 주세요.", review.getReject());
+            infoDao.insertInfo(info);
+        }
         return reviewDao.updateReviewState(review);
     }
 

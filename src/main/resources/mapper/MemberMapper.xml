@@ -4,16 +4,38 @@
 <mapper namespace="com.jamie.home.api.dao.MemberDao">
     <sql id="memberList">
         AND MEMBER != 1
-        <if test="admin == null">
-            AND STATE == '0'
+        <if test="searchKeyword != null">
+            <if test="searchType == 'member'.toString()">
+                AND MEMBER LIKE CONCAT('%',#{searchKeyword},'%')
+            </if>
+            <if test="searchType == 'nickname'.toString()">
+                AND NICKNAME LIKE CONCAT('%',#{searchKeyword},'%')
+            </if>
+            <if test="searchType == 'phone'.toString()">
+                AND PHONE LIKE CONCAT('%',#{searchKeyword},'%')
+            </if>
         </if>
+        <if test="stopMember">
+            AND STATE = '2'
+        </if>
+    </sql>
+    <sql id="memberListOrder">
+        ORDER BY
+        <if test="orderType != null">
+            <choose>
+                <when test="orderType == 'reg_date_desc'.toString()">REGDATE DESC, </when>
+                <when test="orderType == 'log_date_desc'.toString()">LOGDATE DESC, </when>
+                <when test="orderType == 'abc'.toString()">NICKNAME, </when>
+            </choose>
+        </if>
+        MEMBER DESC
     </sql>
     <select id="getListMember" resultType="com.jamie.home.api.model.MEMBER">
         SELECT *
         FROM MEMBER
         WHERE 1=1
         <include refid="memberList"></include>
-        ORDER BY MEMBER DESC
+        <include refid="memberListOrder"></include>
         <if test="start != null">
             LIMIT #{start}, #{page_block}
         </if>

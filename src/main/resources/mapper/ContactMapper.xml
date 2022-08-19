@@ -4,15 +4,39 @@
 <mapper namespace="com.jamie.home.api.dao.ContactDao">
     <sql id="contactList">
         <if test="member != null">
-            AND MEMBER = #{member}
+            AND C.MEMBER = #{member}
+        </if>
+        <if test="searchKeyword != null">
+            <if test="searchType == 'nickname'.toString()">
+                AND M.NICKNAME LIKE CONCAT('%',#{searchKeyword},'%')
+            </if>
+            <if test="searchType == 'phone'.toString()">
+                AND M.PHONE LIKE CONCAT('%',#{searchKeyword},'%')
+            </if>
+        </if>
+        <if test="needAnswer">
+            AND C.ANSWER IS NULL
         </if>
     </sql>
-    <select id="getListContact" resultType="com.jamie.home.api.model.CONTACT">
-        SELECT *
-        FROM CONTACT
+    <sql id="contactListOrder">
+        ORDER BY
+        <if test="orderType != null">
+            <choose>
+                <when test="orderType == 'reg_date_desc'.toString()">C.REGDATE DESC, </when>
+            </choose>
+        </if>
+        C.CONTACT DESC
+    </sql>
+    <select id="getListContact" resultMap="ContactMap">
+        SELECT
+            C.*,
+            M.NICKNAME AS MEMBER_NICKNAME,
+            M.PHONE AS MEMBER_PHONE
+        FROM CONTACT C
+            LEFT JOIN MEMBER M on C.MEMBER = M.MEMBER
         WHERE 1=1
         <include refid="contactList"></include>
-        ORDER BY CONTACT DESC
+        <include refid="contactListOrder"></include>
         <if test="start != null">
             LIMIT #{start}, #{page_block}
         </if>
@@ -20,9 +44,14 @@
 
     <select id="getListContactCnt" resultType="java.lang.Integer">
         SELECT COUNT(*)
-        FROM CONTACT
+        FROM CONTACT C
+            LEFT JOIN MEMBER M on C.MEMBER = M.MEMBER
         WHERE 1=1
         <include refid="contactList"></include>
+    </select>
+
+    <select id="getContact" resultType="com.jamie.home.api.model.CONTACT">
+        SELECT * FROM CONTACT WHERE CONTACT = #{contact}
     </select>
     
     <insert id="insertContact">
@@ -48,4 +77,20 @@
             ,UPDDATE = now()
         WHERE CONTACT = #{contact}
     </update>
+
+    <resultMap id="ContactMap" type="com.jamie.home.api.model.CONTACT">
+        <result column="CONTACT" property="contact"/>
+        <result column="MEMBER" property="member"/>
+        <result column="TYPE" property="type"/>
+        <result column="TITLE" property="title"/>
+        <result column="CONTENT" property="content"/>
+        <result column="ANSWER" property="answer"/>
+        <result column="FILES" property="files"/>
+        <result column="REGDATE" property="regdate"/>
+        <result column="UPDDATE" property="upddate"/>
+        <association property="memberVO" column="MEMBER" javaType="com.jamie.home.api.model.MEMBER">
+            <result column="MEMBER_NICKNAME" property="nickname"/>
+            <result column="MEMBER_PHONE" property="phone"/>
+        </association>
+    </resultMap>
 </mapper>

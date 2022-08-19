@@ -128,6 +128,24 @@ public class AdminController {
         }
     }
 
+    @RequestMapping(value="/review/{key}/reject/list", method= RequestMethod.POST)
+    public ResponseOverlays listReviewReject(@PathVariable("key") int key, @Validated @RequestBody SEARCH search) {
+        try {
+            search.setKey(key);
+            List<INFO> list = infoService.list(search);
+
+            if(list != null){
+                VoList<INFO> result = new VoList<>(list.size(), list);
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_REVIEW_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_REVIEW_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_REVIEW_FAIL", null);
+        }
+    }
+
     @RequestMapping(value="/review/{key}", method= RequestMethod.GET)
     public ResponseOverlays getReview(@PathVariable("key") int key) {
         try {
@@ -251,11 +269,13 @@ public class AdminController {
     @RequestMapping(value="/point/list", method= RequestMethod.POST)
     public ResponseOverlays listPoint(@Validated @RequestBody SEARCH search) {
         try {
+            search.calStart();
             List<POINT> list = pointService.list(search);
 
             if(list != null){
                 Integer cnt = pointService.listCnt(search);
                 VoList<POINT> result = new VoList<>(cnt, list);
+                result.setPage(search.getPage(), search.getPage_block());
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_POINT_SUCCESS", result);
             } else {
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_POINT_NULL", null);
@@ -285,11 +305,13 @@ public class AdminController {
     @RequestMapping(value="/category/list", method= RequestMethod.POST)
     public ResponseOverlays listCategory(@Validated @RequestBody SEARCH search) {
         try {
+            search.calStart();
             List<CATEGORY> list = categoryService.list(search);
 
             if(list != null){
                 Integer cnt = categoryService.listCnt(search);
                 VoList<CATEGORY> result = new VoList<>(cnt, list);
+                result.setPage(search.getPage(), search.getPage_block());
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_CATEGORY_SUCCESS", result);
             } else {
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CATEGORY_NULL", null);
@@ -303,11 +325,30 @@ public class AdminController {
     @RequestMapping(value="/contact/list", method= RequestMethod.POST)
     public ResponseOverlays listContact(@Validated @RequestBody SEARCH search) {
         try {
+            search.calStart();
             List<CONTACT> list = contactService.list(search);
 
             if(list != null){
                 Integer cnt = contactService.listCnt(search);
                 VoList<CONTACT> result = new VoList<>(cnt, list);
+                result.setPage(search.getPage(), search.getPage_block());
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_CONTACT_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CONTACT_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CONTACT_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/contact/{key}", method= RequestMethod.GET)
+    public ResponseOverlays getContact(@PathVariable("key") int key) {
+        try {
+            CONTACT contact = new CONTACT();
+            contact.setContact(key);
+            CONTACT result = contactService.get(contact);
+            if(result != null){
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_CONTACT_SUCCESS", result);
             } else {
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CONTACT_NULL", null);
@@ -337,10 +378,12 @@ public class AdminController {
     @RequestMapping(value="/faq/list", method= RequestMethod.POST)
     public ResponseOverlays listFaq(@Validated @RequestBody SEARCH search) {
         try {
+            search.calStart();
             List<FAQ> list = faqService.list(search);
             if(list != null){
                 Integer cnt = faqService.listCnt(search);
                 VoList<FAQ> result = new VoList<>(cnt, list);
+                result.setPage(search.getPage(), search.getPage_block());
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_FAQ_SUCCESS", result);
             } else {
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_FAQ_NULL", null);
