@@ -25,6 +25,7 @@ public class QUESTION {
 
     private Integer answerYn;
     private Integer answerCnt;
+    private Integer reportCnt;
     private MEMBER memberVO;
     private List<QUESTION_ANSWER> answer;
 

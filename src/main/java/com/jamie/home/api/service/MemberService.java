@@ -51,6 +51,7 @@ public class MemberService extends BasicService{
             if(codeMember != null) {
                 SEARCH search = new SEARCH();
                 search.setType("2");
+                search.setValueType("value");
                 Integer pointValue = pointDao.getAdminValue(search);
                 POINT point = new POINT();
                 point.setValues(member.getMember(), "1", pointValue, "회원가입", "1");

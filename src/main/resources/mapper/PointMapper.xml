@@ -59,6 +59,10 @@
         SELECT VALUE FROM ADMIN WHERE TYPE = #{type}
     </select>
 
+    <update id="updateAdminValue">
+        UPDATE ADMIN SET VALUE = #{value} WHERE TYPE = #{type}
+    </update>
+
     <select id="getListPointMinusTot" resultType="java.lang.Integer">
         SELECT IFNULL(SUM(VALUE),0)
             FROM POINT

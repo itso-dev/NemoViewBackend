@@ -1,6 +1,7 @@
 package com.jamie.home.api.service;
 
 import com.jamie.home.api.model.CONTACT;
+import com.jamie.home.api.model.INFO;
 import com.jamie.home.api.model.SEARCH;
 import com.jamie.home.util.FileUtils;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,13 @@ public class ContactService extends BasicService{
     }
 
     public Integer modiContactAnswer(CONTACT contact){
+        CONTACT contactInfo = contactDao.getContact(contact);
+
+        // 답변채택 알림 TYPE 5
+        INFO info = new INFO();
+        info.setValues(contactInfo.getMember(), "5", contactInfo.getContact(), "고객 센터로 문의한 질문에 답변이 등록되었어요. 지금 확인해 보세요!", "");
+        infoDao.insertInfo(info);
+
         return contactDao.updateContactAnswer(contact);
     }
 

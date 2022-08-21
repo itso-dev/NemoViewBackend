@@ -6,10 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -52,6 +49,21 @@ public class MainController {
         } catch (Exception e){
             logger.error(e.getLocalizedMessage());
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CATEGORY_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/admin/value", method= RequestMethod.PUT)
+    public ResponseOverlays modiKeywords(@Validated @RequestBody SEARCH search) {
+        try {
+            int result = mainService.modiAdminValue(search);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_MEMBER_NOT_SAVE", null);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_MEMBER_SUCCESS", result);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_MEMBER_FAIL", null);
         }
     }
 

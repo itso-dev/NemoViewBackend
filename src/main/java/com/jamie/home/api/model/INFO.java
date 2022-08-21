@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,6 +21,8 @@ public class INFO {
     private Boolean del;
     private Date regdate;
     private Date upddate;
+
+    private List<MEMBER> memberList;
 
     public void setValues(Integer member, String type, Integer key, String title, String content) {
         this.member = member;

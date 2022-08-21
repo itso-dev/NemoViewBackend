@@ -33,7 +33,14 @@
         INSERT INTO INFO
             (MEMBER, `KEY`, TITLE, CONTENT, THUMB, TYPE)
         VALUES
+        <if test="memberList == null">
             (#{member}, #{key}, #{title}, #{content}, #{thumb}, #{type})
+        </if>
+        <if test="memberList != null">
+            <foreach collection="memberList" item="member" separator=",">
+                (#{member.member}, #{member.member}, '이번 달 환급 가능 금액이 늘어났어요. 지금 확인하고 환급 신청해 보세요!', '', #{thumb}, '6')
+            </foreach>
+        </if>
     </insert>
 
     <update id="updateInfoDel">

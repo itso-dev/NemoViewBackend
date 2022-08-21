@@ -54,6 +54,9 @@
             AND IFNULL(CC.STATE,1) = #{state}
         </if>
         ORDER BY C.SEQ, CC.SEQ, CK.KEYWORD
+        <if test="start != null">
+            LIMIT #{start}, #{page_block}
+        </if>
     </select>
 
     <resultMap id="CategoryMap" type="com.jamie.home.api.model.CATEGORY">

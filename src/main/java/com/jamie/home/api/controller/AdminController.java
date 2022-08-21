@@ -2,10 +2,17 @@ package com.jamie.home.api.controller;
 
 import com.jamie.home.api.model.*;
 import com.jamie.home.api.service.*;
+import com.jamie.home.jwt.JwtFilter;
+import com.jamie.home.jwt.TokenProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +24,11 @@ import java.util.List;
 public class AdminController {
 
     private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
+    @Autowired
+    private TokenProvider tokenProvider;
+
+    @Autowired
+    private AuthenticationManagerBuilder authenticationManagerBuilder;
 
     @Autowired
     private MemberService memberService;
@@ -36,26 +48,59 @@ public class AdminController {
     private FaqService faqService;
     @Autowired
     private InfoService infoService;
-/*
-    @RequestMapping(value="/dashboard", method= RequestMethod.POST)
-    public ResponseOverlays dashboard(@Validated @RequestBody SEARCH search) {
+
+    @Autowired
+    private MainService mainService;
+    /*
+        @RequestMapping(value="/dashboard", method= RequestMethod.POST)
+        public ResponseOverlays dashboard(@Validated @RequestBody SEARCH search) {
+            try {
+                search.calStart();
+                List<CATEGORY> list = memberService.listCategory(search);
+                if(list != null){
+                    Integer cnt = memberService.listCategoryCnt(search);
+                    VoList<CATEGORY> result = new VoList<>(cnt, list);
+                    result.setPage(search.getPage(), search.getPage_block());
+                    return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_DASHBOARD_SUCCESS", result);
+                } else {
+                    return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_DASHBOARD_NULL", null);
+                }
+            } catch (Exception e){
+                logger.error(e.getLocalizedMessage());
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_DASHBOARD_FAIL", null);
+            }
+        }*/
+    @RequestMapping(value="/member/login", method= RequestMethod.POST)
+    public ResponseOverlays login(@Validated @RequestBody MEMBER member) {
         try {
-            search.calStart();
-            List<CATEGORY> list = memberService.listCategory(search);
-            if(list != null){
-                Integer cnt = memberService.listCategoryCnt(search);
-                VoList<CATEGORY> result = new VoList<>(cnt, list);
-                result.setPage(search.getPage(), search.getPage_block());
-                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_DASHBOARD_SUCCESS", result);
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(member.getEmail(), member.getPassword());
+
+            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            String jwt = tokenProvider.createToken(authentication);
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+
+            MEMBER result = memberService.checkEmail(member);
+            if(jwt != null){
+                // 최근 로그인 업데이트
+                memberService.updateLogDate(result);
+                if(ROLE.ROLE_ADMIN.equals(result.getRole())){
+                    return new ResponseOverlays(HttpServletResponse.SC_OK, "LOGIN_MEMBER_SUCCESS", new TOKEN(result, jwt));
+                }else {
+                    return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "LOGIN_MEMBER_FAIL", null);
+                }
             } else {
-                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_DASHBOARD_NULL", null);
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "LOGIN_MEMBER_FAIL", null);
             }
         } catch (Exception e){
             logger.error(e.getLocalizedMessage());
-            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_DASHBOARD_FAIL", null);
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "LOGIN_MEMBER_FAIL", null);
         }
-    }*/
-
+    }
     @RequestMapping(value="/member/list", method= RequestMethod.POST)
     public ResponseOverlays listMember(@Validated @RequestBody SEARCH search) {
         try {
@@ -303,15 +348,28 @@ public class AdminController {
     }
 
     @RequestMapping(value="/category/list", method= RequestMethod.POST)
-    public ResponseOverlays listCategory(@Validated @RequestBody SEARCH search) {
+    public ResponseOverlays keywordList(@Validated @RequestBody SEARCH search) {
         try {
-            search.calStart();
-            List<CATEGORY> list = categoryService.list(search);
-
+            List<CATEGORY> list = mainService.listCategoryKeyword(search);
             if(list != null){
-                Integer cnt = categoryService.listCnt(search);
-                VoList<CATEGORY> result = new VoList<>(cnt, list);
-                result.setPage(search.getPage(), search.getPage_block());
+                VoList<CATEGORY> result = new VoList<>(list.size(), list);
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_CATEGORY_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CATEGORY_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CATEGORY_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/category/{key}", method= RequestMethod.GET)
+    public ResponseOverlays getCategory(@PathVariable("key") int key) {
+        try {
+            CATEGORY category = new CATEGORY();
+            category.setCategory(key);
+            CATEGORY result = reviewService.getCategory(category);
+            if(result != null){
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_CATEGORY_SUCCESS", result);
             } else {
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CATEGORY_NULL", null);

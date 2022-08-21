@@ -7,15 +7,27 @@
             AND Q.TYPE = #{type}
         </if>
         <if test="state != null">
-            AND Q.STATE != #{state}
+            AND Q.STATE = #{state}
         </if>
         <if test="questionMember != null">
             AND Q.MEMBER = #{questionMember}
-            AND Q.STATE != '4'
         </if>
         <if test="answerMember != null">
             AND Q.QUESTION IN (SELECT QUESTION FROM QUESTION_ANSWER WHERE MEMBER = #{answerMember})
-            AND Q.STATE != '4'
+        </if>
+        <if test="searchKeyword != null">
+            <if test="searchType == 'question'.toString()">
+                AND Q.QUESTION LIKE CONCAT('%',#{searchKeyword},'%')
+            </if>
+            <if test="searchType == 'title'.toString()">
+                AND Q.TITLE LIKE CONCAT('%',#{searchKeyword},'%')
+            </if>
+            <if test="searchType == 'keyword'.toString()">
+                AND Q.KEYWORDS LIKE CONCAT('%"',#{searchKeyword},'"%')
+            </if>
+            <if test="searchType == 'nickname'.toString()">
+                AND M.NICKNAME LIKE CONCAT('%',#{searchKeyword},'%')
+            </if>
         </if>
     </sql>
     <sql id="questionListOrder">
@@ -23,6 +35,10 @@
         <if test="orderType != null">
             <choose>
                 <when test="orderType == 'reg_date_desc'.toString()">Q.REGDATE DESC, </when>
+                <when test="orderType == 'hits_desc'.toString()">Q.HITS DESC, </when>
+                <when test="orderType == 'point_desc'.toString()">Q.POINT DESC, </when>
+                <when test="orderType == 'answer_desc'.toString()">ANSWER_CNT DESC, </when>
+                <when test="orderType == 'report_desc'.toString()">REPORT_CNT DESC, </when>
             </choose>
         </if>
         Q.QUESTION DESC
@@ -31,6 +47,7 @@
         SELECT Q.*
             ,(SELECT COUNT(*) FROM QUESTION_ANSWER QA WHERE QA.QUESTION = Q.QUESTION AND CHOOSE = TRUE) AS ANSWER_YN
             ,(SELECT COUNT(*) FROM QUESTION_ANSWER QA WHERE QA.QUESTION = Q.QUESTION) AS ANSWER_CNT
+            ,(SELECT COUNT(*) FROM REPORT WHERE TYPE = '3' AND `KEY` = Q.QUESTION) AS REPORT_CNT
             , M.MEMBER AS MEMBER_MEMBER
             , M.PROFILE AS MEMBER_PROFILE
             , M.NAME AS MEMBER_NAME
@@ -48,6 +65,7 @@
     <select id="getListQuestionCnt" resultType="java.lang.Integer">
         SELECT COUNT(*)
         FROM QUESTION Q
+            LEFT JOIN MEMBER M on Q.MEMBER = M.MEMBER
         WHERE 1=1
         <include refid="questionList"></include>
     </select>
@@ -168,6 +186,7 @@
         <result column="KEYWORDS" property="keywords"/>
         <result column="ANSWER_YN" property="answerYn"/>
         <result column="ANSWER_CNT" property="answerCnt"/>
+        <result column="REPORT_CNT" property="reportCnt"/>
         <association property="memberVO" column="MEMBER" javaType="com.jamie.home.api.model.MEMBER">
             <result column="MEMBER_PROFILE" property="profile"/>
             <result column="MEMBER_NAME" property="name"/>

@@ -24,6 +24,7 @@ public class SEARCH {
     private String birthday;
     private String email;
     private Boolean stopMember;
+    private Boolean alertMember;
 
     // 리뷰
     private Integer review;
@@ -49,6 +50,8 @@ public class SEARCH {
     private String state;
     private Boolean admin;
     private Boolean needAnswer;
+    private String valueType;
+    private Integer value;
 
     public void calStart(){
         this.start = (this.page-1) * this.page_block;

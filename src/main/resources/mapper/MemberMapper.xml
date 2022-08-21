@@ -3,7 +3,7 @@
 
 <mapper namespace="com.jamie.home.api.dao.MemberDao">
     <sql id="memberList">
-        AND MEMBER != 1
+        AND ROLE != 'ROLE_ADMIN'
         <if test="searchKeyword != null">
             <if test="searchType == 'member'.toString()">
                 AND MEMBER LIKE CONCAT('%',#{searchKeyword},'%')
@@ -17,6 +17,9 @@
         </if>
         <if test="stopMember">
             AND STATE = '2'
+        </if>
+        <if test="alertMember">
+            AND STATE = '1'
         </if>
     </sql>
     <sql id="memberListOrder">
