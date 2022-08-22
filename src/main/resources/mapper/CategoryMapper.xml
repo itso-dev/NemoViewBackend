@@ -59,6 +59,46 @@
         </if>
     </select>
 
+    <insert id="insertCategory" parameterType="com.jamie.home.api.model.CATEGORY" useGeneratedKeys="true" keyProperty="category">
+        INSERT INTO CATEGORY
+            (NAME, SEQ, STATE, ICON)
+        VALUES
+            (#{name}, #{seq}, #{state}, #{icon})
+    </insert>
+
+    <insert id="insertCategoryClassification" parameterType="com.jamie.home.api.model.CATEGORY_CLASSIFICATION" useGeneratedKeys="true" keyProperty="classification">
+        INSERT INTO CATEGORY_CLASSIFICATION
+            (CATEGORY, NAME, SEQ, STATE)
+        VALUES
+            (#{category}, #{name}, #{seq}, #{state})
+    </insert>
+
+    <insert id="insertCategoryKeywords">
+        INSERT INTO CATEGORY_KEYWORD (CATEGORY, CLASSIFICATION, NAME) VALUES
+        <foreach collection="keywords" item="keyword" separator=",">
+            (#{category}, #{classification}, #{keyword.name})
+        </foreach>
+    </insert>
+
+    <update id="updateCategory">
+        UPDATE CATEGORY SET
+            NAME = #{name}
+            ,SEQ = #{seq}
+            ,STATE = #{state}
+            ,ICON = #{icon}
+            ,UPDDATE = NOW()
+        WHERE 1=1
+            AND CATEGORY = #{category}
+    </update>
+
+    <delete id="deleteAllClassifications">
+        DELETE FROM CATEGORY_CLASSIFICATION WHERE CATEGORY = #{category}
+    </delete>
+
+    <delete id="deleteAllKeywords">
+        DELETE FROM CATEGORY_KEYWORD WHERE CATEGORY = #{category}
+    </delete>
+
     <resultMap id="CategoryMap" type="com.jamie.home.api.model.CATEGORY">
         <result column="CATEGORY" property="category"/>
         <result column="NAME" property="name"/>

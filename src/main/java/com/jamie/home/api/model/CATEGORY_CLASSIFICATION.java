@@ -10,6 +10,7 @@ import java.util.List;
 @Setter
 @ToString
 public class CATEGORY_CLASSIFICATION {
+    private Integer category;
     private Integer classification;
     private String name;
     private Integer seq;

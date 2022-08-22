@@ -380,6 +380,37 @@ public class AdminController {
         }
     }
 
+    @RequestMapping(value="/category/save", method= RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseOverlays save(@Validated @ModelAttribute CATEGORY category) {
+        try {
+            int result = categoryService.save(category);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_CATEGORY_NOT_SAVE", null);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_CATEGORY_SUCCESS", category);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_CATEGORY_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/category/{key}", method= RequestMethod.PUT, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseOverlays save(@PathVariable("key") int key, @Validated @ModelAttribute CATEGORY category) {
+        try {
+            category.setCategory(key);
+            int result = categoryService.modi(category);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_CATEGORY_NOT_SAVE", null);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_CATEGORY_SUCCESS", category);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_CATEGORY_FAIL", null);
+        }
+    }
+
     @RequestMapping(value="/contact/list", method= RequestMethod.POST)
     public ResponseOverlays listContact(@Validated @RequestBody SEARCH search) {
         try {
