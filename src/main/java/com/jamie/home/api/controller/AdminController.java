@@ -530,4 +530,19 @@ public class AdminController {
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_FAQ_FAIL", null);
         }
     }
+
+    @RequestMapping(value="/dash", method= RequestMethod.POST)
+    public ResponseOverlays dashInfo(@Validated @RequestBody SEARCH search) {
+        try {
+            DASH result = mainService.adminDashInfo(search);
+            if(result != null){
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_DASH_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_DASH_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_DASH_FAIL", null);
+        }
+    }
 }

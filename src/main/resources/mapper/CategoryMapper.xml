@@ -99,6 +99,31 @@
         DELETE FROM CATEGORY_KEYWORD WHERE CATEGORY = #{category}
     </delete>
 
+    <select id="listCategoryRank" resultType="com.jamie.home.api.model.CATEGORY">
+        SELECT CATEGORY FROM REVIEW
+        GROUP BY CATEGORY
+        ORDER BY COUNT(CATEGORY) DESC
+        LIMIT 8
+    </select>
+
+    <select id="listReviewKeywordRank" resultType="com.jamie.home.api.model.KEYWORD">
+        SELECT KEYWORD FROM REVIEW_KEYWORD
+        GROUP BY KEYWORD
+        ORDER BY COUNT(KEYWORD) DESC
+        LIMIT 8
+    </select>
+
+    <select id="listQuestionKeywordRank" resultType="com.jamie.home.api.model.KEYWORD">
+        SELECT KEYWORD FROM QUESTION_KEYWORD
+        GROUP BY KEYWORD
+        ORDER BY COUNT(KEYWORD) DESC
+        LIMIT 8
+    </select>
+
+    <select id="getKeyword" resultType="com.jamie.home.api.model.KEYWORD">
+        SELECT * FROM CATEGORY_KEYWORD WHERE KEYWORD = #{keyword}
+    </select>
+
     <resultMap id="CategoryMap" type="com.jamie.home.api.model.CATEGORY">
         <result column="CATEGORY" property="category"/>
         <result column="NAME" property="name"/>

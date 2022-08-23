@@ -1,9 +1,6 @@
 package com.jamie.home.api.dao;
 
-import com.jamie.home.api.model.CATEGORY;
-import com.jamie.home.api.model.CATEGORY_CLASSIFICATION;
-import com.jamie.home.api.model.CONTACT;
-import com.jamie.home.api.model.SEARCH;
+import com.jamie.home.api.model.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -31,4 +28,12 @@ public interface CategoryDao {
     Integer deleteAllClassifications(CATEGORY category);
 
     Integer deleteAllKeywords(CATEGORY category);
+
+    List<CATEGORY> listCategoryRank();
+
+    List<KEYWORD> listReviewKeywordRank();
+
+    List<KEYWORD> listQuestionKeywordRank();
+
+    KEYWORD getKeyword(KEYWORD keyword);
 }

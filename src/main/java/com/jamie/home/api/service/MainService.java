@@ -1,12 +1,10 @@
 package com.jamie.home.api.service;
 
-import com.jamie.home.api.model.CATEGORY;
-import com.jamie.home.api.model.INFO;
-import com.jamie.home.api.model.MEMBER;
-import com.jamie.home.api.model.SEARCH;
+import com.jamie.home.api.model.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -55,5 +53,33 @@ public class MainService extends BasicService{
         }
 
         return pointDao.updateAdminValue(search);
+    }
+
+    public DASH adminDashInfo(SEARCH search) {
+        DASH result = memberDao.getAdminDashInfo(search);
+        // 카테고리 정보
+        result.setCategoryList(categoryDao.getListCategory(search));
+
+        // 인기 카테고리
+        result.setCategoryRankList(categoryDao.listCategoryRank());
+
+        // 인기 키워드 - 리뷰
+        List<KEYWORD> reviewKeywordList = new ArrayList<>();
+        List<KEYWORD> reviewKeywordRank = categoryDao.listReviewKeywordRank();
+        for(int i=0; i<reviewKeywordRank.size(); i++){
+            reviewKeywordList.add(categoryDao.getKeyword(reviewKeywordRank.get(i)));
+        }
+
+        result.setReviewKeywordRankList(reviewKeywordList);
+
+        // 인기 키워드 - 질문
+        List<KEYWORD> qeustionKeywordList = new ArrayList<>();
+        List<KEYWORD> questionKeywordRank = categoryDao.listQuestionKeywordRank();
+        for(int i=0; i<questionKeywordRank.size(); i++){
+            qeustionKeywordList.add(categoryDao.getKeyword(questionKeywordRank.get(i)));
+        }
+
+        result.setQuestionKeywordRankList(qeustionKeywordList);
+        return result;
     }
 }

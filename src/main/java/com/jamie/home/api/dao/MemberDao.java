@@ -1,5 +1,6 @@
 package com.jamie.home.api.dao;
 
+import com.jamie.home.api.model.DASH;
 import com.jamie.home.api.model.MEMBER;
 import com.jamie.home.api.model.REVIEW;
 import com.jamie.home.api.model.SEARCH;
@@ -43,4 +44,6 @@ public interface MemberDao {
     void deleteAllMemberKeywrod(SEARCH search);
 
     MEMBER find(SEARCH search);
+
+    DASH getAdminDashInfo(SEARCH search);
 }

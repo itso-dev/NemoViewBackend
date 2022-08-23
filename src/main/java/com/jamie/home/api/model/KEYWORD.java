@@ -13,5 +13,6 @@ public class KEYWORD {
     private Integer rkeyword;
     private Integer member;
     private Integer review;
+    private Integer category;
     private String name;
 }
