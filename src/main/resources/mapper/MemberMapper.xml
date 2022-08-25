@@ -143,10 +143,10 @@
     <select id="getAdminDashInfo" resultType="com.jamie.home.api.model.DASH">
         SELECT
             (SELECT COUNT(*) FROM MEMBER WHERE ROLE = 'ROLE_USER') AS memberTot
-            ,(SELECT COUNT(*) FROM MEMBER WHERE ROLE = 'ROLE_USER' AND DATE_FORMAT(REGDATE, '%Y%m%d') = DATE_FORMAT(NOW(), '%Y%m%d')) AS memberNew
-            ,(SELECT COUNT(*) FROM MEMBER WHERE ROLE = 'ROLE_USER' AND DATE_FORMAT(LOGDATE, '%Y%m%d') = DATE_FORMAT(NOW(), '%Y%m%d')) AS memberLogin
+            ,(SELECT COUNT(*) FROM MEMBER WHERE ROLE = 'ROLE_USER' AND REGDATE >= #{searchStartDate} AND REGDATE <![CDATA[<=]]> #{searchEndDate}) AS memberNew
+            ,(SELECT COUNT(*) FROM MEMBER WHERE ROLE = 'ROLE_USER' AND LOGDATE >= #{searchStartDate} AND LOGDATE <![CDATA[<=]]> #{searchEndDate}) AS memberLogin
             ,(SELECT SUM(POINT) FROM MEMBER WHERE ROLE = 'ROLE_USER') AS pointTot
-            ,(SELECT SUM(VALUE) FROM POINT WHERE TYPE = '2') AS pointApply
+            ,(SELECT SUM(VALUE) FROM POINT WHERE TYPE = '2' AND STATE = '2') AS pointApply
             ,(SELECT SUM(VALUE) FROM POINT WHERE TYPE = '2' AND STATE = '1') AS pointComplete
         FROM DUAL;
     </select>

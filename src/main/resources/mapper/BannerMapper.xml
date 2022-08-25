@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jamie.home.api.dao.BannerDao">
+    <sql id="bannerList">
+        <if test="type != null">
+            AND TYPE = #{type}
+        </if>
+        <if test="searchKeyword != null">
+            <if test="searchType == 'title'.toString()">
+                AND TITLE LIKE CONCAT('%',#{searchKeyword},'%')
+            </if>
+        </if>
+    </sql>
+    <sql id="bannerListOrder">
+        ORDER BY
+        <if test="orderType != null">
+            <choose>
+                <when test="orderType == 'reg_date_desc'.toString()">REGDATE DESC, </when>
+                <when test="orderType == 'hits_desc'.toString()">HITS DESC, </when>
+            </choose>
+        </if>
+        BANNER DESC
+    </sql>
+    <select id="getListBanner" resultType="com.jamie.home.api.model.BANNER">
+        SELECT *
+        FROM BANNER
+        WHERE 1=1
+        <include refid="bannerList"></include>
+        <include refid="bannerListOrder"></include>
+        <if test="start != null">
+            LIMIT #{start}, #{page_block}
+        </if>
+    </select>
+
+    <select id="getListBannerCnt" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM BANNER
+        WHERE 1=1
+        <include refid="bannerList"></include>
+    </select>
+
+    <select id="getBanner" resultType="com.jamie.home.api.model.BANNER">
+        SELECT * FROM BANNER WHERE BANNER = #{banner}
+    </select>
+    
+    <insert id="insertBanner">
+        INSERT INTO BANNER
+            (STATE, TITLE, IMAGE, TYPE, LOCATION, SEQ, LINK, START, END)
+        VALUE
+            (#{state}, #{title}, #{image}, #{type}, #{location}, #{seq}, #{link}, #{start}, #{end});
+    </insert>
+
+    <update id="updateBanner">
+        UPDATE BANNER SET
+            STATE = #{state}
+            ,TITLE = #{title}
+            ,IMAGE = #{image}
+            ,TYPE = #{type}
+            ,LOCATION = #{location}
+            ,SEQ = #{seq}
+            ,LINK = #{link}
+            ,START = #{start}
+            ,END = #{end}
+            ,UPDDATE = now()
+        WHERE BANNER = #{banner}
+    </update>
+</mapper>

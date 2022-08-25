@@ -34,4 +34,7 @@ public class BasicService {
     CategoryDao categoryDao;
     @Autowired
     SearchDao searchDao;
+
+    @Autowired
+    BannerDao bannerDao;
 }

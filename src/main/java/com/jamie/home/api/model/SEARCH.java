@@ -52,6 +52,9 @@ public class SEARCH {
     private Boolean needAnswer;
     private String valueType;
     private Integer value;
+    private String searchStartDate;
+    private String searchEndDate;
+    private String chkPointList;
 
     public void calStart(){
         this.start = (this.page-1) * this.page_block;

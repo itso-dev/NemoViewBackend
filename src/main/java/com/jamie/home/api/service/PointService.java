@@ -1,10 +1,13 @@
 package com.jamie.home.api.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jamie.home.api.model.*;
 import com.jamie.home.util.FileUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -49,5 +52,25 @@ public class PointService extends BasicService{
         }
 
         return pointDao.updatePointState(point);
+    }
+
+    public int modiPointStateAll(SEARCH search) throws JsonProcessingException {
+        int result = 0;
+        ObjectMapper mapper = new ObjectMapper();
+        List<Integer> list = Arrays.asList(mapper.readValue(search.getChkPointList(), Integer[].class));
+        for(int i=0; i<list.size(); i++){
+            POINT point = new POINT();
+            point.setPoint(list.get(i));
+            point.setState("1");
+
+            POINT pointInfo = pointDao.getPoint(point);
+            // 답변채택 알림 TYPE 3
+            INFO info = new INFO();
+            info.setValues(pointInfo.getMember(), "3", pointInfo.getMember(), "계좌로 환급이 완료되었어요! 변경 내역을 확인해 보세요!", "");
+            infoDao.insertInfo(info);
+
+            result += pointDao.updatePointState(point);
+        }
+        return result;
     }
 }

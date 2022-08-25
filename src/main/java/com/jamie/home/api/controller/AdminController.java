@@ -347,6 +347,21 @@ public class AdminController {
         }
     }
 
+    @RequestMapping(value="/point/state/all", method= RequestMethod.PUT)
+    public ResponseOverlays modiPointStateAll(@Validated @RequestBody SEARCH search) {
+        try {
+            int result = pointService.modiPointStateAll(search);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_POINT_NOT_SAVE", null);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_POINT_SUCCESS", search);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_POINT_FAIL", null);
+        }
+    }
+
     @RequestMapping(value="/category/list", method= RequestMethod.POST)
     public ResponseOverlays keywordList(@Validated @RequestBody SEARCH search) {
         try {
@@ -543,6 +558,73 @@ public class AdminController {
         } catch (Exception e){
             logger.error(e.getLocalizedMessage());
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_DASH_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/banner/list", method= RequestMethod.POST)
+    public ResponseOverlays listBanner(@Validated @RequestBody SEARCH search) {
+        try {
+            search.calStart();
+            List<BANNER> list = bannerService.list(search);
+            if(list != null){
+                Integer cnt = bannerService.listCnt(search);
+                VoList<BANNER> result = new VoList<>(cnt, list);
+                result.setPage(search.getPage(), search.getPage_block());
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_BANNER_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_BANNER_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_BANNER_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/banner/save", method= RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseOverlays saveBanner(@Validated @ModelAttribute BANNER banner) {
+        try {
+            int result = bannerService.save(banner);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_BANNER_NOT_SAVE", null);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_BANNER_SUCCESS", banner);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_BANNER_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/banner/{key}", method= RequestMethod.GET)
+    public ResponseOverlays getBanner(@PathVariable("key") int key) {
+        try {
+            BANNER banner = new BANNER();
+            banner.setBanner(key);
+            BANNER result = bannerService.get(banner);
+            if(result != null){
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_BANNER_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_BANNER_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_BANNER_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/banner/{key}", method= RequestMethod.PUT, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseOverlays modiBanner(@PathVariable("key") int key, @Validated @ModelAttribute BANNER banner) {
+        try {
+            banner.setBanner(key);
+            int result = bannerService.modi(banner);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_BANNER_NOT_SAVE", null);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_BANNER_SUCCESS", banner);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_BANNER_FAIL", null);
         }
     }
 }
