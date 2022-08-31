@@ -183,4 +183,8 @@ public class ReviewService extends BasicService{
     public CATEGORY getCategory(CATEGORY category) {
         return categoryDao.getCategoryWithKeyword(category);
     }
+
+    public Integer removeReply(REVIEW_REPLY reply) {
+        return reviewDao.deleteReply(reply);
+    }
 }

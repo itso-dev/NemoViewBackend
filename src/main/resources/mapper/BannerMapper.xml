@@ -6,6 +6,11 @@
         <if test="type != null">
             AND TYPE = #{type}
         </if>
+        <if test="location != null">
+            AND LOCATION = #{location}
+            AND DATE_FORMAT(START, '%Y%m%d') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m%d')
+            AND DATE_FORMAT(END, '%Y%m%d') >= DATE_FORMAT(NOW(), '%Y%m%d')
+        </if>
         <if test="searchKeyword != null">
             <if test="searchType == 'title'.toString()">
                 AND TITLE LIKE CONCAT('%',#{searchKeyword},'%')
@@ -18,6 +23,7 @@
             <choose>
                 <when test="orderType == 'reg_date_desc'.toString()">REGDATE DESC, </when>
                 <when test="orderType == 'hits_desc'.toString()">HITS DESC, </when>
+                <when test="orderType == 'seq'.toString()">SEQ, </when>
             </choose>
         </if>
         BANNER DESC
@@ -64,5 +70,14 @@
             ,END = #{end}
             ,UPDDATE = now()
         WHERE BANNER = #{banner}
+    </update>
+
+    <update id="updateBannerHits">
+        UPDATE BANNER SET HITS = HITS + 1 WHERE BANNER = #{banner}
+    </update>
+
+    <update id="upsertBannerMember">
+        INSERT BANNER_MEMBER (BANNER, MEMBER) VALUE
+        (#{banner}, #{member}) ON DUPLICATE KEY UPDATE UPDDATE = NOW()
     </update>
 </mapper>

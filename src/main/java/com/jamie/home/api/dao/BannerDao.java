@@ -20,4 +20,8 @@ public interface BannerDao {
     Integer updateBanner(BANNER contact);
 
     BANNER getBanner(BANNER contact);
+
+    Integer updateBannerHits(SEARCH search);
+
+    void upsertBannerMember(SEARCH search);
 }

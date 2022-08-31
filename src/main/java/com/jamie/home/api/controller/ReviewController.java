@@ -158,6 +158,22 @@ public class ReviewController {
         }
     }
 
+    @RequestMapping(value="/reply/{key}", method= RequestMethod.PUT)
+    public ResponseOverlays removeReply(@PathVariable("key") int key, @Validated @RequestBody REVIEW_REPLY reply) {
+        try {
+            reply.setReply(key);
+            int result = reviewService.removeReply(reply);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_REVIEW_REPLY_NOT_SAVE", null);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_REVIEW_REPLY_SUCCESS", reply);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_REVIEW_REPLY_FAIL", null);
+        }
+    }
+
     @RequestMapping(value="/category/{key}/keyword", method= RequestMethod.POST)
     public ResponseOverlays getCategory(@PathVariable("key") int key, @Validated @RequestBody CATEGORY category) {
         try {

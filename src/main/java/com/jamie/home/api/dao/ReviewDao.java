@@ -23,4 +23,5 @@ public interface ReviewDao {
     //관리자
     Integer updateReviewState(REVIEW review);
     void deleteAllReviewKeywrod(SEARCH search);
+    Integer deleteReply(REVIEW_REPLY reply);
 }

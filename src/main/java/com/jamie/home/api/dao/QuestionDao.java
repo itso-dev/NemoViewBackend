@@ -37,4 +37,6 @@ public interface QuestionDao {
     void deleteAllQuestionKeywrod(SEARCH search);
 
     QUESTION_ANSWER getAnswer(QUESTION_ANSWER answer);
+
+    Integer deleteAnswer(QUESTION_ANSWER answer);
 }

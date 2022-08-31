@@ -173,6 +173,10 @@
             AND ANSWER = #{answer}
     </select>
 
+    <delete id="deleteAnswer">
+        DELETE FROM QUESTION_ANSWER WHERE ANSWER = #{answer}
+    </delete>
+
     <resultMap id="QuestionMap" type="com.jamie.home.api.model.QUESTION">
         <result column="QUESTION" property="question"/>
         <result column="MEMBER" property="member"/>

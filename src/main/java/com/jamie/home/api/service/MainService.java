@@ -82,4 +82,15 @@ public class MainService extends BasicService{
         result.setQuestionKeywordRankList(qeustionKeywordList);
         return result;
     }
+
+    public List<BANNER> listBanner(SEARCH search) {
+        return bannerDao.getListBanner(search);
+    }
+
+    public int modiBannerHits(SEARCH search) {
+        if(search.getMember() != null){
+            bannerDao.upsertBannerMember(search);
+        }
+        return bannerDao.updateBannerHits(search);
+    }
 }

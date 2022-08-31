@@ -198,6 +198,10 @@
         DELETE FROM REVIEW_KEYWORD WHERE REVIEW = #{review}
     </delete>
 
+    <delete id="deleteReply">
+        DELETE FROM REVIEW_REPLY WHERE REPLY = #{reply}
+    </delete>
+
     <resultMap id="ReviewMap" type="com.jamie.home.api.model.REVIEW">
         <result column="REVIEW" property="review"/>
         <result column="MEMBER" property="member"/>

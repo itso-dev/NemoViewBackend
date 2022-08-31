@@ -1,6 +1,7 @@
 package com.jamie.home.api.controller;
 
 import com.jamie.home.api.model.*;
+import com.jamie.home.api.service.MailService;
 import com.jamie.home.api.service.MainService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,9 @@ public class MainController {
 
     @Autowired
     private MainService mainService;
+
+    @Autowired
+    private MailService mailService;
 
     @RequestMapping(value="/category/list", method= RequestMethod.POST)
     public ResponseOverlays list(@Validated @RequestBody SEARCH search) {
@@ -88,6 +92,9 @@ public class MainController {
         try {
             MEMBER result = mainService.find(search);
             if(result != null){
+                if(search.getEmail() != null){
+                    mailService.sendMail(result);
+                }
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_MEMBER_SUCCESS", result);
             } else {
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_MEMBER_NULL", null);
@@ -97,4 +104,38 @@ public class MainController {
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_MEMBER_FAIL", null);
         }
     }
+
+    @RequestMapping(value="/banner/list", method= RequestMethod.POST)
+    public ResponseOverlays listBanner(@Validated @RequestBody SEARCH search) {
+        try {
+            List<BANNER> list = mainService.listBanner(search);
+            if(list != null){
+                Integer cnt = mainService.listCategoryCnt(search);
+                VoList<BANNER> result = new VoList<>(cnt, list);
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_BANNER_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_BANNER_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_BANNER_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/banner/{key}/hits", method= RequestMethod.PUT)
+    public ResponseOverlays modiBannerHits(@PathVariable("key") int key, @Validated @RequestBody SEARCH search) {
+        try {
+            search.setBanner(key);
+            int result = mainService.modiBannerHits(search);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_BANNER_NOT_SAVE", null);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_BANNER_SUCCESS", result);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_BANNER_FAIL", null);
+        }
+    }
+
 }

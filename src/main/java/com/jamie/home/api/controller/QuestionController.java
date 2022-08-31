@@ -123,7 +123,7 @@ public class QuestionController {
         }
     }
 
-    @RequestMapping(value="answer/{key}/choose", method= RequestMethod.PUT)
+    @RequestMapping(value="/answer/{key}/choose", method= RequestMethod.PUT)
     public ResponseOverlays choose(@PathVariable("key") int key, @Validated @RequestBody QUESTION_ANSWER answer) {
         try {
             answer.setAnswer(key);
@@ -136,6 +136,22 @@ public class QuestionController {
         } catch (Exception e){
             logger.error(e.getLocalizedMessage());
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_QUESTION_LIKE_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/answer/{key}", method= RequestMethod.PUT)
+    public ResponseOverlays removeAnswer(@PathVariable("key") int key, @Validated @RequestBody QUESTION_ANSWER answer) {
+        try {
+            answer.setAnswer(key);
+            int result = questionService.removeAnswer(answer);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_QUESTION_REMOVE_NOT_SAVE", null);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_QUESTION_REMOVE_SUCCESS", answer);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_QUESTION_REMOVE_FAIL", null);
         }
     }
 }

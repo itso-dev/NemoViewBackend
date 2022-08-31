@@ -3,6 +3,7 @@ package com.jamie.home.api.service;
 import com.jamie.home.api.dao.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +35,8 @@ public class BasicService {
     CategoryDao categoryDao;
     @Autowired
     SearchDao searchDao;
-
     @Autowired
     BannerDao bannerDao;
+    @Autowired
+    JavaMailSender javaMailSender;
 }

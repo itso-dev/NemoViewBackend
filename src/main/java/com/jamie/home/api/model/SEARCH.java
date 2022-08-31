@@ -56,6 +56,10 @@ public class SEARCH {
     private String searchEndDate;
     private String chkPointList;
 
+    // 배너
+    private Integer banner;
+    private String location;
+
     public void calStart(){
         this.start = (this.page-1) * this.page_block;
     }

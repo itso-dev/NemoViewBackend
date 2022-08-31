@@ -136,4 +136,8 @@ public class QuestionService extends BasicService{
     public Integer modiQuestionState(QUESTION question) {
         return questionDao.updateQuestionState(question);
     }
+
+    public Integer removeAnswer(QUESTION_ANSWER answer) {
+        return questionDao.deleteAnswer(answer);
+    }
 }
