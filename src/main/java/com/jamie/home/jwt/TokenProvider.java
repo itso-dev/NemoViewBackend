@@ -29,15 +29,17 @@ public class TokenProvider implements InitializingBean {
 
    private final String secret;
    private final long tokenValidityInMilliseconds;
-
+   private final long tokenLongValidityInMilliseconds;
    private Key key;
 
 
    public TokenProvider(
-      @Value("${jwt.secret}") String secret,
-      @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds) {
+           @Value("${jwt.secret}") String secret,
+           @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds,
+           @Value("${jwt.token-long-validity-in-seconds}") long tokenLongValidityInMilliseconds) {
       this.secret = secret;
       this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
+      this.tokenLongValidityInMilliseconds = tokenLongValidityInMilliseconds * 1000;
    }
 
    @Override
@@ -60,6 +62,22 @@ public class TokenProvider implements InitializingBean {
          .signWith(key, SignatureAlgorithm.HS512)
          .setExpiration(validity)
          .compact();
+   }
+
+   public String createLongToken(Authentication authentication) {
+      String authorities = authentication.getAuthorities().stream()
+              .map(GrantedAuthority::getAuthority)
+              .collect(Collectors.joining(","));
+
+      long now = (new Date()).getTime();
+      Date validity = new Date(now + this.tokenLongValidityInMilliseconds);
+
+      return Jwts.builder()
+              .setSubject(authentication.getName())
+              .claim(AUTHORITIES_KEY, authorities)
+              .signWith(key, SignatureAlgorithm.HS512)
+              .setExpiration(validity)
+              .compact();
    }
 
    public Authentication getAuthentication(String token) {

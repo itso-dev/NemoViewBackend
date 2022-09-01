@@ -140,6 +140,22 @@
         </if>
     </select>
 
+    <insert id="insertRemember">
+        INSERT INTO MEMBER_REMEMBER
+            (MEMBER, TOKEN, UUID)
+        VALUE
+            (#{member}, #{token}, #{uuid})
+        ON DUPLICATE KEY UPDATE
+            TOKEN = #{token}
+            , UUID = #{uuid}
+            , REGDATE = NOW()
+            , UPDDATE = NOW() + interval 1 month
+    </insert>
+
+    <select id="getRemember" resultType="com.jamie.home.api.model.REMEMBER">
+        SELECT * FROM MEMBER_REMEMBER WHERE UUID = #{rememberCode} AND UPDDATE >= NOW()
+    </select>
+
     <select id="getAdminDashInfo" resultType="com.jamie.home.api.model.DASH">
         SELECT
             (SELECT COUNT(*) FROM MEMBER WHERE ROLE = 'ROLE_USER') AS memberTot

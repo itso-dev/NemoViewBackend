@@ -7,6 +7,7 @@ import com.jamie.home.jwt.TokenProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -71,7 +72,7 @@ public class AdminController {
             }
         }*/
     @RequestMapping(value="/member/login", method= RequestMethod.POST)
-    public ResponseOverlays login(@Validated @RequestBody MEMBER member) {
+    public ResponseOverlays login(@Value("${jwt.token-validity-in-seconds}") Double expirySec, @Validated @RequestBody MEMBER member) {
         try {
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(member.getEmail(), member.getPassword());
@@ -89,7 +90,7 @@ public class AdminController {
                 // 최근 로그인 업데이트
                 memberService.updateLogDate(result);
                 if(ROLE.ROLE_ADMIN.equals(result.getRole())){
-                    return new ResponseOverlays(HttpServletResponse.SC_OK, "LOGIN_MEMBER_SUCCESS", new TOKEN(result, jwt));
+                    return new ResponseOverlays(HttpServletResponse.SC_OK, "LOGIN_MEMBER_SUCCESS", new TOKEN(result, jwt, (expirySec / 3600.0)));
                 }else {
                     return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "LOGIN_MEMBER_FAIL", null);
                 }

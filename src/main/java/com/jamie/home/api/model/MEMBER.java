@@ -45,4 +45,7 @@ public class MEMBER {
 
     private String keywordList;
     private String inputCode;
+
+    private Boolean remember;
+    private String rememberCode;
 }

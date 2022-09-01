@@ -1,6 +1,7 @@
 package com.jamie.home.api.controller;
 
 import com.jamie.home.api.model.MEMBER;
+import com.jamie.home.api.model.REMEMBER;
 import com.jamie.home.api.model.ResponseOverlays;
 import com.jamie.home.api.model.TOKEN;
 import com.jamie.home.api.service.MemberService;
@@ -21,6 +22,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/member/*")
@@ -93,7 +95,7 @@ public class MemberController {
     }
 
     @RequestMapping(value="/login", method= RequestMethod.POST)
-    public ResponseOverlays login(@Validated @RequestBody MEMBER member) {
+    public ResponseOverlays login(@Value("${jwt.token-validity-in-seconds}") Double expirySec, @Validated @RequestBody MEMBER member) {
         try {
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(member.getEmail(), member.getPassword());
@@ -101,16 +103,54 @@ public class MemberController {
             Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            String jwt = tokenProvider.createToken(authentication);
-
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-
+            String jwt = null;
+            TOKEN token = null;
+            if(member.getRemember() != null && member.getRemember().booleanValue()){
+                jwt = tokenProvider.createLongToken(authentication);
+                HttpHeaders httpHeaders = new HttpHeaders();
+                httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+            } else {
+                jwt = tokenProvider.createToken(authentication);
+                HttpHeaders httpHeaders = new HttpHeaders();
+                httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+            }
             MEMBER result = memberService.checkEmail(member);
             if(jwt != null){
                 // 최근 로그인 업데이트
                 memberService.updateLogDate(result);
-                return new ResponseOverlays(HttpServletResponse.SC_OK, "LOGIN_MEMBER_SUCCESS", new TOKEN(result, jwt));
+                token = new TOKEN(result, jwt, (expirySec/3600.0));
+                if(member.getRemember() != null && member.getRemember().booleanValue()){
+                    REMEMBER remember = new REMEMBER();
+                    remember.setMember(result.getMember());
+                    remember.setToken(jwt);
+                    remember.setUuid(UUID.randomUUID().toString());
+
+                    memberService.saveRemember(remember);
+
+                    token.setRemember(remember.getUuid());
+                }
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "LOGIN_MEMBER_SUCCESS", token);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "LOGIN_MEMBER_FAIL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "LOGIN_MEMBER_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/login/remember", method= RequestMethod.POST)
+    public ResponseOverlays loginRemember(@Value("${jwt.token-long-validity-in-seconds}") Double expirySec, @Validated @RequestBody MEMBER member) {
+        try {
+            REMEMBER remember = memberService.getRemember(member);
+
+            if(remember != null){
+                HttpHeaders httpHeaders = new HttpHeaders();
+                httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + remember.getToken());
+                member.setMember(remember.getMember());
+                MEMBER result = memberService.get(member);
+                TOKEN token = new TOKEN(result, remember.getToken(), (expirySec/3600.0));
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "LOGIN_MEMBER_SUCCESS", token);
             } else {
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "LOGIN_MEMBER_FAIL", null);
             }

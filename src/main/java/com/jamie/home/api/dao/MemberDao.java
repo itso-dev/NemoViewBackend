@@ -1,9 +1,6 @@
 package com.jamie.home.api.dao;
 
-import com.jamie.home.api.model.DASH;
-import com.jamie.home.api.model.MEMBER;
-import com.jamie.home.api.model.REVIEW;
-import com.jamie.home.api.model.SEARCH;
+import com.jamie.home.api.model.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -46,4 +43,8 @@ public interface MemberDao {
     MEMBER find(SEARCH search);
 
     DASH getAdminDashInfo(SEARCH search);
+
+    Integer insertRemember(REMEMBER remember);
+
+    REMEMBER getRemember(MEMBER member);
 }

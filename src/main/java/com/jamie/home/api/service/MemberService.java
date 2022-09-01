@@ -144,11 +144,11 @@ public class MemberService extends BasicService{
         return memberDao.updateMemberSearchKeywords(member);
     }
 
-    public int modiAccount(MEMBER member) {
+    public Integer modiAccount(MEMBER member) {
         return memberDao.updateMemberAccount(member);
     }
 
-    public int inputCode(MEMBER member) {
+    public Integer inputCode(MEMBER member) {
         int result = 0;
         MEMBER codeMember = memberDao.getMemberByCode(member);
         if(codeMember != null) {
@@ -165,5 +165,13 @@ public class MemberService extends BasicService{
             result = 1;
         }
         return result;
+    }
+
+    public Integer saveRemember(REMEMBER remember) {
+        return memberDao.insertRemember(remember);
+    }
+
+    public REMEMBER getRemember(MEMBER member) {
+        return memberDao.getRemember(member);
     }
 }
