@@ -67,7 +67,9 @@ public class MainService extends BasicService{
         List<KEYWORD> reviewKeywordList = new ArrayList<>();
         List<KEYWORD> reviewKeywordRank = categoryDao.listReviewKeywordRank();
         for(int i=0; i<reviewKeywordRank.size(); i++){
-            reviewKeywordList.add(categoryDao.getKeyword(reviewKeywordRank.get(i)));
+            KEYWORD keyword = categoryDao.getKeyword(reviewKeywordRank.get(i));
+            keyword.setCnt(reviewKeywordRank.get(i).getCnt());
+            reviewKeywordList.add(keyword);
         }
 
         result.setReviewKeywordRankList(reviewKeywordList);
@@ -76,7 +78,9 @@ public class MainService extends BasicService{
         List<KEYWORD> qeustionKeywordList = new ArrayList<>();
         List<KEYWORD> questionKeywordRank = categoryDao.listQuestionKeywordRank();
         for(int i=0; i<questionKeywordRank.size(); i++){
-            qeustionKeywordList.add(categoryDao.getKeyword(questionKeywordRank.get(i)));
+            KEYWORD keyword = categoryDao.getKeyword(questionKeywordRank.get(i));
+            keyword.setCnt(questionKeywordRank.get(i).getCnt());
+            qeustionKeywordList.add(keyword);
         }
 
         result.setQuestionKeywordRankList(qeustionKeywordList);

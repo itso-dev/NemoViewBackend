@@ -156,6 +156,10 @@
         SELECT * FROM MEMBER_REMEMBER WHERE UUID = #{rememberCode} AND UPDDATE >= NOW()
     </select>
 
+    <delete id="deleteMember">
+        DELETE FROM MEMBER WHERE MEMBER = #{member}
+    </delete>
+
     <select id="getAdminDashInfo" resultType="com.jamie.home.api.model.DASH">
         SELECT
             (SELECT COUNT(*) FROM MEMBER WHERE ROLE = 'ROLE_USER') AS memberTot

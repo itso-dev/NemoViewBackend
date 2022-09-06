@@ -47,4 +47,6 @@ public interface MemberDao {
     Integer insertRemember(REMEMBER remember);
 
     REMEMBER getRemember(MEMBER member);
+
+    int deleteMember(MEMBER member);
 }

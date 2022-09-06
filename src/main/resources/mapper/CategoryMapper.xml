@@ -100,21 +100,21 @@
     </delete>
 
     <select id="listCategoryRank" resultType="com.jamie.home.api.model.CATEGORY">
-        SELECT CATEGORY FROM REVIEW
+        SELECT CATEGORY, COUNT(CATEGORY) AS CNT FROM REVIEW
         GROUP BY CATEGORY
         ORDER BY COUNT(CATEGORY) DESC
         LIMIT 8
     </select>
 
     <select id="listReviewKeywordRank" resultType="com.jamie.home.api.model.KEYWORD">
-        SELECT KEYWORD FROM REVIEW_KEYWORD
+        SELECT KEYWORD, COUNT(KEYWORD) AS CNT  FROM REVIEW_KEYWORD
         GROUP BY KEYWORD
         ORDER BY COUNT(KEYWORD) DESC
         LIMIT 8
     </select>
 
     <select id="listQuestionKeywordRank" resultType="com.jamie.home.api.model.KEYWORD">
-        SELECT KEYWORD FROM QUESTION_KEYWORD
+        SELECT KEYWORD, COUNT(KEYWORD) AS CNT  FROM QUESTION_KEYWORD
         GROUP BY KEYWORD
         ORDER BY COUNT(KEYWORD) DESC
         LIMIT 8

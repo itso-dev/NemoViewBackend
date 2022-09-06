@@ -174,4 +174,8 @@ public class MemberService extends BasicService{
     public REMEMBER getRemember(MEMBER member) {
         return memberDao.getRemember(member);
     }
+
+    public int removeMember(MEMBER member) {
+        return memberDao.deleteMember(member);
+    }
 }

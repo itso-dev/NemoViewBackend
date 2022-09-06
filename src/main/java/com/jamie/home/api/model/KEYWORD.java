@@ -15,4 +15,5 @@ public class KEYWORD {
     private Integer review;
     private Integer category;
     private String name;
+    private Integer cnt;
 }

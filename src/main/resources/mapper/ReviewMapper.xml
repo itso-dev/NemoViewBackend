@@ -72,7 +72,7 @@
             ,(SELECT COUNT(*) FROM REVIEW_LIKE RL WHERE RL.REVIEW = R.REVIEW AND DEL = 0) LIKE_TOT
             ,(SELECT COUNT(*) FROM REVIEW_REPLY RR WHERE RR.REVIEW = R.REVIEW) REPLY_TOT
             ,(SELECT NAME FROM CATEGORY C WHERE C.CATEGORY = R.CATEGORY) CATEGORY_NAME
-            ,(SELECT COUNT(*) FROM REPORT WHERE `KEY` = 3 AND TYPE = '1') REPORT_CNT
+            ,(SELECT COUNT(*) FROM REPORT WHERE `KEY` = R.REVIEW AND TYPE = '1') REPORT_CNT
             ,M.NICKNAME MEMBER_NICKNAME
         FROM REVIEW R
             LEFT JOIN MEMBER M on R.MEMBER = M.MEMBER
@@ -144,6 +144,7 @@
             ,USETIME = #{usetime}
             ,TIP = #{tip}
             ,KEYWORDS = #{keywords}
+            ,STATE = #{state}
             ,UPDDATE = now()
         WHERE REVIEW = #{review}
     </update>

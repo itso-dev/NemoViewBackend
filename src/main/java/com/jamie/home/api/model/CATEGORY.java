@@ -18,6 +18,7 @@ public class CATEGORY {
     private String state;
     private String icon;
     private String files;
+    private Integer cnt;
 
     private ArrayList<MultipartFile> saveFiles;
     private String deleteFiles;

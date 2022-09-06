@@ -2,6 +2,7 @@ package com.jamie.home.api.service;
 
 import com.jamie.home.api.model.BANNER;
 import com.jamie.home.api.model.CATEGORY;
+import com.jamie.home.api.model.MEMBER;
 import com.jamie.home.api.model.SEARCH;
 import com.jamie.home.util.FileUtils;
 import org.springframework.stereotype.Service;
@@ -47,5 +48,9 @@ public class BannerService extends BasicService{
 
     public BANNER get(BANNER banner) {
         return bannerDao.getBanner(banner);
+    }
+
+    public List<MEMBER> listMember(SEARCH search) {
+        return bannerDao.getListBannerMember(search);
     }
 }

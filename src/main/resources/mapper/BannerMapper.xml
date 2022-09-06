@@ -80,4 +80,8 @@
         INSERT BANNER_MEMBER (BANNER, MEMBER) VALUE
         (#{banner}, #{member}) ON DUPLICATE KEY UPDATE UPDDATE = NOW()
     </update>
+
+    <select id="getListBannerMember" resultType="com.jamie.home.api.model.MEMBER">
+        SELECT * FROM MEMBER WHERE MEMBER IN (SELECT MEMBER FROM BANNER_MEMBER WHERE BANNER = #{banner})
+    </select>
 </mapper>

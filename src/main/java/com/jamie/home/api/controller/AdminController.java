@@ -137,7 +137,24 @@ public class AdminController {
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_MEMBER_FAIL", null);
         }
     }
-
+    
+    @RequestMapping(value="member/{key}", method= RequestMethod.DELETE)
+    public ResponseOverlays removeMember(@PathVariable("key") int key) {
+        try {
+            MEMBER member = new MEMBER();
+            member.setMember(key);
+            int result = memberService.removeMember(member);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "DELETE_MEMBER_NOT_SAVE", null);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "DELETE_MEMBER_SUCCESS", member);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "DELETE_MEMBER_FAIL", null);
+        }
+    }
+    
     @RequestMapping(value="member/{key}/state", method= RequestMethod.PUT)
     public ResponseOverlays hideMember(@PathVariable("key") int key, @Validated @RequestBody MEMBER member) {
         try {
@@ -578,6 +595,22 @@ public class AdminController {
         } catch (Exception e){
             logger.error(e.getLocalizedMessage());
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_BANNER_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/banner/member/list", method= RequestMethod.POST)
+    public ResponseOverlays listBannerMember(@Validated @RequestBody SEARCH search) {
+        try {
+            List<MEMBER> list = bannerService.listMember(search);
+            if(list != null){
+                VoList<MEMBER> result = new VoList<>(list.size(), list);
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_BANNER_MEMBER_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_BANNER_MEMBER_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_BANNER_MEMBER_FAIL", null);
         }
     }
 
