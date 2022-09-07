@@ -23,6 +23,7 @@ public class BANNER {
     private String start;
     private String end;
     private Integer hits;
+    private Integer views;
     private Date regdate;
     private Date upddate;
 

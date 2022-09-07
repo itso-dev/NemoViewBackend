@@ -27,4 +27,6 @@ public interface BannerDao {
     void upsertBannerMember(SEARCH search);
 
     List<MEMBER> getListBannerMember(SEARCH search);
+
+    Integer updateBannerViews(SEARCH search);
 }

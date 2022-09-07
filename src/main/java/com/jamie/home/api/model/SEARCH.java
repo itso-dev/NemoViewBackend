@@ -41,6 +41,8 @@ public class SEARCH {
     private String type;
     private Integer questionMember;
     private Integer answerMember;
+    private Boolean noAnswer;
+    private Boolean helpAnswer;
 
     // 알림
     private Integer key;

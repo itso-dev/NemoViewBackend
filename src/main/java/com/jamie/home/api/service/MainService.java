@@ -88,13 +88,25 @@ public class MainService extends BasicService{
     }
 
     public List<BANNER> listBanner(SEARCH search) {
-        return bannerDao.getListBanner(search);
+        List<BANNER> result = bannerDao.getListBanner(search);
+        if("1".equals(search.getType())){
+            for(int i=0; i<result.size(); i++){
+                SEARCH param = new SEARCH();
+                param.setBanner(result.get(i).getBanner());
+                bannerDao.updateBannerViews(param);
+            }
+        }
+        return result;
     }
 
-    public int modiBannerHits(SEARCH search) {
+    public Integer modiBannerHits(SEARCH search) {
         if(search.getMember() != null){
             bannerDao.upsertBannerMember(search);
         }
         return bannerDao.updateBannerHits(search);
+    }
+
+    public Integer modiBannerViews(SEARCH search) {
+        return bannerDao.updateBannerViews(search);
     }
 }

@@ -76,6 +76,22 @@ public class ReviewController {
         }
     }
 
+    @RequestMapping(value="/{key}/hits", method= RequestMethod.PUT)
+    public ResponseOverlays modiHits(@PathVariable("key") int key, @Validated @RequestBody REVIEW review) {
+        try {
+            review.setReview(key);
+            int result = reviewService.upHits(review);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_REVIEW_NOT_SAVE", null);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_REVIEW_SUCCESS", review);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_REVIEW_FAIL", null);
+        }
+    }
+
     @RequestMapping(value="/save", method= RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseOverlays save(@Validated @ModelAttribute REVIEW review) {
         try {

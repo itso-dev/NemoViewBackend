@@ -29,6 +29,9 @@
                 AND M.NICKNAME LIKE CONCAT('%',#{searchKeyword},'%')
             </if>
         </if>
+        <if test="noAnswer">
+            AND (SELECT COUNT(*) FROM QUESTION_ANSWER QA WHERE QA.QUESTION = Q.QUESTION AND CHOOSE = TRUE) = 0
+        </if>
     </sql>
     <sql id="questionListOrder">
         ORDER BY

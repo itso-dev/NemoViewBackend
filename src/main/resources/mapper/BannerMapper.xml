@@ -24,6 +24,7 @@
                 <when test="orderType == 'reg_date_desc'.toString()">REGDATE DESC, </when>
                 <when test="orderType == 'hits_desc'.toString()">HITS DESC, </when>
                 <when test="orderType == 'seq'.toString()">SEQ, </when>
+                <when test="orderType == 'random'.toString()">RAND(), </when>
             </choose>
         </if>
         BANNER DESC
@@ -84,4 +85,8 @@
     <select id="getListBannerMember" resultType="com.jamie.home.api.model.MEMBER">
         SELECT * FROM MEMBER WHERE MEMBER IN (SELECT MEMBER FROM BANNER_MEMBER WHERE BANNER = #{banner})
     </select>
+
+    <update id="updateBannerViews">
+        UPDATE BANNER SET VIEWS = VIEWS + 1 WHERE BANNER = #{banner}
+    </update>
 </mapper>

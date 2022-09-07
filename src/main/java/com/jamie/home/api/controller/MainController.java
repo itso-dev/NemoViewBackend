@@ -138,4 +138,19 @@ public class MainController {
         }
     }
 
+    @RequestMapping(value="/banner/{key}/views", method= RequestMethod.PUT)
+    public ResponseOverlays modiBannerViews(@PathVariable("key") int key, @Validated @RequestBody SEARCH search) {
+        try {
+            search.setBanner(key);
+            int result = mainService.modiBannerViews(search);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_BANNER_NOT_SAVE", null);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_BANNER_SUCCESS", result);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_BANNER_FAIL", null);
+        }
+    }
 }
