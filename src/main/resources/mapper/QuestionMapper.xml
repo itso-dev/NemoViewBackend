@@ -32,6 +32,24 @@
         <if test="noAnswer">
             AND (SELECT COUNT(*) FROM QUESTION_ANSWER QA WHERE QA.QUESTION = Q.QUESTION AND CHOOSE = TRUE) = 0
         </if>
+        <if test="helpAnswer">
+            AND
+            <foreach collection="keywordList" item="keyword" separator="AND">
+                Q.KEYWORDS LIKE CONCAT('%"',#{keyword},'"%')
+            </foreach>
+            AND
+            (
+                SELECT COUNT(*) FROM MEMBER_KEYWORD
+                WHERE KEYWORD IN (
+                    SELECT KEYWORD FROM QUESTION_KEYWORD WHERE QUESTION = Q.QUESTION
+                )
+            )
+            >=
+            (
+                SELECT COUNT(*) FROM QUESTION_KEYWORD WHERE QUESTION = Q.QUESTION
+            )
+        </if>
+
     </sql>
     <sql id="questionListOrder">
         ORDER BY

@@ -1,5 +1,6 @@
 package com.jamie.home.api.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.jamie.home.api.model.*;
 import com.jamie.home.util.KeywordUtils;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,10 @@ import java.util.List;
 @Service
 @Transactional
 public class QuestionService extends BasicService{
-    public List<QUESTION> list(SEARCH search) {
+    public List<QUESTION> list(SEARCH search) throws Exception {
+        if(search.getKeywords() != null){
+            search.setKeywordList(KeywordUtils.getKeywordListFromSearch(search.getKeywords()));
+        }
         List<QUESTION> list = questionDao.getListQuestion(search);
         if(search.getAnswerMember() != null){
             for(int i=0; i<list.size(); i++){
