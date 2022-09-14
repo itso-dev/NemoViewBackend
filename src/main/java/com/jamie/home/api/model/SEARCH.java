@@ -62,6 +62,12 @@ public class SEARCH {
     private Integer banner;
     private String location;
 
+    // auth
+    private String returnurl;
+    private String enc_data;
+    private String auth_iv;
+    private String auth_key;
+
     public void calStart(){
         this.start = (this.page-1) * this.page_block;
     }

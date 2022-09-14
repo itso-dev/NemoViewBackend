@@ -170,4 +170,14 @@
             ,(SELECT SUM(VALUE) FROM POINT WHERE TYPE = '2' AND STATE = '1') AS pointComplete
         FROM DUAL;
     </select>
+
+    <select id="getListMemberKeyword" resultType="com.jamie.home.api.model.KEYWORD">
+        SELECT * FROM MEMBER_KEYWORD WHERE MEMBER = #{member}
+    </select>
+
+    <select id="getMandatoryKeyword" resultType="com.jamie.home.api.model.Keywords">
+        SELECT '2' AS TYPE, KEYWORD AS `KEY`, NAME AS VALUE
+        FROM CATEGORY_KEYWORD
+        WHERE KEYWORD IN (SELECT KEYWORD FROM MEMBER_KEYWORD WHERE MEMBER = #{member})
+    </select>
 </mapper>

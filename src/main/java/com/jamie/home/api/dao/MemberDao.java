@@ -49,4 +49,8 @@ public interface MemberDao {
     REMEMBER getRemember(MEMBER member);
 
     int deleteMember(MEMBER member);
+
+    List<KEYWORD> getListMemberKeyword(MEMBER reviewMember);
+
+    List<Keywords> getMandatoryKeyword(MEMBER reviewMember);
 }

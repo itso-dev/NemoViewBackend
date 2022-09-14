@@ -6,6 +6,7 @@ import com.jamie.home.util.KeywordUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -50,7 +51,8 @@ public class ReviewService extends BasicService{
 
         MEMBER param = new MEMBER();
         param.setMember(review.getMember());
-        List<Keywords> common = KeywordUtils.getCommonKeyword(memberDao.getMember(param));
+        MEMBER reviewMember = memberDao.getMember(param);
+        List<Keywords> common = KeywordUtils.getCommonKeyword(reviewMember);
 
         List<Keywords> mandatory = KeywordUtils.getMandatoryKeyword(review.getKeywordList());
 
@@ -69,8 +71,40 @@ public class ReviewService extends BasicService{
             search.setReview(review.getReview());
             search.setReview_keywords(keywords);
             reviewDao.insertReviewKeywrod(search);
-        }
 
+            // 리뷰 작성자 키워드 저장
+            List<KEYWORD> addList = new ArrayList<>();
+            List<KEYWORD> keywordList = memberDao.getListMemberKeyword(reviewMember);
+            for(int i=0; i<keywords.size(); i++){
+                boolean add = true;
+                for(int j=0; j<keywordList.size(); j++){
+                    if(keywordList.get(j).getKeyword().equals(keywords.get(i).getKeyword())){
+                        add = false;
+                        break;
+                    }
+                }
+                if(add){
+                    addList.add(keywords.get(i));
+                }
+            }
+
+            for(int i=0; i<addList.size(); i++){
+                keywordList.add(addList.get(i));
+            }
+
+            // MEMBER_KEYWORD 수정
+            SEARCH search2 = new SEARCH();
+            search2.setMember(reviewMember.getMember());
+            memberDao.deleteAllMemberKeywrod(search2);
+            search2.setReview_keywords(keywordList);
+            memberDao.insertMemberKeywrod(search2);
+
+            // 회원정보에서 공통키워드 추출
+            List<Keywords> memberCommon = KeywordUtils.getCommonKeyword(reviewMember);
+            List<Keywords> memberMandatory = memberDao.getMandatoryKeyword(reviewMember);
+            reviewMember.setKeywords(KeywordUtils.getKeywordsValue(memberCommon, memberMandatory, null));
+            memberDao.updateMemberKeywords(reviewMember);
+        }
         return result;
     }
 
@@ -97,7 +131,8 @@ public class ReviewService extends BasicService{
 
         MEMBER param = new MEMBER();
         param.setMember(review.getMember());
-        List<Keywords> common = KeywordUtils.getCommonKeyword(memberDao.getMember(param));
+        MEMBER reviewMember = memberDao.getMember(param);
+        List<Keywords> common = KeywordUtils.getCommonKeyword(reviewMember);
 
         List<Keywords> mandatory = KeywordUtils.getMandatoryKeyword(review.getKeywordList());
 
@@ -118,6 +153,39 @@ public class ReviewService extends BasicService{
         if(keywords != null && keywords.size() != 0){
             search.setReview_keywords(keywords);
             reviewDao.insertReviewKeywrod(search);
+
+            // 리뷰 작성자 키워드 저장
+            List<KEYWORD> addList = new ArrayList<>();
+            List<KEYWORD> keywordList = memberDao.getListMemberKeyword(reviewMember);
+            for(int i=0; i<keywords.size(); i++){
+                boolean add = true;
+                for(int j=0; j<keywordList.size(); j++){
+                    if(keywordList.get(j).getKeyword().equals(keywords.get(i).getKeyword())){
+                        add = false;
+                        break;
+                    }
+                }
+                if(add){
+                    addList.add(keywords.get(i));
+                }
+            }
+
+            for(int i=0; i<addList.size(); i++){
+                keywordList.add(addList.get(i));
+            }
+
+            // MEMBER_KEYWORD 수정
+            SEARCH search2 = new SEARCH();
+            search2.setMember(reviewMember.getMember());
+            memberDao.deleteAllMemberKeywrod(search2);
+            search2.setReview_keywords(keywordList);
+            memberDao.insertMemberKeywrod(search2);
+
+            // 회원정보에서 공통키워드 추출
+            List<Keywords> memberCommon = KeywordUtils.getCommonKeyword(reviewMember);
+            List<Keywords> memberMandatory = memberDao.getMandatoryKeyword(reviewMember);
+            reviewMember.setKeywords(KeywordUtils.getKeywordsValue(memberCommon, memberMandatory, null));
+            memberDao.updateMemberKeywords(reviewMember);
         }
         return result;
     }

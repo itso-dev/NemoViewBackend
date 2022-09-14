@@ -178,4 +178,8 @@ public class MemberService extends BasicService{
     public int removeMember(MEMBER member) {
         return memberDao.deleteMember(member);
     }
+
+    public List<KEYWORD> getListKeywordMandatory(MEMBER member) {
+        return memberDao.getListMemberKeyword(member);
+    }
 }

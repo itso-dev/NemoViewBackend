@@ -1,12 +1,11 @@
 package com.jamie.home.api.controller;
 
-import com.jamie.home.api.model.MEMBER;
-import com.jamie.home.api.model.REMEMBER;
-import com.jamie.home.api.model.ResponseOverlays;
-import com.jamie.home.api.model.TOKEN;
+import com.jamie.home.api.model.*;
+import com.jamie.home.api.model.auth.Key;
 import com.jamie.home.api.service.MemberService;
 import com.jamie.home.jwt.JwtFilter;
 import com.jamie.home.jwt.TokenProvider;
+import com.jamie.home.util.NiceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -239,4 +239,33 @@ public class MemberController {
         }
     }
 
+    @RequestMapping(value="/auth", method= RequestMethod.POST)
+    public ResponseOverlays auth(@RequestBody @Validated SEARCH search) {
+        try {
+            Key result = NiceUtils.requestEncryptionToken(search);
+            if(result != null){
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_AUTH_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_AUTH_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_AUTH_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/auth/result", method= RequestMethod.POST)
+    public ResponseOverlays authResult(@RequestBody @Validated SEARCH search) {
+        try {
+            String result = NiceUtils.decodeResult(search);
+            if(result != null){
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_AUTH_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_AUTH_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_AUTH_FAIL", null);
+        }
+    }
 }
