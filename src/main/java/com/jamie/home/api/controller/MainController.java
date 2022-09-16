@@ -153,4 +153,20 @@ public class MainController {
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_BANNER_FAIL", null);
         }
     }
+
+    @RequestMapping(value="/search/list", method= RequestMethod.POST)
+    public ResponseOverlays listSearch(@Validated @RequestBody SEARCH search) {
+        try {
+            List<String> list = mainService.listSearch(search);
+            if(list != null){
+                VoList<String> result = new VoList<>(list.size(), list);
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_CATEGORY_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CATEGORY_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CATEGORY_FAIL", null);
+        }
+    }
 }

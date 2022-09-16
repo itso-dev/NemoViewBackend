@@ -10,5 +10,7 @@ import java.util.List;
 @Mapper
 @Repository
 public interface SearchDao {
-    Integer upsertSearchKeyword(SEARCH search);
+    Integer insertSearchKeyword(SEARCH search);
+
+    List<String> getListSearch(SEARCH search);
 }

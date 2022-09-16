@@ -109,4 +109,8 @@ public class MainService extends BasicService{
     public Integer modiBannerViews(SEARCH search) {
         return bannerDao.updateBannerViews(search);
     }
+
+    public List<String> listSearch(SEARCH search) {
+        return searchDao.getListSearch(search);
+    }
 }

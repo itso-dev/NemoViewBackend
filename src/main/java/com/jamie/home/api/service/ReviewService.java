@@ -17,7 +17,7 @@ public class ReviewService extends BasicService{
             search.setKeywordList(KeywordUtils.getKeywordListFromSearch(search.getKeywords()));
         }
         if(search.getSearchKeyword() != null){
-            searchDao.upsertSearchKeyword(search);
+            searchDao.insertSearchKeyword(search);
         }
         return reviewDao.getListReview(search);
     }
