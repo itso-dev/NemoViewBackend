@@ -53,4 +53,6 @@ public interface MemberDao {
     List<KEYWORD> getListMemberKeyword(MEMBER reviewMember);
 
     List<Keywords> getMandatoryKeyword(MEMBER reviewMember);
+
+    List<MEMBER> getListMemberSameKeyword(SEARCH search);
 }

@@ -3,9 +3,11 @@ package com.jamie.home.api.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.jamie.home.api.model.*;
 import com.jamie.home.util.KeywordUtils;
+import javassist.compiler.ast.Keyword;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -62,11 +64,24 @@ public class QuestionService extends BasicService{
         }
 
         // 포인트 내역 수정
-        POINT point = new POINT();
-        point.setValues(question.getMember(), "3", question.getPoint(), "질문등록", "1");
-        pointDao.insertPoint(point);
-        param.setPoint(question.getPoint()*(-1));
-        memberDao.updateMemberPoint(param);
+        if (question.getPoint().intValue() != 0){
+            POINT point = new POINT();
+            point.setValues(question.getMember(), "3", question.getPoint(), "질문등록", "1");
+            pointDao.insertPoint(point);
+            param.setPoint(question.getPoint()*(-1));
+            memberDao.updateMemberPoint(param);
+        }
+
+        // 답변채택 알림 TYPE 11
+        if(!question.getNokeyword()){
+            search.setKeywordList(KeywordUtils.getKeywordListFromSearch(question.getKeywords()));
+            List<MEMBER> memberList = memberDao.getListMemberSameKeyword(search);
+            for(int i=0; i<memberList.size(); i++){
+                INFO info = new INFO();
+                info.setValues(memberList.get(i).getMember(), "11", question.getQuestion(), "다른 사용자가 도움을 필요로 하고 있어요! 지금 내용을 확인해 보세요!", "");
+                infoDao.insertInfo(info);
+            }
+        }
         return result;
     }
 

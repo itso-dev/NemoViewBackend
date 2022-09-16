@@ -12,6 +12,9 @@ public class Keywords {
     private Integer key;
     private String value;
 
+    public Keywords(){
+    }
+
     public Keywords(String type, Integer key, String value){
         this.type = type;
         this.key = key;

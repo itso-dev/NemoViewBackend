@@ -49,9 +49,11 @@ public class ContactService extends BasicService{
         CONTACT contactInfo = contactDao.getContact(contact);
 
         // 답변채택 알림 TYPE 5
-        INFO info = new INFO();
-        info.setValues(contactInfo.getMember(), "5", contactInfo.getContact(), "고객 센터로 문의한 질문에 답변이 등록되었어요. 지금 확인해 보세요!", "");
-        infoDao.insertInfo(info);
+        if(contactInfo.getAnswer() == null){ // 중복알림 방지
+            INFO info = new INFO();
+            info.setValues(contactInfo.getMember(), "5", contactInfo.getContact(), "고객 센터로 문의한 질문에 답변이 등록되었어요. 지금 확인해 보세요!", "");
+            infoDao.insertInfo(info);
+        }
 
         return contactDao.updateContactAnswer(contact);
     }

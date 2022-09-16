@@ -56,4 +56,6 @@ public class REVIEW {
     private MEMBER memberVO;
     private Integer point;
     private String reject;
+
+    private Integer keywordCnt;
 }

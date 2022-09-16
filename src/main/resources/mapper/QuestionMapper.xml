@@ -35,19 +35,18 @@
         <if test="helpAnswer">
             AND
             <foreach collection="keywordList" item="keyword" separator="AND">
-                Q.KEYWORDS LIKE CONCAT('%"',#{keyword},'"%')
+                <choose>
+                    <when test="keyword.type == '1'.toString()">
+                        Q.KEYWORDS LIKE CONCAT('%"',#{keyword.value},'"%')
+                    </when>
+                    <when test="keyword.type == '2'.toString()">
+                        #{keyword.key} IN (SELECT KEYWORD FROM QUESTION_KEYWORD WHERE QUESTION = Q.QUESTION)
+                    </when>
+                    <otherwise>
+                        1 = 1
+                    </otherwise>
+                </choose>
             </foreach>
-            AND
-            (
-                SELECT COUNT(*) FROM MEMBER_KEYWORD
-                WHERE KEYWORD IN (
-                    SELECT KEYWORD FROM QUESTION_KEYWORD WHERE QUESTION = Q.QUESTION
-                )
-            )
-            >=
-            (
-                SELECT COUNT(*) FROM QUESTION_KEYWORD WHERE QUESTION = Q.QUESTION
-            )
         </if>
 
     </sql>

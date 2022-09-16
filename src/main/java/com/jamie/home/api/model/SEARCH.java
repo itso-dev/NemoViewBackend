@@ -31,7 +31,7 @@ public class SEARCH {
     private Integer category;
     private Boolean videoYn;
     private String keywords;
-    private List<String> keywordList;
+    private List<Keywords> keywordList;
     private List<KEYWORD> review_keywords;
     private Integer reviewMember;
     private Integer likeMember;

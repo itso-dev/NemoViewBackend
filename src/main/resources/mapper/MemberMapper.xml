@@ -180,4 +180,23 @@
         FROM CATEGORY_KEYWORD
         WHERE KEYWORD IN (SELECT KEYWORD FROM MEMBER_KEYWORD WHERE MEMBER = #{member})
     </select>
+
+    <select id="getListMemberSameKeyword" resultType="com.jamie.home.api.model.MEMBER">
+        SELECT M.* FROM MEMBER M
+        WHERE 1=1
+        AND
+        <foreach collection="keywordList" item="keyword" separator="AND">
+            <choose>
+                <when test="keyword.type == '1'.toString()">
+                    M.KEYWORDS LIKE CONCAT('%"',#{keyword.value},'"%')
+                </when>
+                <when test="keyword.type == '2'.toString()">
+                    #{keyword.key} IN (SELECT KEYWORD FROM MEMBER_KEYWORD WHERE MEMBER = M.MEMBER)
+                </when>
+                <otherwise>
+                    1 = 1
+                </otherwise>
+            </choose>
+        </foreach>
+    </select>
 </mapper>
