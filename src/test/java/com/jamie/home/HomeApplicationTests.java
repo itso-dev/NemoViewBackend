@@ -2,6 +2,7 @@ package com.jamie.home;
 
 import com.jamie.home.api.model.Keywords;
 import com.jamie.home.util.KeywordUtils;
+import com.jamie.home.util.NiceUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -14,7 +15,7 @@ import java.util.List;
 class HomeApplicationTests {
 
     @Test
-    void contextLoads() {
+    void contextLoads() throws Exception {
         /*Keywords k1 = new Keywords("1","test1");
         Keywords k2 = new Keywords("1","test2");
         Keywords k3 = new Keywords("1","test3");
@@ -38,7 +39,7 @@ class HomeApplicationTests {
         } catch (Exception e){
 
         }*/
-
+        //NiceUtils.makeToken();
     }
 
 }

@@ -28,11 +28,39 @@ import java.util.Date;
 import java.util.UUID;
 
 public class NiceUtils {
-    private static final String access_token = "6815ba41-33e8-41e6-9cf6-b47940ea8c02";
-    private static final String client_id = "7eaee019-25e4-4e49-8046-4aaa15bb8436";
+    private static final String access_token = "d4b29387-832b-4367-9503-c86f78868028";
+    private static final String client_id = "b11648e2-e119-4c9c-985b-41bfd920a35b";
+    private static final String client_secret = "d4eb778dd26b41d66f3b02ce7a76d9c9";
     private static final Logger logger = LoggerFactory.getLogger(NiceUtils.class);
 
-    public static Key requestEncryptionToken(SEARCH search) throws JsonProcessingException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+    public static ResponseEntity<String> makeToken() throws Exception {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type","application/x-www-form-urlencoded");
+        long current_timestamp = new Date().getTime()/1000;
+        String encodedString = client_id+":"+client_secret;
+        String Authorization = "Basic " +  Base64.getUrlEncoder().encodeToString(encodedString.getBytes());
+        headers.add("Authorization",Authorization);
+        headers.add("grant_type","client_credentials");
+        headers.add("scope","default");
+
+        // 파라미터 생성
+        String requestJson = "grant_type=client_credentials&scope=default";
+        HttpEntity<String> entity = new HttpEntity<String>(requestJson, headers);
+
+        // 요청
+        RestTemplate rt = new RestTemplate();
+        String uri = "https://svc.niceapi.co.kr:22001/digital/niceid/oauth/oauth/token";
+        ResponseEntity<String> response = rt.exchange(
+                uri, //{요청할 서버 주소}
+                HttpMethod.POST, //{요청할 방식}
+                entity, // {요청할 때 보낼 데이터}
+                String.class //{요청시 반환되는 데이터 타입}
+        );
+
+        return response;
+    }
+
+    public static Key requestEncryptionToken(SEARCH search) throws Exception {
         String req_dtim = new SimpleDateFormat("yyyyMMddhhmmss").format(new Timestamp(System.currentTimeMillis()));
         UUID uuid = UUID.randomUUID();
         String req_no = uuid.toString().substring(6);
