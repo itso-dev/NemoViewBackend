@@ -109,6 +109,7 @@ public class NiceUtils {
         // 요청데이터 암호화
         String reqData = "{\"requestno\":\""+req_no+"\""+
                 ",\"returnurl\":\""+search.getReturnurl()+"\"" +
+                ",\"methodtype\":\"get\"" +
                 ",\"sitecode\":\""+resultData.getDataBody().getSite_code()+"\"}";
 
         //logger.info("reqData JSON ="+reqData); // Construct your JSON
