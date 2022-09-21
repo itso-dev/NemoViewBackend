@@ -143,7 +143,7 @@ public class ReviewService extends BasicService{
 
         review.setSavePhotos(null);
         review.setSaveVideos(null);
-        review.setState("1"); // 검수단계로 변경
+        //review.setState("1"); // 검수단계로 변경
         int result = reviewDao.updateReview(review);
 
         // 리뷰 키워드 저장
@@ -221,7 +221,7 @@ public class ReviewService extends BasicService{
 
     public Integer modiReviewState(REVIEW review){
         REVIEW reviewInfo = reviewDao.getReview(review);
-        if("2".equals(review.getState())){ // 리뷰 승인
+        if("2".equals(review.getState()) && review.getPoint() != null){ // 리뷰 승인
             // 포인트 적립
             POINT point = new POINT();
             point.setValues(reviewInfo.getMember(), "1", review.getPoint(), "리뷰승인", "1");

@@ -87,6 +87,7 @@
             ,(SELECT COUNT(*) FROM REVIEW_REPLY RR WHERE RR.REVIEW = R.REVIEW) REPLY_TOT
             ,(SELECT NAME FROM CATEGORY C WHERE C.CATEGORY = R.CATEGORY) CATEGORY_NAME
             ,(SELECT COUNT(*) FROM REPORT WHERE `KEY` = R.REVIEW AND TYPE = '1') REPORT_CNT
+            ,(SELECT COUNT(*) FROM INFO WHERE TYPE = 1 AND `KEY` = R.REVIEW) MODI_CNT
             ,M.PROFILE MEMBER_PROFILE
             ,M.NAME MEMBER_NAME
             ,M.NICKNAME MEMBER_NICKNAME
@@ -134,6 +135,8 @@
             ,(SELECT COUNT(*) FROM REVIEW_LIKE RL WHERE RL.REVIEW = R.REVIEW AND DEL = 0) LIKE_TOT
             ,(SELECT COUNT(*) FROM REVIEW_REPLY RR WHERE RR.REVIEW = R.REVIEW) REPLY_TOT
             ,(SELECT NAME FROM CATEGORY C WHERE C.CATEGORY = R.CATEGORY) CATEGORY_NAME
+            ,(SELECT COUNT(*) FROM REPORT WHERE `KEY` = R.REVIEW AND TYPE = '1') REPORT_CNT
+            ,(SELECT COUNT(*) FROM INFO WHERE TYPE = 1 AND `KEY` = R.REVIEW) MODI_CNT
             ,M.PROFILE MEMBER_PROFILE
             ,M.NAME MEMBER_NAME
             ,M.NICKNAME MEMBER_NICKNAME
@@ -270,6 +273,7 @@
         <result column="REPORT_CNT" property="reportCnt"/>
         <result column="CATEGORY_NAME" property="categoryName"/>
         <result column="KEYWORD_CNT" property="keywordCnt"/>
+        <result column="MODI_CNT" property="modiCnt"/>
         <association property="memberVO" column="MEMBER" javaType="com.jamie.home.api.model.MEMBER">
             <result column="MEMBER_PROFILE" property="profile"/>
             <result column="MEMBER_NAME" property="name"/>
