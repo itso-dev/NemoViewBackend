@@ -107,17 +107,23 @@
     </select>
 
     <select id="listReviewKeywordRank" resultType="com.jamie.home.api.model.KEYWORD">
-        SELECT KEYWORD, COUNT(KEYWORD) AS CNT  FROM REVIEW_KEYWORD
-        GROUP BY KEYWORD
-        ORDER BY COUNT(KEYWORD) DESC
-        LIMIT 8
+        SELECT CK.*, A.CNT
+        FROM (
+            SELECT KEYWORD, COUNT(KEYWORD) AS CNT  FROM REVIEW_KEYWORD
+            GROUP BY KEYWORD
+            ORDER BY COUNT(KEYWORD) DESC
+            LIMIT 8
+        ) A LEFT JOIN CATEGORY_KEYWORD CK ON CK.KEYWORD = A.KEYWORD
     </select>
 
     <select id="listQuestionKeywordRank" resultType="com.jamie.home.api.model.KEYWORD">
-        SELECT KEYWORD, COUNT(KEYWORD) AS CNT  FROM QUESTION_KEYWORD
-        GROUP BY KEYWORD
-        ORDER BY COUNT(KEYWORD) DESC
-        LIMIT 8
+        SELECT CK.*, A.CNT
+        FROM (
+            SELECT KEYWORD, COUNT(KEYWORD) AS CNT  FROM QUESTION_KEYWORD
+            GROUP BY KEYWORD
+            ORDER BY COUNT(KEYWORD) DESC
+            LIMIT 8
+        ) A LEFT JOIN CATEGORY_KEYWORD CK ON CK.KEYWORD = A.KEYWORD
     </select>
 
     <select id="getKeyword" resultType="com.jamie.home.api.model.KEYWORD">

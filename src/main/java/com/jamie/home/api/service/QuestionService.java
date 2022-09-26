@@ -143,6 +143,22 @@ public class QuestionService extends BasicService{
 
         if(result != 0) {
             QUESTION_ANSWER infoAnswer = questionDao.getAnswer(answer);
+
+            // 포인트 적립
+            QUESTION param = new QUESTION();
+            param.setQuestion(infoAnswer.getQuestion());
+            QUESTION infoQuestion = questionDao.getQuestion(param);
+            POINT point = new POINT();
+            point.setValues(infoAnswer.getMember(), "1", infoQuestion.getPoint(), "답변채택", "1");
+            pointDao.insertPoint(point);
+
+            // 회원 포인트 업데이트
+            MEMBER member = new MEMBER();
+            member.setMember(infoAnswer.getMember());
+            MEMBER memberInfo = memberDao.getMember(member);
+            memberInfo.setPoint(infoQuestion.getPoint());
+            memberDao.updateMemberPoint(memberInfo);
+
             // 답변채택 알림 TYPE 7
             INFO info = new INFO();
             info.setValues(infoAnswer.getMember(), "7", infoAnswer.getQuestion(), "내 댓글이 채택되었어요! 지급된 포인트를 확인해 보세요!", "");

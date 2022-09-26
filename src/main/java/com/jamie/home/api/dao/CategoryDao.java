@@ -36,4 +36,6 @@ public interface CategoryDao {
     List<KEYWORD> listQuestionKeywordRank();
 
     KEYWORD getKeyword(KEYWORD keyword);
+
+    String getKeywordName(KEYWORD keyword);
 }

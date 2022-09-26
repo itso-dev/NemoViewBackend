@@ -3,6 +3,9 @@
 
 <mapper namespace="com.jamie.home.api.dao.BannerDao">
     <sql id="bannerList">
+        <if test="state != null">
+            AND STATE = #{state}
+        </if>
         <if test="type != null">
             AND TYPE = #{type}
         </if>
