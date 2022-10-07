@@ -82,11 +82,13 @@
 
     <update id="upsertBannerMember">
         INSERT BANNER_MEMBER (BANNER, MEMBER) VALUE
-        (#{banner}, #{member}) ON DUPLICATE KEY UPDATE UPDDATE = NOW()
+        (#{banner}, #{member}) ON DUPLICATE KEY UPDATE UPDDATE = NOW(), HITS = HITS + 1
     </update>
 
     <select id="getListBannerMember" resultType="com.jamie.home.api.model.MEMBER">
-        SELECT * FROM MEMBER WHERE MEMBER IN (SELECT MEMBER FROM BANNER_MEMBER WHERE BANNER = #{banner})
+        SELECT M.*,
+            (SELECT HITS FROM BANNER_MEMBER WHERE MEMBER = M.MEMBER AND BANNER = #{banner}) AS HITS
+        FROM MEMBER M WHERE M.MEMBER IN (SELECT MEMBER FROM BANNER_MEMBER WHERE BANNER = #{banner})
     </select>
 
     <update id="updateBannerViews">

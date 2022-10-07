@@ -24,5 +24,9 @@ public class CATEGORY {
     private String deleteFiles;
 
     private List<CATEGORY_CLASSIFICATION> classifications;
+    private List<CATEGORY_CLASSIFICATION> delClassifications = new ArrayList<>();
+    private List<CATEGORY_CLASSIFICATION> newClassifications = new ArrayList<>();
     private String classificationsStr;
+    private String newClassificationsStr;
+    private String delClassificationsStr;
 }

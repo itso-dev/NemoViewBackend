@@ -48,4 +48,6 @@ public class MEMBER {
 
     private Boolean remember;
     private String rememberCode;
+
+    private Integer hits;
 }

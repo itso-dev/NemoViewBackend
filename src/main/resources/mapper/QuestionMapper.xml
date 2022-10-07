@@ -34,19 +34,13 @@
         </if>
         <if test="helpAnswer">
             AND
-            <foreach collection="keywordList" item="keyword" separator="AND">
-                <choose>
-                    <when test="keyword.type == '1'.toString()">
-                        Q.KEYWORDS LIKE CONCAT('%"',#{keyword.value},'"%')
-                    </when>
-                    <when test="keyword.type == '2'.toString()">
-                        #{keyword.key} IN (SELECT KEYWORD FROM QUESTION_KEYWORD WHERE QUESTION = Q.QUESTION)
-                    </when>
-                    <otherwise>
-                        1 = 1
-                    </otherwise>
-                </choose>
-            </foreach>
+            (
+                SELECT CASE COUNT(*) WHEN 0 THEN FALSE ELSE TRUE END
+                FROM MEMBER_KEYWORD MK
+                    LEFT JOIN QUESTION_KEYWORD QK on QK.KEYWORD = MK.KEYWORD AND QK.QUESTION = Q.QUESTION
+                WHERE MEMBER = #{member}
+                    AND QKEYWORD IS NOT NULL
+            )
         </if>
 
     </sql>
@@ -60,6 +54,15 @@
                 <when test="orderType == 'answer_desc'.toString()">ANSWER_CNT DESC, </when>
                 <when test="orderType == 'report_desc'.toString()">REPORT_CNT DESC, </when>
             </choose>
+        </if>
+        <if test="helpAnswer">
+            (
+            SELECT COUNT(*)
+            FROM MEMBER_KEYWORD MK
+                LEFT JOIN QUESTION_KEYWORD QK on QK.KEYWORD = MK.KEYWORD AND QK.QUESTION = Q.QUESTION
+            WHERE MEMBER = #{member}
+                AND QKEYWORD IS NOT NULL
+            ) DESC,
         </if>
         Q.QUESTION DESC
     </sql>

@@ -73,9 +73,9 @@
             (#{category}, #{name}, #{seq}, #{state})
     </insert>
 
-    <insert id="insertCategoryKeywords">
+    <insert id="insertCategoryNewKeywords">
         INSERT INTO CATEGORY_KEYWORD (CATEGORY, CLASSIFICATION, NAME) VALUES
-        <foreach collection="keywords" item="keyword" separator=",">
+        <foreach collection="newKeywords" item="keyword" separator=",">
             (#{category}, #{classification}, #{keyword.name})
         </foreach>
     </insert>
@@ -91,12 +91,20 @@
             AND CATEGORY = #{category}
     </update>
 
-    <delete id="deleteAllClassifications">
-        DELETE FROM CATEGORY_CLASSIFICATION WHERE CATEGORY = #{category}
+    <delete id="deleteClassifications">
+        DELETE FROM CATEGORY_CLASSIFICATION WHERE CLASSIFICATION IN (
+        <foreach collection="delClassifications" item="classification" separator=",">
+            #{classification.classification}
+        </foreach>
+        )
     </delete>
 
-    <delete id="deleteAllKeywords">
-        DELETE FROM CATEGORY_KEYWORD WHERE CATEGORY = #{category}
+    <delete id="deleteKeywords">
+        DELETE FROM CATEGORY_KEYWORD WHERE KEYWORD IN (
+        <foreach collection="delKeywords" item="keyword" separator=",">
+            #{keyword.keyword}
+        </foreach>
+        )
     </delete>
 
     <select id="listCategoryRank" resultType="com.jamie.home.api.model.CATEGORY">
@@ -129,6 +137,14 @@
     <select id="getKeyword" resultType="com.jamie.home.api.model.KEYWORD">
         SELECT * FROM CATEGORY_KEYWORD WHERE KEYWORD = #{keyword}
     </select>
+
+    <update id="updateKeyword">
+        UPDATE CATEGORY_KEYWORD SET NAME = #{name} WHERE KEYWORD = #{keyword}
+    </update>
+
+    <update id="updateClassification">
+        UPDATE CATEGORY_CLASSIFICATION SET NAME = #{name}, SEQ = #{seq}, STATE = #{state} WHERE CLASSIFICATION = #{classification}
+    </update>
 
     <resultMap id="CategoryMap" type="com.jamie.home.api.model.CATEGORY">
         <result column="CATEGORY" property="category"/>

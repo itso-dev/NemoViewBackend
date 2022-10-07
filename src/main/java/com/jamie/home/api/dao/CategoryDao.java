@@ -21,13 +21,13 @@ public interface CategoryDao {
 
     Integer insertCategoryClassification(CATEGORY_CLASSIFICATION cTarget);
 
-    Integer insertCategoryKeywords(CATEGORY_CLASSIFICATION cTarget);
+    Integer insertCategoryNewKeywords(CATEGORY_CLASSIFICATION cTarget);
 
     Integer updateCategory(CATEGORY category);
 
-    Integer deleteAllClassifications(CATEGORY category);
+    Integer deleteClassifications(CATEGORY category);
 
-    Integer deleteAllKeywords(CATEGORY category);
+    Integer deleteKeywords(CATEGORY_CLASSIFICATION cTarget);
 
     List<CATEGORY> listCategoryRank();
 
@@ -38,4 +38,8 @@ public interface CategoryDao {
     KEYWORD getKeyword(KEYWORD keyword);
 
     String getKeywordName(KEYWORD keyword);
+
+    Integer updateKeyword(CATEGORY_KEYWORD keyword);
+
+    Integer updateClassification(CATEGORY_CLASSIFICATION cTarget);
 }

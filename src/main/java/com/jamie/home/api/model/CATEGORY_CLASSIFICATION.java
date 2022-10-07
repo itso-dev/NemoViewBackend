@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -17,4 +18,6 @@ public class CATEGORY_CLASSIFICATION {
     private String state;
 
     private List<CATEGORY_KEYWORD> keywords;
+    private List<CATEGORY_KEYWORD> newKeywords = new ArrayList<>();
+    private List<CATEGORY_KEYWORD> delKeywords = new ArrayList<>();
 }
