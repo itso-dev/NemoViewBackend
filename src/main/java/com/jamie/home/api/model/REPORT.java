@@ -6,6 +6,7 @@ import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -18,6 +19,10 @@ public class REPORT {
     private String title;
     private String content;
     private String files;
+    private Date regdate;
+    private Date upddate;
 
     private ArrayList<MultipartFile> saveFiles;
+
+    private MEMBER memberVO;
 }

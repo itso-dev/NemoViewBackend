@@ -2,10 +2,73 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
 
 <mapper namespace="com.jamie.home.api.dao.ReportDao">
+    <sql id="reportList">
+        <if test="searchKeyword != null">
+            <if test="searchType == 'title'.toString()">
+                AND R.TITLE LIKE CONCAT('%',#{searchKeyword},'%')
+            </if>
+            <if test="searchType == 'content'.toString()">
+                AND R.CONTENT LIKE CONCAT('%',#{searchKeyword},'%')
+            </if>
+        </if>
+    </sql>
+    <sql id="reportListOrder">
+        ORDER BY
+        <if test="orderType != null">
+            <choose>
+                <when test="orderType == 'reg_date_desc'.toString()">R.REGDATE DESC, </when>
+            </choose>
+        </if>
+        R.REPORT DESC
+    </sql>
+
+    <select id="getListReport" resultMap="ReportMap">
+        SELECT
+            R.*,
+            M.NICKNAME AS MEMBER_NICKNAME,
+            M.PHONE AS MEMBER_PHONE
+        FROM REPORT R
+            LEFT JOIN MEMBER M on R.MEMBER = M.MEMBER
+        WHERE 1=1
+        <include refid="reportList"></include>
+        <include refid="reportListOrder"></include>
+        <if test="start != null">
+            LIMIT #{start}, #{page_block}
+        </if>
+    </select>
+
+    <select id="getListReportCnt" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM REPORT R
+            LEFT JOIN MEMBER M on R.MEMBER = M.MEMBER
+        WHERE 1=1
+        <include refid="reportList"></include>
+    </select>
+
     <insert id="insertReport">
         INSERT REPORT
             (MEMBER, `KEY`, TYPE, TITLE, CONTENT, FILES)
         VALUES
             (#{member},#{key},#{type},#{title},#{content},#{files});
     </insert>
+
+    <select id="getReport" resultType="com.jamie.home.api.model.REPORT">
+        SELECT * FROM REPORT WHERE REPORT = #{report}
+    </select>
+
+    <resultMap id="ReportMap" type="com.jamie.home.api.model.REPORT">
+        <result column="REPORT" property="report"/>
+        <result column="MEMBER" property="member"/>
+        <result column="KEY" property="key"/>
+        <result column="TYPE" property="type"/>
+        <result column="TITLE" property="title"/>
+        <result column="CONTENT" property="content"/>
+        <result column="FILES" property="files"/>
+        <result column="REGDATE" property="regdate"/>
+        <result column="UPDDATE" property="upddate"/>
+        <association property="memberVO" column="MEMBER" javaType="com.jamie.home.api.model.MEMBER">
+            <result column="MEMBER_NICKNAME" property="nickname"/>
+            <result column="MEMBER_PHONE" property="phone"/>
+        </association>
+    </resultMap>
 </mapper>

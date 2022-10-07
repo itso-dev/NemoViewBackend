@@ -49,28 +49,11 @@ public class AdminController {
     private FaqService faqService;
     @Autowired
     private InfoService infoService;
-
     @Autowired
     private MainService mainService;
-    /*
-        @RequestMapping(value="/dashboard", method= RequestMethod.POST)
-        public ResponseOverlays dashboard(@Validated @RequestBody SEARCH search) {
-            try {
-                search.calStart();
-                List<CATEGORY> list = memberService.listCategory(search);
-                if(list != null){
-                    Integer cnt = memberService.listCategoryCnt(search);
-                    VoList<CATEGORY> result = new VoList<>(cnt, list);
-                    result.setPage(search.getPage(), search.getPage_block());
-                    return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_DASHBOARD_SUCCESS", result);
-                } else {
-                    return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_DASHBOARD_NULL", null);
-                }
-            } catch (Exception e){
-                logger.error(e.getLocalizedMessage());
-                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_DASHBOARD_FAIL", null);
-            }
-        }*/
+    @Autowired
+    private ReportService reportService;
+    
     @RequestMapping(value="/member/login", method= RequestMethod.POST)
     public ResponseOverlays login(@Value("${jwt.token-validity-in-seconds}") Double expirySec, @Validated @RequestBody MEMBER member) {
         try {
@@ -659,6 +642,43 @@ public class AdminController {
         } catch (Exception e){
             logger.error(e.getLocalizedMessage());
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_BANNER_FAIL", null);
+        }
+    }
+    
+    @RequestMapping(value="/report/list", method= RequestMethod.POST)
+    public ResponseOverlays listReport(@Validated @RequestBody SEARCH search) {
+        try {
+            search.calStart();
+            List<REPORT> list = reportService.list(search);
+
+            if(list != null){
+                Integer cnt = contactService.listCnt(search);
+                VoList<REPORT> result = new VoList<>(cnt, list);
+                result.setPage(search.getPage(), search.getPage_block());
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_REPORT_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_REPORT_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_REPORT_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/report/{key}", method= RequestMethod.GET)
+    public ResponseOverlays getReport(@PathVariable("key") int key) {
+        try {
+            REPORT report = new REPORT();
+            report.setReport(key);
+            REPORT result = reportService.get(report);
+            if(result != null){
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_REPORT_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_REPORT_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_REPORT_FAIL", null);
         }
     }
 }
