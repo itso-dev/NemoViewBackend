@@ -146,6 +146,18 @@
         UPDATE CATEGORY_CLASSIFICATION SET NAME = #{name}, SEQ = #{seq}, STATE = #{state} WHERE CLASSIFICATION = #{classification}
     </update>
 
+    <update id="updateMemberKeywords">
+        UPDATE MEMBER SET KEYWORDS = GET_MEMBER_KEYWORD(MEMBER) WHERE 1=1
+    </update>
+
+    <update id="updateReviewKeywords">
+        UPDATE REVIEW SET KEYWORDS = GET_REVIEW_KEYWORD(REVIEW, MEMBER) WHERE 1=1
+    </update>
+
+    <update id="updateQuestionKeywords">
+        UPDATE QUESTION SET KEYWORDS = GET_QUESTION_KEYWORD(QUESTION, MEMBER) WHERE 1=1
+    </update>
+
     <resultMap id="CategoryMap" type="com.jamie.home.api.model.CATEGORY">
         <result column="CATEGORY" property="category"/>
         <result column="NAME" property="name"/>

@@ -42,4 +42,10 @@ public interface CategoryDao {
     Integer updateKeyword(CATEGORY_KEYWORD keyword);
 
     Integer updateClassification(CATEGORY_CLASSIFICATION cTarget);
+
+    void updateMemberKeywords();
+
+    void updateReviewKeywords();
+
+    void updateQuestionKeywords();
 }

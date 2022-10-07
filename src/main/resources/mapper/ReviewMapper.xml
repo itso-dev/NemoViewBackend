@@ -79,7 +79,7 @@
         R.REVIEW DESC
     </sql>
     <select id="getListReview" resultMap="ReviewMap">
-        SELECT R.*
+        SELECT GET_REVIEW_KEYWORD(R.REVIEW, R.MEMBER) AS KEYWORDS, R.*
         <if test="member != null">
             ,(SELECT COUNT(*) FROM REVIEW_LIKE RL WHERE RL.REVIEW = R.REVIEW AND RL.MEMBER = #{member} AND DEL = 0) LIKE_YN
         </if>
@@ -91,7 +91,7 @@
             ,M.PROFILE MEMBER_PROFILE
             ,M.NAME MEMBER_NAME
             ,M.NICKNAME MEMBER_NICKNAME
-            ,M.KEYWORDS MEMBER_KEYWORDS
+            ,GET_MEMBER_KEYWORD(M.MEMBER) AS MEMBER_KEYWORDS
         <if test="keywordList != null">
             ,(
             <foreach collection="keywordList" item="keyword" separator="+">
@@ -128,7 +128,7 @@
     </select>
 
     <select id="getReview" resultMap="ReviewMap">
-        SELECT R.*
+        SELECT GET_REVIEW_KEYWORD(R.REVIEW, R.MEMBER) AS KEYWORDS, R.*
         <if test="member != null">
             ,(SELECT COUNT(*) FROM REVIEW_LIKE RL WHERE RL.REVIEW = R.REVIEW AND RL.MEMBER = #{member} AND DEL = 0) LIKE_YN
         </if>
@@ -140,7 +140,7 @@
             ,M.PROFILE MEMBER_PROFILE
             ,M.NAME MEMBER_NAME
             ,M.NICKNAME MEMBER_NICKNAME
-            ,M.KEYWORDS MEMBER_KEYWORDS
+            ,GET_MEMBER_KEYWORD(M.MEMBER) AS MEMBER_KEYWORDS
         FROM REVIEW R
             LEFT JOIN MEMBER M on R.MEMBER = M.MEMBER
         WHERE 1=1
@@ -209,7 +209,7 @@
             M.PROFILE AS MEMBER_PROFILE,
             M.NAME AS MEMBER_NAME,
             M.NICKNAME AS MEMBER_NICKNAME,
-            M.KEYWORDS AS MEMBER_KEYWORDS
+            GET_MEMBER_KEYWORD(M.MEMBER) AS MEMBER_KEYWORDS
         FROM REVIEW_REPLY RR
             LEFT JOIN MEMBER M on RR.MEMBER = M.MEMBER
         WHERE 1=1

@@ -34,7 +34,8 @@
         MEMBER DESC
     </sql>
     <select id="getListMember" resultType="com.jamie.home.api.model.MEMBER">
-        SELECT *
+        SELECT
+            GET_MEMBER_KEYWORD(MEMBER) AS KEYWORDS, MEMBER.*
         FROM MEMBER
         WHERE 1=1
         <include refid="memberList"></include>
@@ -52,7 +53,8 @@
     </select>
 
     <select id="getMember" resultType="com.jamie.home.api.model.MEMBER">
-        SELECT *
+        SELECT
+            GET_MEMBER_KEYWORD(MEMBER) AS KEYWORDS, MEMBER.*
         FROM MEMBER
         WHERE MEMBER = #{member}
     </select>
@@ -75,7 +77,8 @@
     </update>
 
     <select id="checkEmail" resultType="com.jamie.home.api.model.MEMBER">
-        SELECT *
+        SELECT
+            GET_MEMBER_KEYWORD(MEMBER) AS KEYWORDS, MEMBER.*
         FROM MEMBER
         WHERE EMAIL = #{email}
     </select>

@@ -100,6 +100,10 @@ public class CategoryService extends BasicService{
                 categoryDao.insertCategoryNewKeywords(cTarget);
             }
         }
+        // 4. 회원, 리뷰, 질문 키워드 재설정
+        categoryDao.updateMemberKeywords();
+        categoryDao.updateReviewKeywords();
+        categoryDao.updateQuestionKeywords();
         return reuslt;
     }
 }
