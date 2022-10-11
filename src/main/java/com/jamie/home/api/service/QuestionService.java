@@ -72,13 +72,18 @@ public class QuestionService extends BasicService{
             memberDao.updateMemberPoint(param);
         }
 
-        // 답변채택 알림 TYPE 11
+        // 질문등록 시 전체 알림 TYPE 11
         if(!question.getNokeyword()){
             search.setKeywordList(KeywordUtils.getKeywordListFromSearch(question.getKeywords()));
             List<MEMBER> memberList = memberDao.getListMemberSameKeyword(search);
             for(int i=0; i<memberList.size(); i++){
                 INFO info = new INFO();
-                info.setValues(memberList.get(i).getMember(), "11", question.getQuestion(), "다른 사용자가 도움을 필요로 하고 있어요! 지금 내용을 확인해 보세요!", "");
+                info.setValues(memberList.get(i).getMember(),
+                        "11",
+                        question.getQuestion(),
+                        "다른 사용자가 도움을 필요로 하고 있어요! 지금 내용을 확인해 보세요!",
+                        "",
+                        "[{\"name\":\"input-check.png\",\"uuid\":\"input-check\",\"path\":\"/image/login/input-check.png\"}]");
                 infoDao.insertInfo(info);
             }
         }
@@ -123,14 +128,19 @@ public class QuestionService extends BasicService{
     public Integer saveAnswer(QUESTION_ANSWER answer) {
         int result = questionDao.insertQuestionAnswer(answer);
 
-        // 답변채택 알림 TYPE 8
+        // 질문에 댓글 달릴 때 알림 TYPE 8
         if(result != 0) {
             QUESTION param = new QUESTION();
             param.setQuestion(answer.getQuestion());
             QUESTION question = questionDao.getQuestion(param);
 
             INFO info = new INFO();
-            info.setValues(question.getMember(), "8", question.getQuestion(), "내 질문에 댓글이 달렸어요! 지금 댓글을 확인해 보세요!", "");
+            info.setValues(question.getMember(),
+                    "8",
+                    question.getQuestion(),
+                    "내 질문에 댓글이 달렸어요! 지금 댓글을 확인해 보세요!",
+                    "",
+                    "[{\"name\":\"comment-off.png\",\"uuid\":\"comment-off\",\"path\":\"/image/common/comment-off.png\"}]");
             infoDao.insertInfo(info);
         }
 
@@ -159,9 +169,14 @@ public class QuestionService extends BasicService{
             memberInfo.setPoint(infoQuestion.getPoint());
             memberDao.updateMemberPoint(memberInfo);
 
-            // 답변채택 알림 TYPE 7
+            // 질문 댓글 채택 시 알림 TYPE 7 TODO thumb 변경해야함
             INFO info = new INFO();
-            info.setValues(infoAnswer.getMember(), "7", infoAnswer.getQuestion(), "내 댓글이 채택되었어요! 지급된 포인트를 확인해 보세요!", "");
+            info.setValues(infoAnswer.getMember(),
+                    "7",
+                    infoAnswer.getQuestion(),
+                    "내 댓글이 채택되었어요! 지급된 포인트를 확인해 보세요!",
+                    "",
+                    "[{\"name\":\"comment-off.png\",\"uuid\":\"comment-off\",\"path\":\"/image/common/comment-off.png\"}]");
             infoDao.insertInfo(info);
         }
 

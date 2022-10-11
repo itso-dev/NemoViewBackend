@@ -24,11 +24,12 @@ public class INFO {
 
     private List<MEMBER> memberList;
 
-    public void setValues(Integer member, String type, Integer key, String title, String content) {
+    public void setValues(Integer member, String type, Integer key, String title, String content, String thumb) {
         this.member = member;
         this.type = type;
         this.key = key;
         this.title = title;
         this.content = content;
+        this.thumb = thumb;
     }
 }

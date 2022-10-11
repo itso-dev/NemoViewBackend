@@ -202,9 +202,14 @@ public class ReviewService extends BasicService{
             param.setReview(reply.getReview());
             REVIEW review = reviewDao.getReview(param);
 
-            // 답변채택 알림 TYPE 9
+            // 댓글달림 알림 TYPE 9
             INFO info = new INFO();
-            info.setValues(review.getMember(), "9", review.getReview(), "내 리뷰에 댓글이 달렸어요! 지금 댓글을 확인해 보세요!", "");
+            info.setValues(review.getMember(),
+                    "9",
+                    review.getReview(),
+                    "내 리뷰에 댓글이 달렸어요! 지금 댓글을 확인해 보세요!",
+                    "",
+                    review.getPhoto());
             infoDao.insertInfo(info);
         }
 
@@ -234,15 +239,25 @@ public class ReviewService extends BasicService{
             memberInfo.setPoint(review.getPoint());
             memberDao.updateMemberPoint(memberInfo);
 
-            // 답변채택 알림 TYPE 1
+            // 리뷰승인 알림 TYPE 1
             INFO info = new INFO();
-            info.setValues(reviewInfo.getMember(), "1", reviewInfo.getReview(), "리뷰가 승인되어 "+review.getPoint()+"포인트가 지급 되었어요! 지금 등록된 리뷰를 확인해 보세요.", "");
+            info.setValues(reviewInfo.getMember(),
+                    "1",
+                    reviewInfo.getReview(),
+                    "리뷰가 승인되어 "+review.getPoint()+"포인트가 지급 되었어요! 지금 등록된 리뷰를 확인해 보세요.",
+                    "",
+                    reviewInfo.getPhoto());
             infoDao.insertInfo(info);
 
         } else if("4".equals(review.getState())) { // 리뷰 반려
-            // 답변채택 알림 TYPE 2
+            // 리뷰반려 알림 TYPE 2
             INFO info = new INFO();
-            info.setValues(reviewInfo.getMember(), "2", reviewInfo.getReview(), "리뷰 등록이 거절되었어요. 사유를 확인 후 다시 등록해 주세요.", review.getReject());
+            info.setValues(reviewInfo.getMember(),
+                    "2",
+                    reviewInfo.getReview(),
+                    "리뷰 등록이 거절되었어요. 사유를 확인 후 다시 등록해 주세요.",
+                    review.getReject(),
+                    reviewInfo.getPhoto());
             infoDao.insertInfo(info);
         }
         return reviewDao.updateReviewState(review);
