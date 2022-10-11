@@ -46,7 +46,7 @@ public class MainService extends BasicService{
             // 환급 가능 금액 수정 시 늘어났으면 전체 알림
             search.setAlertMember(true);
             List<MEMBER> memberList = memberDao.getListMember(search);
-            // 답변채택 알림 TYPE 6
+            // 알림 TYPE 6
             INFO info = new INFO();
             info.setMemberList(memberList);
             infoDao.insertInfo(info);

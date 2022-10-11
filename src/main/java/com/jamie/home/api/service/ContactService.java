@@ -48,7 +48,7 @@ public class ContactService extends BasicService{
     public Integer modiContactAnswer(CONTACT contact){
         CONTACT contactInfo = contactDao.getContact(contact);
 
-        // 답변채택 알림 TYPE 5
+        // 고객센터 답변 등록 알림 TYPE 5
         if(contactInfo.getAnswer() == null){ // 중복알림 방지
             INFO info = new INFO();
             info.setValues(contactInfo.getMember(),
