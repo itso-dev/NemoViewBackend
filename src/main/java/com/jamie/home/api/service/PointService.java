@@ -31,14 +31,14 @@ public class PointService extends BasicService{
     public Integer modiPointState(POINT point) {
         if("1".equals(point.getState())){ //정산 완료
             POINT pointInfo = pointDao.getPoint(point);
-            // 정산 완료 알림 TYPE 3 TODO thumb 변경 해야함
+            // 정산 완료 알림 TYPE 3
             INFO info = new INFO();
             info.setValues(pointInfo.getMember(),
                     "3",
                     pointInfo.getMember(),
                     "계좌로 환급이 완료되었어요! 변경 내역을 확인해 보세요!",
                     "",
-                    "[{\"name\":\"point-icon.png\",\"uuid\":\"point-icon\",\"path\":\"/image/mypage/point-icon.png\"}]");
+                    "[{\"name\":\"point_transfer.png\",\"uuid\":\"point_transfer\",\"path\":\"/image/mypage/point_transfer.png\"}]");
             infoDao.insertInfo(info);
 
         } else if("3".equals(point.getState())) { // 정산 거절
@@ -74,14 +74,14 @@ public class PointService extends BasicService{
             point.setState("1");
 
             POINT pointInfo = pointDao.getPoint(point);
-            // 모든 정산 완료 알림 TYPE 3 TODO thumb 변경 해야함
+            // 모든 정산 완료 알림 TYPE 3
             INFO info = new INFO();
             info.setValues(pointInfo.getMember(),
                     "3",
                     pointInfo.getMember(),
                     "계좌로 환급이 완료되었어요! 변경 내역을 확인해 보세요!",
                     "",
-                    "[{\"name\":\"point-icon.png\",\"uuid\":\"point-icon\",\"path\":\"/image/mypage/point-icon.png\"}]");
+                    "[{\"name\":\"point_transfer.png\",\"uuid\":\"point_transfer\",\"path\":\"/image/mypage/point_transfer.png\"}]");
             infoDao.insertInfo(info);
 
             result += pointDao.updatePointState(point);

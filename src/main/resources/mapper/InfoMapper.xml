@@ -36,13 +36,13 @@
         <if test="memberList == null">
             (#{member}, #{key}, #{title}, #{content}, #{thumb}, #{type})
         </if>
-        <if test="memberList != null"> <!--TODO-->
+        <if test="memberList != null">
             <foreach collection="memberList" item="member" separator=",">
                 (#{member.member},
                 #{member.member},
                 '이번 달 환급 가능 금액이 늘어났어요. 지금 확인하고 환급 신청해 보세요!',
                 '',
-                '[{"name":"point-icon.png","uuid":"point-icon","path":"/image/mypage/point-icon.png"}]',
+                '[{"name":"point_transfer.png","uuid":"point_transfer","path":"/image/mypage/point_transfer.png"}]',
                 '6')
             </foreach>
         </if>

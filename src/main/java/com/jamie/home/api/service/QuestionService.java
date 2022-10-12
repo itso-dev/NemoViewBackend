@@ -169,14 +169,14 @@ public class QuestionService extends BasicService{
             memberInfo.setPoint(infoQuestion.getPoint());
             memberDao.updateMemberPoint(memberInfo);
 
-            // 질문 댓글 채택 시 알림 TYPE 7 TODO thumb 변경해야함
+            // 질문 댓글 채택 시 알림 TYPE 7
             INFO info = new INFO();
             info.setValues(infoAnswer.getMember(),
                     "7",
                     infoAnswer.getQuestion(),
                     "내 댓글이 채택되었어요! 지급된 포인트를 확인해 보세요!",
                     "",
-                    "[{\"name\":\"comment-off.png\",\"uuid\":\"comment-off\",\"path\":\"/image/common/comment-off.png\"}]");
+                    "[{\"name\":\"comment-on.png\",\"uuid\":\"comment-on\",\"path\":\"/image/common/comment-on.png\"}]");
             infoDao.insertInfo(info);
         }
 
