@@ -16,17 +16,25 @@
             AND Q.QUESTION IN (SELECT QUESTION FROM QUESTION_ANSWER WHERE MEMBER = #{answerMember})
         </if>
         <if test="searchKeyword != null">
-            <if test="searchType == 'question'.toString()">
-                AND Q.QUESTION LIKE CONCAT('%',#{searchKeyword},'%')
+            <if test="searchType != null">
+                <if test="searchType == 'question'.toString()">
+                    AND Q.QUESTION LIKE CONCAT('%',#{searchKeyword},'%')
+                </if>
+                <if test="searchType == 'title'.toString()">
+                    AND Q.TITLE LIKE CONCAT('%',#{searchKeyword},'%')
+                </if>
+                <if test="searchType == 'keyword'.toString()">
+                    AND Q.KEYWORDS LIKE CONCAT('%"',#{searchKeyword},'"%')
+                </if>
+                <if test="searchType == 'nickname'.toString()">
+                    AND M.NICKNAME LIKE CONCAT('%',#{searchKeyword},'%')
+                </if>
             </if>
-            <if test="searchType == 'title'.toString()">
-                AND Q.TITLE LIKE CONCAT('%',#{searchKeyword},'%')
-            </if>
-            <if test="searchType == 'keyword'.toString()">
-                AND Q.KEYWORDS LIKE CONCAT('%"',#{searchKeyword},'"%')
-            </if>
-            <if test="searchType == 'nickname'.toString()">
-                AND M.NICKNAME LIKE CONCAT('%',#{searchKeyword},'%')
+            <if test="searchType == null">
+                AND (
+                    Q.TITLE LIKE CONCAT('%',#{searchKeyword},'%') OR
+                    Q.KEYWORDS LIKE CONCAT('%"',#{searchKeyword},'"%')
+                )
             </if>
         </if>
         <if test="noAnswer">
