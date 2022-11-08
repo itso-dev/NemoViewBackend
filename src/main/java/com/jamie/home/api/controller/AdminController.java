@@ -364,9 +364,9 @@ public class AdminController {
     }
 
     @RequestMapping(value="/category/list", method= RequestMethod.POST)
-    public ResponseOverlays keywordList(@Validated @RequestBody SEARCH search) {
+    public ResponseOverlays categoryList(@Validated @RequestBody SEARCH search) {
         try {
-            List<CATEGORY> list = mainService.listCategoryKeyword(search);
+            List<CATEGORY> list = categoryService.list(search);
             if(list != null){
                 VoList<CATEGORY> result = new VoList<>(list.size(), list);
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_CATEGORY_SUCCESS", result);
@@ -384,7 +384,7 @@ public class AdminController {
         try {
             CATEGORY category = new CATEGORY();
             category.setCategory(key);
-            CATEGORY result = reviewService.getCategory(category);
+            CATEGORY result = categoryService.getCategory(category);
             if(result != null){
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_CATEGORY_SUCCESS", result);
             } else {
@@ -424,6 +424,70 @@ public class AdminController {
         } catch (Exception e){
             logger.error(e.getLocalizedMessage());
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_CATEGORY_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/category/classification/list", method= RequestMethod.POST)
+    public ResponseOverlays classificationList(@Validated @RequestBody SEARCH search) {
+        try {
+            List<CATEGORY_CLASSIFICATION> list = categoryService.listClassification(search);
+            if(list != null){
+                VoList<CATEGORY_CLASSIFICATION> result = new VoList<>(list.size(), list);
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_CLASSIFICATION_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CLASSIFICATION_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CLASSIFICATION_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/category/classification/{key}", method= RequestMethod.GET)
+    public ResponseOverlays getClassification(@PathVariable("key") int key) {
+        try {
+            CATEGORY_CLASSIFICATION classification = new CATEGORY_CLASSIFICATION();
+            classification.setClassification(key);
+            CATEGORY_CLASSIFICATION result = categoryService.getClassification(classification);
+            if(result != null){
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_CLASSIFICATION_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CLASSIFICATION_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CLASSIFICATION_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/category/classification/save", method= RequestMethod.POST)
+    public ResponseOverlays saveClassification(@Validated @RequestBody CATEGORY_CLASSIFICATION classification) {
+        try {
+            int result = categoryService.saveClassification(classification);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_CLASSIFICATION_NOT_SAVE", null);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_CLASSIFICATION_SUCCESS", classification);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_CLASSIFICATION_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/category/classification/{key}", method= RequestMethod.PUT)
+    public ResponseOverlays modiClassification(@PathVariable("key") int key, @Validated @RequestBody CATEGORY_CLASSIFICATION classification) {
+        try {
+            classification.setClassification(key);
+            int result = categoryService.modiClassification(classification);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_CLASSIFICATION_NOT_SAVE", null);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_CLASSIFICATION_SUCCESS", classification);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_CLASSIFICATION_FAIL", null);
         }
     }
 

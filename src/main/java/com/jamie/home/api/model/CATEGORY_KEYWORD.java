@@ -9,5 +9,6 @@ import lombok.ToString;
 @ToString
 public class CATEGORY_KEYWORD {
     private Integer keyword;
+    private Integer classification;
     private String name;
 }

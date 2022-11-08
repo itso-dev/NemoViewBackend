@@ -16,6 +16,7 @@ import java.util.List;
 @ToString
 public class MEMBER {
     private Integer member;
+    private Integer category;
     private String email;
     private String password;
     private String phone;

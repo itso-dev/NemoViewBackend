@@ -3,6 +3,7 @@ package com.jamie.home.api.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jamie.home.api.model.CATEGORY;
 import com.jamie.home.api.model.CATEGORY_CLASSIFICATION;
+import com.jamie.home.api.model.CATEGORY_KEYWORD;
 import com.jamie.home.api.model.SEARCH;
 import com.jamie.home.util.FileUtils;
 import org.springframework.stereotype.Service;
@@ -15,12 +16,16 @@ import java.util.List;
 @Transactional
 public class CategoryService extends BasicService{
     public List<CATEGORY> list(SEARCH search) {
-        return categoryDao.getListCategory(search);
+        return categoryDao.getCategoryWithKeywordList(search);
     }
 
-    public Integer listCnt(SEARCH search) {
-        return categoryDao.getListCategoryCnt(search);
+    public List<CATEGORY_CLASSIFICATION> listClassification(SEARCH search) {
+        return categoryDao.getClassificationWithKeywordList(search);
     }
+
+    /*public Integer listCnt(SEARCH search) {
+        return categoryDao.getListCategoryCnt(search);
+    }*/
 
     public Integer save(CATEGORY category) throws Exception{
         category.setIcon(
@@ -39,8 +44,7 @@ public class CategoryService extends BasicService{
         for(int i=0; i<cList.size(); i++){
             CATEGORY_CLASSIFICATION cTarget = cList.get(i);
             cTarget.setCategory(category.getCategory());
-            categoryDao.insertCategoryClassification(cTarget);
-            categoryDao.insertCategoryNewKeywords(cTarget);
+            categoryDao.insertCategoryClassificationGroup(cTarget);
         }
 
         return reuslt;
@@ -71,39 +75,73 @@ public class CategoryService extends BasicService{
 
         // 1. 세부 카테고리 삭제
         if(category.getDelClassifications() != null && category.getDelClassifications().size() != 0){
-            categoryDao.deleteClassifications(category);
+            categoryDao.deleteClassificationGroups(category);
         }
         // 2. 세부 카테고리 수정
         for(int i=0; i<category.getClassifications().size(); i++){
-            CATEGORY_CLASSIFICATION cTarget = category.getClassifications().get(i);
-            // 2-1. 키워드 삭제
-            if(cTarget.getDelKeywords() != null && cTarget.getDelKeywords().size() != 0){
-                categoryDao.deleteKeywords(cTarget);
-            }
-            // 2-1. 키워드 수정
-            for(int j=0; j<cTarget.getKeywords().size(); j++){
-                categoryDao.updateClassification(cTarget);
-                categoryDao.updateKeyword(cTarget.getKeywords().get(j));
-            }
-            // 2-1. 키워드 신규
-            if(cTarget.getNewKeywords() != null && cTarget.getNewKeywords().size() != 0){
-                cTarget.setCategory(category.getCategory());
-                categoryDao.insertCategoryNewKeywords(cTarget);
-            }
+            categoryDao.updateClassificationGroup(category.getClassifications().get(i));
         }
         // 3. 세부 카테고리 신규
         for(int i=0; i<category.getNewClassifications().size(); i++){
             CATEGORY_CLASSIFICATION cTarget = category.getNewClassifications().get(i);
             cTarget.setCategory(category.getCategory());
-            categoryDao.insertCategoryClassification(cTarget);
-            if(cTarget.getNewKeywords() != null && cTarget.getNewKeywords().size() != 0){
-                categoryDao.insertCategoryNewKeywords(cTarget);
-            }
+            categoryDao.insertCategoryClassificationGroup(cTarget);
         }
         // 4. 회원, 리뷰, 질문 키워드 재설정
-        categoryDao.updateMemberKeywords();
-        categoryDao.updateReviewKeywords();
-        categoryDao.updateQuestionKeywords();
+        //categoryDao.updateMemberKeywords();
+        //categoryDao.updateReviewKeywords();
+        //categoryDao.updateQuestionKeywords();
+        return reuslt;
+    }
+
+    public CATEGORY getCategory(CATEGORY category) {
+        return categoryDao.getCategoryWithKeyword(category);
+    }
+
+    public CATEGORY_CLASSIFICATION getClassification(CATEGORY_CLASSIFICATION classification) {
+        return categoryDao.getClassificationWithKeyword(classification);
+    }
+
+    public int saveClassification(CATEGORY_CLASSIFICATION classification) throws Exception {
+        int reuslt = categoryDao.insertCategoryClassification(classification);
+
+        ObjectMapper mapper = new ObjectMapper();
+        List<CATEGORY_KEYWORD> kList = Arrays.asList(mapper.readValue(classification.getKeywordsStr(), CATEGORY_KEYWORD[].class));
+
+        classification.setNewKeywords(kList);
+        if(classification.getNewKeywords() != null && classification.getNewKeywords().size() != 0){
+            categoryDao.insertCategoryNewKeywords(classification);
+        }
+
+        return reuslt;
+    }
+
+    public int modiClassification(CATEGORY_CLASSIFICATION classification) throws Exception {
+        int reuslt = categoryDao.updateClassification(classification);
+
+        ObjectMapper mapper = new ObjectMapper();
+        List<CATEGORY_KEYWORD> kList = Arrays.asList(mapper.readValue(classification.getKeywordsStr(), CATEGORY_KEYWORD[].class));
+        List<CATEGORY_KEYWORD> kListNew = Arrays.asList(mapper.readValue(classification.getNewKeywordsStr(), CATEGORY_KEYWORD[].class));
+        List<CATEGORY_KEYWORD> kListDel = Arrays.asList(mapper.readValue(classification.getDelKeywordsStr(), CATEGORY_KEYWORD[].class));
+
+        classification.setKeywords(kList);
+        classification.setNewKeywords(kListNew);
+        classification.setDelKeywords(kListDel);
+
+        // 2-1. 키워드 삭제
+        if(classification.getDelKeywords() != null && classification.getDelKeywords().size() != 0){
+            categoryDao.deleteKeywords(classification);
+        }
+        // 2-1. 키워드 수정
+        for(int j=0; j<classification.getKeywords().size(); j++){
+            categoryDao.updateClassification(classification);
+            categoryDao.updateKeyword(classification.getKeywords().get(j));
+        }
+        // 2-1. 키워드 신규
+        if(classification.getNewKeywords() != null && classification.getNewKeywords().size() != 0){
+            categoryDao.insertCategoryNewKeywords(classification);
+        }
+
         return reuslt;
     }
 }

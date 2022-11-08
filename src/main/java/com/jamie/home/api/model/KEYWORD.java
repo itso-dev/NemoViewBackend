@@ -14,6 +14,7 @@ public class KEYWORD {
     private Integer member;
     private Integer review;
     private Integer category;
+    private Integer classification;
     private String name;
     private Integer cnt;
 }

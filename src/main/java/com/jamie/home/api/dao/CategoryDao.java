@@ -17,7 +17,17 @@ public interface CategoryDao {
 
     List<CATEGORY> getCategoryWithKeywordList(SEARCH search);
 
+    CATEGORY_CLASSIFICATION getClassificationWithKeyword(CATEGORY_CLASSIFICATION classification);
+
+    List<CATEGORY_CLASSIFICATION> getClassificationWithKeywordList(SEARCH search);
+
     Integer insertCategory(CATEGORY category);
+
+    Integer insertCategoryClassificationGroup(CATEGORY_CLASSIFICATION cTarget);
+
+    Integer deleteClassificationGroups(CATEGORY category);
+
+    Integer updateClassificationGroup(CATEGORY_CLASSIFICATION cTarget);
 
     Integer insertCategoryClassification(CATEGORY_CLASSIFICATION cTarget);
 

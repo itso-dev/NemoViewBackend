@@ -4,7 +4,19 @@
 <mapper namespace="com.jamie.home.api.dao.CategoryDao">
     <sql id="categoryList">
         <if test="state != null">
-            AND STATE = #{state}
+            AND C.STATE = #{state}
+            AND IFNULL(CCG.STATE,1) = #{state}
+        </if>
+        <if test="searchKeyword != null">
+            <if test="searchType == 'name'.toString()">
+                AND C.NAME LIKE CONCAT('%',#{searchKeyword},'%')
+            </if>
+            <if test="searchType == 'classification'.toString()">
+                AND CC.NAME LIKE CONCAT('%',#{searchKeyword},'%')
+            </if>
+            <if test="searchType == 'keyword'.toString()">
+                AND CK.NAME LIKE CONCAT('%',#{searchKeyword},'%')
+            </if>
         </if>
     </sql>
 
@@ -12,7 +24,9 @@
         SELECT *
         FROM CATEGORY
         WHERE 1=1
-        <include refid="categoryList"></include>
+        <if test="state != null">
+            AND STATE = #{state}
+        </if>
         ORDER BY SEQ
         <if test="start != null">
             LIMIT #{start}, #{page_block}
@@ -23,40 +37,57 @@
         SELECT COUNT(*)
         FROM CATEGORY
         WHERE 1=1
-        <include refid="categoryList"></include>
+        <if test="state != null">
+            AND STATE = #{state}
+        </if>
     </select>
 
     <select id="getCategoryWithKeyword" resultMap="CategoryMap">
         SELECT C.CATEGORY, C.NAME, C.SEQ, C.STATE ,C.ICON,
-            CC.CLASSIFICATION AS CC_CLASSIFICATION, CC.NAME AS CC_NAME, CC.SEQ AS CC_SEQ, CC.STATE AS CC_STATE,
+            CCG.GROUP AS CCG_GROUP, CC.CLASSIFICATION AS CC_CLASSIFICATION, CC.NAME AS CC_NAME, CCG.SEQ AS CC_SEQ, CCG.STATE AS CC_STATE,
             CK.KEYWORD AS CK_KEYWORD, CK.NAME AS CK_NAME
         FROM CATEGORY C
-            LEFT JOIN CATEGORY_CLASSIFICATION CC on C.CATEGORY = CC.CATEGORY
-            LEFT JOIN CATEGORY_KEYWORD CK on C.CATEGORY = CK.CATEGORY AND CC.CLASSIFICATION = CK.CLASSIFICATION
+            LEFT JOIN CATEGORY_CLASSIFICATION_GROUP CCG on CCG.CATEGORY = C.CATEGORY
+            LEFT JOIN CATEGORY_CLASSIFICATION CC on CCG.CLASSIFICATION = CC.CLASSIFICATION
+            LEFT JOIN CATEGORY_KEYWORD CK on CC.CLASSIFICATION = CK.CLASSIFICATION
         WHERE C.CATEGORY = #{category}
         <if test="state != null">
             AND C.STATE = #{state}
-            AND IFNULL(CC.STATE,1) = #{state}
+            AND IFNULL(CCG.STATE,1) = #{state}
         </if>
-        ORDER BY C.SEQ, CC.SEQ, CK.KEYWORD
+        ORDER BY C.SEQ, CCG.SEQ, CK.KEYWORD
     </select>
 
     <select id="getCategoryWithKeywordList" resultMap="CategoryMap">
         SELECT C.CATEGORY, C.NAME, C.SEQ, C.STATE ,C.ICON,
-        CC.CLASSIFICATION AS CC_CLASSIFICATION, CC.NAME AS CC_NAME, CC.SEQ AS CC_SEQ, CC.STATE AS CC_STATE,
-        CK.KEYWORD AS CK_KEYWORD, CK.NAME AS CK_NAME
+            CCG.GROUP AS CCG_GROUP, CC.CLASSIFICATION AS CC_CLASSIFICATION, CC.NAME AS CC_NAME, CCG.SEQ AS CC_SEQ, CCG.STATE AS CC_STATE,
+            CK.KEYWORD AS CK_KEYWORD, CK.NAME AS CK_NAME
         FROM CATEGORY C
-        LEFT JOIN CATEGORY_CLASSIFICATION CC on C.CATEGORY = CC.CATEGORY
-        LEFT JOIN CATEGORY_KEYWORD CK on C.CATEGORY = CK.CATEGORY AND CC.CLASSIFICATION = CK.CLASSIFICATION
+            LEFT JOIN CATEGORY_CLASSIFICATION_GROUP CCG on CCG.CATEGORY = C.CATEGORY
+            LEFT JOIN CATEGORY_CLASSIFICATION CC on CCG.CLASSIFICATION = CC.CLASSIFICATION
+            LEFT JOIN CATEGORY_KEYWORD CK on CC.CLASSIFICATION = CK.CLASSIFICATION
         WHERE 1=1
-        <if test="state != null">
-            AND C.STATE = #{state}
-            AND IFNULL(CC.STATE,1) = #{state}
-        </if>
-        ORDER BY C.SEQ, CC.SEQ, CK.KEYWORD
-        <if test="start != null">
-            LIMIT #{start}, #{page_block}
-        </if>
+        <include refid="categoryList"></include>
+        ORDER BY C.SEQ, CCG.SEQ, CK.KEYWORD
+    </select>
+
+    <select id="getClassificationWithKeyword" resultMap="ClassificationMap">
+        SELECT CC.CLASSIFICATION AS CC_CLASSIFICATION, CC.NAME AS CC_NAME,
+            CK.KEYWORD AS CK_KEYWORD, CK.NAME AS CK_NAME
+        FROM CATEGORY_CLASSIFICATION CC
+            LEFT JOIN CATEGORY_KEYWORD CK on CC.CLASSIFICATION = CK.CLASSIFICATION
+        WHERE CC.CLASSIFICATION = #{classification}
+        ORDER BY CC.CLASSIFICATION, CK.KEYWORD
+    </select>
+
+    <select id="getClassificationWithKeywordList" resultMap="ClassificationMap">
+        SELECT CC.CLASSIFICATION AS CC_CLASSIFICATION, CC.NAME AS CC_NAME,
+            CK.KEYWORD AS CK_KEYWORD, CK.NAME AS CK_NAME
+        FROM CATEGORY_CLASSIFICATION CC
+            LEFT JOIN CATEGORY_KEYWORD CK on CC.CLASSIFICATION = CK.CLASSIFICATION
+        WHERE 1=1
+        <include refid="categoryList"></include>
+        ORDER BY CC.CLASSIFICATION, CK.KEYWORD
     </select>
 
     <insert id="insertCategory" parameterType="com.jamie.home.api.model.CATEGORY" useGeneratedKeys="true" keyProperty="category">
@@ -66,17 +97,36 @@
             (#{name}, #{seq}, #{state}, #{icon})
     </insert>
 
+    <insert id="insertCategoryClassificationGroup">
+        INSERT INTO CATEGORY_CLASSIFICATION_GROUP (CATEGORY, CLASSIFICATION, SEQ, STATE) VALUES (#{category}, #{classification}, #{seq}, #{state})
+    </insert>
+
+    <update id="updateClassificationGroup">
+        UPDATE CATEGORY_CLASSIFICATION_GROUP SET
+            CLASSIFICATION = #{classification}
+            ,SEQ = #{seq}
+            ,STATE = #{state}
+            ,UPDDATE = NOW()
+        WHERE 1=1
+        AND `GROUP` = #{group}
+    </update>
+
+    <delete id="deleteClassificationGroups">
+        DELETE FROM CATEGORY_CLASSIFICATION_GROUP WHERE CATEGORY = #{category} AND CLASSIFICATION IN (
+        <foreach collection="delClassifications" item="classification" separator=",">
+            #{classification.classification}
+        </foreach>
+        )
+    </delete>
+
     <insert id="insertCategoryClassification" parameterType="com.jamie.home.api.model.CATEGORY_CLASSIFICATION" useGeneratedKeys="true" keyProperty="classification">
-        INSERT INTO CATEGORY_CLASSIFICATION
-            (CATEGORY, NAME, SEQ, STATE)
-        VALUES
-            (#{category}, #{name}, #{seq}, #{state})
+        INSERT INTO CATEGORY_CLASSIFICATION (NAME) VALUES (#{name})
     </insert>
 
     <insert id="insertCategoryNewKeywords">
-        INSERT INTO CATEGORY_KEYWORD (CATEGORY, CLASSIFICATION, NAME) VALUES
+        INSERT INTO CATEGORY_KEYWORD (CLASSIFICATION, NAME) VALUES
         <foreach collection="newKeywords" item="keyword" separator=",">
-            (#{category}, #{classification}, #{keyword.name})
+            (#{classification}, #{keyword.name})
         </foreach>
     </insert>
 
@@ -143,7 +193,7 @@
     </update>
 
     <update id="updateClassification">
-        UPDATE CATEGORY_CLASSIFICATION SET NAME = #{name}, SEQ = #{seq}, STATE = #{state} WHERE CLASSIFICATION = #{classification}
+        UPDATE CATEGORY_CLASSIFICATION SET NAME = #{name},UPDDATE = NOW() WHERE CLASSIFICATION = #{classification}
     </update>
 
     <update id="updateMemberKeywords">
@@ -165,6 +215,7 @@
         <result column="STATE" property="state"/>
         <result column="ICON" property="icon"/>
         <collection property="classifications" ofType="com.jamie.home.api.model.CATEGORY_CLASSIFICATION">
+            <result column="CCG_GROUP" property="group"/>
             <result column="CC_CLASSIFICATION" property="classification"/>
             <result column="CC_NAME" property="name"/>
             <result column="CC_SEQ" property="seq"/>
@@ -173,6 +224,15 @@
                 <result column="CK_KEYWORD" property="keyword"/>
                 <result column="CK_NAME" property="name"/>
             </collection>
+        </collection>
+    </resultMap>
+
+    <resultMap id="ClassificationMap" type="com.jamie.home.api.model.CATEGORY_CLASSIFICATION">
+        <result column="CC_CLASSIFICATION" property="classification"/>
+        <result column="CC_NAME" property="name"/>
+        <collection property="keywords" ofType="com.jamie.home.api.model.CATEGORY_KEYWORD">
+            <result column="CK_KEYWORD" property="keyword"/>
+            <result column="CK_NAME" property="name"/>
         </collection>
     </resultMap>
 </mapper>
