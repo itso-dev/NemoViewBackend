@@ -87,10 +87,6 @@ public class CategoryService extends BasicService{
             cTarget.setCategory(category.getCategory());
             categoryDao.insertCategoryClassificationGroup(cTarget);
         }
-        // 4. 회원, 리뷰, 질문 키워드 재설정
-        //categoryDao.updateMemberKeywords();
-        //categoryDao.updateReviewKeywords();
-        //categoryDao.updateQuestionKeywords();
         return reuslt;
     }
 
@@ -141,6 +137,11 @@ public class CategoryService extends BasicService{
         if(classification.getNewKeywords() != null && classification.getNewKeywords().size() != 0){
             categoryDao.insertCategoryNewKeywords(classification);
         }
+
+        // 4. 회원, 리뷰, 질문 키워드 재설정
+        categoryDao.updateMemberKeywords();
+        categoryDao.updateReviewKeywords();
+        categoryDao.updateQuestionKeywords();
 
         return reuslt;
     }
