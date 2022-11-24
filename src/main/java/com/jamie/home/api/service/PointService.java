@@ -47,7 +47,7 @@ public class PointService extends BasicService{
             MEMBER member = new MEMBER();
             member.setMember(pointInfo.getMember());
             MEMBER memberInfo = memberDao.getMember(member);
-            memberInfo.setPoint(pointInfo.getPoint());
+            memberInfo.setPoint(pointInfo.getValue());
             memberDao.updateMemberPoint(memberInfo);
 
             // 정산 거절 알림 TYPE 4

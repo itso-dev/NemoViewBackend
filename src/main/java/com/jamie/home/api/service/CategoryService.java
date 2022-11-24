@@ -145,4 +145,12 @@ public class CategoryService extends BasicService{
 
         return reuslt;
     }
+
+    public Integer removeCategory(CATEGORY category) {
+        return categoryDao.deleteCategory(category);
+    }
+
+    public Integer removeClassification(CATEGORY_CLASSIFICATION classification) {
+        return categoryDao.deleteClassification(classification);
+    }
 }

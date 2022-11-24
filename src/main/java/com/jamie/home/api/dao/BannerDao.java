@@ -29,4 +29,6 @@ public interface BannerDao {
     List<MEMBER> getListBannerMember(SEARCH search);
 
     Integer updateBannerViews(SEARCH search);
+
+    Integer deleteBanner(BANNER banner);
 }

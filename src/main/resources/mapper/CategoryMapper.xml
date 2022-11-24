@@ -123,6 +123,14 @@
         INSERT INTO CATEGORY_CLASSIFICATION (NAME) VALUES (#{name})
     </insert>
 
+    <delete id="deleteCategory">
+        DELETE FROM CATEGORY WHERE CATEGORY = #{category}
+    </delete>
+
+    <delete id="deleteClassification">
+        DELETE FROM CATEGORY_CLASSIFICATION WHERE CLASSIFICATION = #{classification}
+    </delete>
+
     <insert id="insertCategoryNewKeywords">
         INSERT INTO CATEGORY_KEYWORD (CLASSIFICATION, NAME) VALUES
         <foreach collection="newKeywords" item="keyword" separator=",">

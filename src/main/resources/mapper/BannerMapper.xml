@@ -94,4 +94,8 @@
     <update id="updateBannerViews">
         UPDATE BANNER SET VIEWS = VIEWS + 1 WHERE BANNER = #{banner}
     </update>
+
+    <delete id="deleteBanner">
+        DELETE FROM BANNER WHERE BANNER = #{banner}
+    </delete>
 </mapper>

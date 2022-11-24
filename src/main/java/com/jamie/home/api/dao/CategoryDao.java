@@ -31,6 +31,10 @@ public interface CategoryDao {
 
     Integer insertCategoryClassification(CATEGORY_CLASSIFICATION cTarget);
 
+    Integer deleteCategory(CATEGORY category);
+
+    Integer deleteClassification(CATEGORY_CLASSIFICATION classification);
+
     Integer insertCategoryNewKeywords(CATEGORY_CLASSIFICATION cTarget);
 
     Integer updateCategory(CATEGORY category);

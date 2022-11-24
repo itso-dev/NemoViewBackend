@@ -53,4 +53,8 @@ public class BannerService extends BasicService{
     public List<MEMBER> listMember(SEARCH search) {
         return bannerDao.getListBannerMember(search);
     }
+
+    public Integer removeBanner(BANNER banner) {
+        return bannerDao.deleteBanner(banner);
+    }
 }

@@ -491,6 +491,40 @@ public class AdminController {
         }
     }
 
+    @RequestMapping(value="/category/{key}", method= RequestMethod.DELETE)
+    public ResponseOverlays removeCategory(@PathVariable("key") int key) {
+        try {
+            CATEGORY category = new CATEGORY();
+            category.setCategory(key);
+            int result = categoryService.removeCategory(category);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "DELETE_CATEGORY_NOT_SAVE", null);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "DELETE_CATEGORY_SUCCESS", category);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "DELETE_CATEGORY_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/category/classification/{key}", method= RequestMethod.DELETE)
+    public ResponseOverlays modiClassification(@PathVariable("key") int key) {
+        try {
+            CATEGORY_CLASSIFICATION classification = new CATEGORY_CLASSIFICATION();
+            classification.setClassification(key);
+            int result = categoryService.removeClassification(classification);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "DELETE_CLASSIFICATION_NOT_SAVE", null);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "DELETE_CLASSIFICATION_SUCCESS", classification);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "DELETE_CLASSIFICATION_FAIL", null);
+        }
+    }
+
     @RequestMapping(value="/contact/list", method= RequestMethod.POST)
     public ResponseOverlays listContact(@Validated @RequestBody SEARCH search) {
         try {
@@ -708,7 +742,24 @@ public class AdminController {
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_BANNER_FAIL", null);
         }
     }
-    
+
+    @RequestMapping(value="/banner/{key}", method= RequestMethod.DELETE)
+    public ResponseOverlays removeBanner(@PathVariable("key") int key) {
+        try {
+            BANNER banner = new BANNER();
+            banner.setBanner(key);
+            Integer result = bannerService.removeBanner(banner);
+            if(result != null){
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "DELETE_BANNER_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "DELETEBANNER_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "DELETE_BANNER_FAIL", null);
+        }
+    }
+
     @RequestMapping(value="/report/list", method= RequestMethod.POST)
     public ResponseOverlays listReport(@Validated @RequestBody SEARCH search) {
         try {
