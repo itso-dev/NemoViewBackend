@@ -60,7 +60,7 @@ public class MemberService extends BasicService{
                 memberDao.updateMemberPoint(member);
                 // 코드주인도 적립
                 point.setMember(codeMember.getMember());
-                point.setContent("코드입력");
+                point.setContent("친구 추천 코드");
                 pointDao.insertPoint(point);
                 codeMember.setPoint(pointValue);
                 memberDao.updateMemberPoint(codeMember);
@@ -158,7 +158,7 @@ public class MemberService extends BasicService{
         MEMBER codeMember = memberDao.getMemberByCode(member);
         if(codeMember != null) {
             POINT point = new POINT();
-            point.setValues(member.getMember(), "1", 1000, "코드입력", "1");
+            point.setValues(member.getMember(), "1", 1000, "친구 추천 코드", "1");
             pointDao.insertPoint(point);
             member.setPoint(1000);
             memberDao.updateMemberPoint(member);
