@@ -51,4 +51,8 @@ public class MEMBER {
     private String rememberCode;
 
     private Integer hits;
+
+    // device
+    private String android_device_token;
+    private String ios_device_token;
 }

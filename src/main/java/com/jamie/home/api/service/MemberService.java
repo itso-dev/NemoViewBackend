@@ -187,4 +187,11 @@ public class MemberService extends BasicService{
     public List<KEYWORD> getListKeywordMandatory(MEMBER member) {
         return memberDao.getListMemberKeyword(member);
     }
+
+    public void updateDeviceToken(MEMBER member) {
+        // 디바이스 토큰값 수정
+        if(member.getAndroid_device_token() != null || member.getIos_device_token() != null){
+            memberDao.updateDeviceToken(member);
+        }
+    }
 }

@@ -118,6 +118,8 @@ public class MemberController {
             if(jwt != null){
                 // 최근 로그인 업데이트
                 memberService.updateLogDate(result);
+                member.setMember(result.getMember());
+                memberService.updateDeviceToken(member);
                 token = new TOKEN(result, jwt, (expirySec/3600.0));
                 if(member.getRemember() != null && member.getRemember().booleanValue()){
                     REMEMBER remember = new REMEMBER();

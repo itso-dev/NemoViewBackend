@@ -202,4 +202,12 @@
             </choose>
         </foreach>
     </select>
+
+    <update id="updateDeviceToken">
+        UPDATE MEMBER SET
+            UPDDATE = now()
+        <if test="android_device_token != null">,ANDROID = #{android_device_token}</if>
+        <if test="ios_device_token != null">,IOS = #{ios_device_token}</if>
+        WHERE MEMBER = #{member}
+    </update>
 </mapper>

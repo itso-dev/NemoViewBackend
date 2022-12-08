@@ -55,4 +55,6 @@ public interface MemberDao {
     List<Keywords> getMandatoryKeyword(MEMBER reviewMember);
 
     List<MEMBER> getListMemberSameKeyword(SEARCH search);
+
+    void updateDeviceToken(MEMBER member);
 }
