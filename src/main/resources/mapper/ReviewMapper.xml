@@ -197,9 +197,15 @@
 
     <insert id="insertReviewReply">
         INSERT INTO REVIEW_REPLY (
-        REVIEW, MEMBER, CONTENT
+            REVIEW, MEMBER, CONTENT
+        <if test="reply_key != null">
+            , REPLY_KEY
+        </if>
         ) VALUES (
-        #{review}, #{member}, #{content}
+            #{review}, #{member}, #{content}
+        <if test="reply_key != null">
+            , #{reply_key}
+        </if>
         )
     </insert>
 
@@ -214,6 +220,12 @@
             LEFT JOIN MEMBER M on RR.MEMBER = M.MEMBER
         WHERE 1=1
             AND RR.REVIEW = #{review}
+        <if test="reply_key == null">
+            AND RR.REPLY_KEY IS NULL
+        </if>
+        <if test="reply_key != null">
+            AND RR.REPLY_KEY = #{reply_key}
+        </if>
         ORDER BY RR.REPLY DESC
     </select>
 
@@ -222,6 +234,12 @@
         FROM REVIEW_REPLY
         WHERE 1=1
             AND REVIEW = #{review}
+        <if test="reply_key == null">
+            AND REPLY_KEY IS NULL
+        </if>
+        <if test="reply_key != null">
+            AND REPLY_KEY = #{reply_key}
+        </if>
     </select>
 
     <update id="updateReviewState">
@@ -242,6 +260,10 @@
     <delete id="deleteReply">
         DELETE FROM REVIEW_REPLY WHERE REPLY = #{reply}
     </delete>
+
+    <select id="getReviewReply" resultType="com.jamie.home.api.model.REVIEW_REPLY">
+        SELECT * FROM REVIEW_REPLY WHERE REPLY = #{reply}
+    </select>
 
     <resultMap id="ReviewMap" type="com.jamie.home.api.model.REVIEW">
         <result column="REVIEW" property="review"/>

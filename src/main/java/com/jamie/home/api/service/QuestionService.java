@@ -118,7 +118,13 @@ public class QuestionService extends BasicService{
     }
 
     public List<QUESTION_ANSWER> listAnswer(SEARCH search) {
-        return questionDao.getListQuestionAnswer(search);
+        List<QUESTION_ANSWER> list = questionDao.getListQuestionAnswer(search);
+        for(int i=0; i< list.size(); i++){
+            QUESTION_ANSWER answer = list.get(i);
+            search.setAnswer_key(answer.getAnswer());
+            list.get(i).setRe_answerList(questionDao.getListQuestionAnswer(search));
+        }
+        return list;
     }
 
     public Integer listAnswerCnt(SEARCH search) {
@@ -128,20 +134,36 @@ public class QuestionService extends BasicService{
     public Integer saveAnswer(QUESTION_ANSWER answer) {
         int result = questionDao.insertQuestionAnswer(answer);
 
-        // 질문에 댓글 달릴 때 알림 TYPE 8
         if(result != 0) {
-            QUESTION param = new QUESTION();
-            param.setQuestion(answer.getQuestion());
-            QUESTION question = questionDao.getQuestion(param);
+            if(answer.getAnswer_key() == null){ // 답변
+                QUESTION param = new QUESTION();
+                param.setQuestion(answer.getQuestion());
+                QUESTION question = questionDao.getQuestion(param);
 
-            INFO info = new INFO();
-            info.setValues(question.getMember(),
-                    "8",
-                    question.getQuestion(),
-                    "내 질문에 댓글이 달렸어요! 지금 댓글을 확인해 보세요!",
-                    "",
-                    "[{\"name\":\"comment-off.png\",\"uuid\":\"comment-off\",\"path\":\"/image/common/comment-off.png\"}]");
-            infoDao.insertInfo(info);
+                // 질문에 댓글 달릴 때 알림 TYPE 8
+                INFO info = new INFO();
+                info.setValues(question.getMember(),
+                        "8",
+                        question.getQuestion(),
+                        "내 질문에 댓글이 달렸어요! 지금 댓글을 확인해 보세요!",
+                        "",
+                        "[{\"name\":\"comment-off.png\",\"uuid\":\"comment-off\",\"path\":\"/image/common/comment-off.png\"}]");
+                infoDao.insertInfo(info);
+            } else {
+                QUESTION_ANSWER param = new QUESTION_ANSWER();
+                param.setAnswer(answer.getAnswer_key());
+                QUESTION_ANSWER question_answer = questionDao.getAnswer(param);
+
+                // 질문 대댓글달림 알림 TYPE 13
+                INFO info = new INFO();
+                info.setValues(question_answer.getMember(),
+                        "13",
+                        answer.getQuestion(),
+                        "내 댓글에 대댓글이 달렸어요! 지금 대댓글을 확인해 보세요!",
+                        "",
+                        "[{\"name\":\"comment-off.png\",\"uuid\":\"comment-off\",\"path\":\"/image/common/comment-off.png\"}]");
+                infoDao.insertInfo(info);
+            }
         }
 
         return result;

@@ -24,4 +24,5 @@ public interface ReviewDao {
     Integer updateReviewState(REVIEW review);
     void deleteAllReviewKeywrod(SEARCH search);
     Integer deleteReply(REVIEW_REPLY reply);
+    REVIEW_REPLY getReviewReply(REVIEW_REPLY param_review_reply);
 }

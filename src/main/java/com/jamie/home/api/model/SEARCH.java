@@ -38,6 +38,7 @@ public class SEARCH {
 
     // 질문
     private Integer question;
+    private Integer answer_key;
     private String type;
     private Integer questionMember;
     private Integer answerMember;

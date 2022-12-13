@@ -3,6 +3,7 @@ package com.jamie.home.api.service;
 import com.jamie.home.api.model.*;
 import com.jamie.home.util.FileUtils;
 import com.jamie.home.util.KeywordUtils;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -198,26 +199,52 @@ public class ReviewService extends BasicService{
         int result = reviewDao.insertReviewReply(reply);
 
         if(result != 0){
-            REVIEW param = new REVIEW();
-            param.setReview(reply.getReview());
-            REVIEW review = reviewDao.getReview(param);
+            if(reply.getReply_key() == null){ // 댓글
+                REVIEW param = new REVIEW();
+                param.setReview(reply.getReview());
+                REVIEW review = reviewDao.getReview(param);
 
-            // 댓글달림 알림 TYPE 9
-            INFO info = new INFO();
-            info.setValues(review.getMember(),
-                    "9",
-                    review.getReview(),
-                    "내 리뷰에 댓글이 달렸어요! 지금 댓글을 확인해 보세요!",
-                    "",
-                    review.getPhoto());
-            infoDao.insertInfo(info);
+                // 댓글달림 알림 TYPE 9
+                INFO info = new INFO();
+                info.setValues(review.getMember(),
+                        "9",
+                        review.getReview(),
+                        "내 리뷰에 댓글이 달렸어요! 지금 댓글을 확인해 보세요!",
+                        "",
+                        review.getPhoto());
+                infoDao.insertInfo(info);
+            } else { // 대댓글
+                REVIEW param = new REVIEW();
+                param.setReview(reply.getReview());
+                REVIEW review = reviewDao.getReview(param);
+                // 댓글 단 회원의 키값 필요
+                REVIEW_REPLY param_review_reply = new REVIEW_REPLY();
+                param_review_reply.setReply(reply.getReply_key());
+                REVIEW_REPLY review_reply = reviewDao.getReviewReply(param_review_reply);
+
+                // 리뷰 대댓글달림 알림 TYPE 12
+                INFO info = new INFO();
+                info.setValues(review_reply.getMember(),
+                        "12",
+                        review.getReview(),
+                        "내 댓글에 대댓글이 달렸어요! 지금 대댓글을 확인해 보세요!",
+                        "",
+                        review.getPhoto());
+                infoDao.insertInfo(info);
+            }
         }
 
         return result;
     }
 
     public List<REVIEW_REPLY> listReply(REVIEW review) {
-        return reviewDao.getListReviewReply(review);
+        List<REVIEW_REPLY> list = reviewDao.getListReviewReply(review);
+        for(int i=0; i< list.size(); i++){
+            REVIEW_REPLY reply = list.get(i);
+            review.setReply_key(reply.getReply());
+            list.get(i).setRe_replyList(reviewDao.getListReviewReply(review));
+        }
+        return list;
     }
 
     public Integer listReplyCnt(REVIEW review) {

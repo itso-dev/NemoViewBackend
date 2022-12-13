@@ -57,6 +57,7 @@ public class REVIEW {
     private Integer point;
     private String reject;
     private Integer modiCnt;
+    private Integer reply_key;
 
     private Integer keywordCnt;
 }

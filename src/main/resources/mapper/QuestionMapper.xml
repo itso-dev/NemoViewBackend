@@ -155,6 +155,12 @@
             <if test="type != null">
                 AND QA.MEMBER = #{answerMember}
             </if>
+            <if test="answer_key == null">
+                AND QA.ANSWER_KEY IS NULL
+            </if>
+            <if test="answer_key != null">
+                AND QA.ANSWER_KEY = #{answer_key}
+            </if>
         ORDER BY QA.ANSWER DESC
         <if test="start != null">
             LIMIT #{start}, #{page_block}
@@ -166,13 +172,27 @@
         FROM QUESTION_ANSWER
         WHERE 1=1
             AND QUESTION = #{question}
+        <if test="answer_key == null">
+            AND ANSWER_KEY IS NULL
+        </if>
+        <if test="answer_key != null">
+            AND ANSWER_KEY = #{answer_key}
+        </if>
     </select>
 
     <insert id="insertQuestionAnswer">
-        INSERT INTO QUESTION_ANSWER
-            (QUESTION, MEMBER, CONTENT)
-        VALUES
-            (#{question}, #{member}, #{content})
+        INSERT INTO QUESTION_ANSWER (
+            QUESTION, MEMBER, CONTENT
+        <if test="answer_key != null">
+            , ANSWER_KEY
+        </if>
+        )
+        VALUES (
+            #{question}, #{member}, #{content}
+        <if test="answer_key != null">
+            , #{answer_key}
+        </if>
+        )
     </insert>
 
     <update id="updateQuestionAnswerChoose">
