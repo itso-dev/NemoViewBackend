@@ -55,4 +55,6 @@ public class MEMBER {
     // device
     private String android_device_token;
     private String ios_device_token;
+    private String android;
+    private String ios;
 }

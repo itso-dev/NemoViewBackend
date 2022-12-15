@@ -58,6 +58,7 @@ public class ContactService extends BasicService{
                     "",
                     "[{\"name\":\"qna-icon.png\",\"uuid\":\"qna-icon\",\"path\":\"/image/mypage/qna-icon.png\"}]");
             infoDao.insertInfo(info);
+            sendPushMessage(contactInfo.getMember(), "문의하기", "고객 센터로 문의한 질문에 답변이 등록되었어요. 지금 확인해 보세요!");
         }
 
         return contactDao.updateContactAnswer(contact);

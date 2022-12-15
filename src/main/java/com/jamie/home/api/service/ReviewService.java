@@ -213,6 +213,7 @@ public class ReviewService extends BasicService{
                         "",
                         review.getPhoto());
                 infoDao.insertInfo(info);
+                sendPushMessage(review.getMember(), "리뷰댓글", "내 리뷰에 댓글이 달렸어요! 지금 댓글을 확인해 보세요!");
             } else { // 대댓글
                 REVIEW param = new REVIEW();
                 param.setReview(reply.getReview());
@@ -231,6 +232,7 @@ public class ReviewService extends BasicService{
                         "",
                         review.getPhoto());
                 infoDao.insertInfo(info);
+                sendPushMessage(review.getMember(), "리뷰댓글", "내 댓글에 대댓글이 달렸어요! 지금 대댓글을 확인해 보세요!");
             }
         }
 
@@ -275,6 +277,7 @@ public class ReviewService extends BasicService{
                     "",
                     reviewInfo.getPhoto());
             infoDao.insertInfo(info);
+            sendPushMessage(reviewInfo.getMember(), "리뷰", "리뷰가 승인되어 "+review.getPoint()+"포인트가 지급 되었어요! 지금 등록된 리뷰를 확인해 보세요.");
 
         } else if("4".equals(review.getState())) { // 리뷰 반려
             // 리뷰반려 알림 TYPE 2
@@ -286,6 +289,7 @@ public class ReviewService extends BasicService{
                     review.getReject(),
                     reviewInfo.getPhoto());
             infoDao.insertInfo(info);
+            sendPushMessage(reviewInfo.getMember(), "리뷰", "리뷰 등록이 거절되었어요. 사유를 확인 후 다시 등록해 주세요.");
         }
         return reviewDao.updateReviewState(review);
     }

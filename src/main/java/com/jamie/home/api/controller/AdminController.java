@@ -4,6 +4,7 @@ import com.jamie.home.api.model.*;
 import com.jamie.home.api.service.*;
 import com.jamie.home.jwt.JwtFilter;
 import com.jamie.home.jwt.TokenProvider;
+import com.jamie.home.util.FirebaseUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -31,6 +34,8 @@ public class AdminController {
     @Autowired
     private AuthenticationManagerBuilder authenticationManagerBuilder;
 
+    @Autowired
+    private BasicService basicService;
     @Autowired
     private MemberService memberService;
     @Autowired
@@ -53,7 +58,7 @@ public class AdminController {
     private MainService mainService;
     @Autowired
     private ReportService reportService;
-    
+
     @RequestMapping(value="/member/login", method= RequestMethod.POST)
     public ResponseOverlays login(@Value("${jwt.token-validity-in-seconds}") Double expirySec, @Validated @RequestBody MEMBER member) {
         try {
@@ -794,6 +799,16 @@ public class AdminController {
         } catch (Exception e){
             logger.error(e.getLocalizedMessage());
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_REPORT_FAIL", null);
+        }
+    }
+    @RequestMapping(value="/send/push", method= RequestMethod.POST)
+    public ResponseOverlays sendPush(@Validated @RequestBody SEARCH search) {
+        try {
+            basicService.sendPushMessage(null,search.getTitle(), search.getBody());
+            return new ResponseOverlays(HttpServletResponse.SC_OK, "SEND_PUSH_SUCCESS", true);
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SEND_PUSH_FAIL", null);
         }
     }
 }

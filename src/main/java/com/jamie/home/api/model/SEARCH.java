@@ -69,6 +69,10 @@ public class SEARCH {
     private String auth_iv;
     private String auth_key;
 
+    // push
+    private String title;
+    private String body;
+
     public void calStart(){
         this.start = (this.page-1) * this.page_block;
     }
