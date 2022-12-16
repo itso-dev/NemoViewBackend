@@ -25,7 +25,7 @@
             <fileNamePattern>${LOGS_PATH}/nemo.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <!-- or whenever the file size reaches 100MB -->
-                <maxFileSize>5MB</maxFileSize>
+                <maxFileSize>1GB</maxFileSize>
                 <!-- kb, mb, gb -->
             </timeBasedFileNamingAndTriggeringPolicy>
             <maxHistory>30</maxHistory>
@@ -38,7 +38,7 @@
     <logger name="com.jamie.home.api.controller" level="DEBUG">
         <appender-ref ref="DAILY_ROLLING_FILE_APPENDER" />
     </logger>-->
-    <root level="INFO">
+    <root level="DEBUG">
         <appender-ref ref="DAILY_ROLLING_FILE_APPENDER" />
         <appender-ref ref="STDOUT" />
     </root>

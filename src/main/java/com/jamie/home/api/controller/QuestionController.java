@@ -24,6 +24,10 @@ public class QuestionController {
     @RequestMapping(value="/list", method= RequestMethod.POST)
     public ResponseOverlays list(@Validated @RequestBody SEARCH search) {
         try {
+            if(search.getPage() != null && search.getPage_block() != null && search.getPage() > 0 && search.getPage_block() > 0){
+                search.calStart();
+            }
+
             List<QUESTION> list = questionService.list(search);
 
             if(list != null){
