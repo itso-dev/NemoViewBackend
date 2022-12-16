@@ -76,11 +76,14 @@
         WHERE MEMBER = #{member}
     </update>
 
-    <select id="checkEmail" resultType="com.jamie.home.api.model.MEMBER">
+    <select id="checkDuplicate" resultType="com.jamie.home.api.model.MEMBER">
         SELECT
             GET_MEMBER_KEYWORD(MEMBER) AS KEYWORDS, MEMBER.*
         FROM MEMBER
-        WHERE EMAIL = #{email}
+        WHERE 1=1
+        <if test="email != null">AND EMAIL = #{email}</if>
+        <if test="phone != null">AND PHONE = #{phone}</if>
+        <if test="nickname != null">AND NICKNAME = #{nickname}</if>
     </select>
 
     <select id="checkCode" resultType="java.lang.Integer">

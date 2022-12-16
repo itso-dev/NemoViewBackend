@@ -15,7 +15,7 @@ public interface MemberDao {
 
     Integer updateMember(MEMBER member);
 
-    MEMBER checkEmail(MEMBER member);
+    MEMBER checkDuplicate(MEMBER member);
 
     Integer checkCode(MEMBER member);
 

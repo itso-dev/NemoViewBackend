@@ -110,7 +110,7 @@ public class MemberService extends BasicService{
     }
 
     public MEMBER checkEmail(MEMBER member) {
-        return memberDao.checkEmail(member);
+        return memberDao.checkDuplicate(member);
     }
 
     public Integer updateLogDate(MEMBER member) {
@@ -194,5 +194,9 @@ public class MemberService extends BasicService{
         if(member.getAndroid_device_token() != null || member.getIos_device_token() != null){
             memberDao.updateDeviceToken(member);
         }
+    }
+
+    public MEMBER checkDuplicate(MEMBER member) {
+        return memberDao.checkDuplicate(member);
     }
 }

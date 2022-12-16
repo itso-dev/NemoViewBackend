@@ -270,4 +270,19 @@ public class MemberController {
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_AUTH_FAIL", null);
         }
     }
+
+    @RequestMapping(value="/check/duplicate", method= RequestMethod.POST)
+    public ResponseOverlays checkDuplicate(@Validated @RequestBody MEMBER member) {
+        try {
+            MEMBER result = memberService.checkDuplicate(member);
+            if(result != null){
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_MEMBER_SUCCESS", false);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_MEMBER_NULL", true);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_MEMBER_FAIL", false);
+        }
+    }
 }
