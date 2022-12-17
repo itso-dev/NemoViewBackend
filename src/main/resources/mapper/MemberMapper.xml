@@ -213,4 +213,11 @@
         <if test="ios_device_token != null">,IOS = #{ios_device_token}, ANDROID = null</if>
         WHERE MEMBER = #{member}
     </update>
+
+    <update id="updatePageView">
+        INSERT INTO PAGE (TYPE, DAY, HOUR, VIEW)
+        VALUES (#{type}, DATE_FORMAT(now(), '%Y%m%d'), DATE_FORMAT(now(), '%H'), 1)
+        ON DUPLICATE KEY
+        UPDATE VIEW = VIEW + 1, UPDDATE = now()
+    </update>
 </mapper>

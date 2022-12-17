@@ -169,4 +169,19 @@ public class MainController {
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CATEGORY_FAIL", null);
         }
     }
+
+    @RequestMapping(value="/pageViewUp", method= RequestMethod.POST)
+    public ResponseOverlays pageViewUp(@Validated @RequestBody SEARCH search) {
+        try {
+            Integer result = mainService.increasePageView(search);
+            if(result != null){
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "UPDATE_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "UPDATE_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "UPDATE_FAIL", null);
+        }
+    }
 }

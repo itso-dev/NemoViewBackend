@@ -99,4 +99,8 @@ public class MainService extends BasicService{
     public List<String> listSearch(SEARCH search) {
         return searchDao.getListSearch(search);
     }
+
+    public Integer increasePageView(SEARCH search) {
+        return memberDao.updatePageView(search);
+    }
 }

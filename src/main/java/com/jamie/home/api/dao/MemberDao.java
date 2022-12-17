@@ -57,4 +57,6 @@ public interface MemberDao {
     List<MEMBER> getListMemberSameKeyword(SEARCH search);
 
     void updateDeviceToken(MEMBER member);
+
+    Integer updatePageView(SEARCH search);
 }
