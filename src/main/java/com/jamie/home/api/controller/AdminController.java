@@ -93,12 +93,14 @@ public class AdminController {
     @RequestMapping(value="/member/list", method= RequestMethod.POST)
     public ResponseOverlays listMember(@Validated @RequestBody SEARCH search) {
         try {
-            search.calStart();
+            if(search.getPage() != null && search.getPage_block() != null && search.getPage() > 0 && search.getPage_block() > 0){
+                search.calStart();
+            }
             List<MEMBER> list = memberService.list(search);
             if(list != null){
                 Integer cnt = memberService.listCnt(search);
                 VoList<MEMBER> result = new VoList<>(cnt, list);
-                result.setPage(search.getPage(), search.getPage_block());
+                //result.setPage(search.getPage(), search.getPage_block());
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_MEMBER_SUCCESS", result);
             } else {
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_MEMBER_NULL", null);
@@ -162,13 +164,15 @@ public class AdminController {
     @RequestMapping(value="/review/list", method= RequestMethod.POST)
     public ResponseOverlays listReview(@Validated @RequestBody SEARCH search) {
         try {
-            search.calStart();
+            if(search.getPage() != null && search.getPage_block() != null && search.getPage() > 0 && search.getPage_block() > 0){
+                search.calStart();
+            }
             List<REVIEW> list = reviewService.list(search);
 
             if(list != null){
                 Integer cnt = reviewService.listCnt(search);
                 VoList<REVIEW> result = new VoList<>(cnt, list);
-                result.setPage(search.getPage(), search.getPage_block());
+                //result.setPage(search.getPage(), search.getPage_block());
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_REVIEW_SUCCESS", result);
             } else {
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_REVIEW_NULL", null);
@@ -249,13 +253,15 @@ public class AdminController {
     @RequestMapping(value="/question/list", method= RequestMethod.POST)
     public ResponseOverlays listQuestion(@Validated @RequestBody SEARCH search) {
         try {
-            search.calStart();
+            if(search.getPage() != null && search.getPage_block() != null && search.getPage() > 0 && search.getPage_block() > 0){
+                search.calStart();
+            }
             List<QUESTION> list = questionService.list(search);
 
             if(list != null){
                 Integer cnt = questionService.listCnt(search);
                 VoList<QUESTION> result = new VoList<>(cnt, list);
-                result.setPage(search.getPage(), search.getPage_block());
+                //result.setPage(search.getPage(), search.getPage_block());
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_QUESTION_SUCCESS", result);
             } else {
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_QUESTION_NULL", null);
@@ -320,14 +326,35 @@ public class AdminController {
     @RequestMapping(value="/point/list", method= RequestMethod.POST)
     public ResponseOverlays listPoint(@Validated @RequestBody SEARCH search) {
         try {
-            search.calStart();
+            if(search.getPage() != null && search.getPage_block() != null && search.getPage() > 0 && search.getPage_block() > 0){
+                search.calStart();
+            }
             List<POINT> list = pointService.list(search);
 
             if(list != null){
                 Integer cnt = pointService.listCnt(search);
                 VoList<POINT> result = new VoList<>(cnt, list);
-                result.setPage(search.getPage(), search.getPage_block());
+                //result.setPage(search.getPage(), search.getPage_block());
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_POINT_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_POINT_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_POINT_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/point/list/cnt", method= RequestMethod.POST)
+    public ResponseOverlays listPointCnts(@Validated @RequestBody SEARCH search) {
+        try {
+            if(search.getPage() != null && search.getPage_block() != null && search.getPage() > 0 && search.getPage_block() > 0){
+                search.calStart();
+            }
+            POINT point = pointService.listCnts(search);
+
+            if(point != null){
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_POINT_SUCCESS", point);
             } else {
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_POINT_NULL", null);
             }
@@ -533,13 +560,15 @@ public class AdminController {
     @RequestMapping(value="/contact/list", method= RequestMethod.POST)
     public ResponseOverlays listContact(@Validated @RequestBody SEARCH search) {
         try {
-            search.calStart();
+            if(search.getPage() != null && search.getPage_block() != null && search.getPage() > 0 && search.getPage_block() > 0){
+                search.calStart();
+            }
             List<CONTACT> list = contactService.list(search);
 
             if(list != null){
                 Integer cnt = contactService.listCnt(search);
                 VoList<CONTACT> result = new VoList<>(cnt, list);
-                result.setPage(search.getPage(), search.getPage_block());
+                //result.setPage(search.getPage(), search.getPage_block());
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_CONTACT_SUCCESS", result);
             } else {
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CONTACT_NULL", null);
@@ -586,12 +615,14 @@ public class AdminController {
     @RequestMapping(value="/faq/list", method= RequestMethod.POST)
     public ResponseOverlays listFaq(@Validated @RequestBody SEARCH search) {
         try {
-            search.calStart();
+            if(search.getPage() != null && search.getPage_block() != null && search.getPage() > 0 && search.getPage_block() > 0){
+                search.calStart();
+            }
             List<FAQ> list = faqService.list(search);
             if(list != null){
                 Integer cnt = faqService.listCnt(search);
                 VoList<FAQ> result = new VoList<>(cnt, list);
-                result.setPage(search.getPage(), search.getPage_block());
+                //result.setPage(search.getPage(), search.getPage_block());
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_FAQ_SUCCESS", result);
             } else {
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_FAQ_NULL", null);
@@ -668,12 +699,14 @@ public class AdminController {
     @RequestMapping(value="/banner/list", method= RequestMethod.POST)
     public ResponseOverlays listBanner(@Validated @RequestBody SEARCH search) {
         try {
-            search.calStart();
+            if(search.getPage() != null && search.getPage_block() != null && search.getPage() > 0 && search.getPage_block() > 0){
+                search.calStart();
+            }
             List<BANNER> list = bannerService.list(search);
             if(list != null){
                 Integer cnt = bannerService.listCnt(search);
                 VoList<BANNER> result = new VoList<>(cnt, list);
-                result.setPage(search.getPage(), search.getPage_block());
+                //result.setPage(search.getPage(), search.getPage_block());
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_BANNER_SUCCESS", result);
             } else {
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_BANNER_NULL", null);
@@ -768,13 +801,15 @@ public class AdminController {
     @RequestMapping(value="/report/list", method= RequestMethod.POST)
     public ResponseOverlays listReport(@Validated @RequestBody SEARCH search) {
         try {
-            search.calStart();
+            if(search.getPage() != null && search.getPage_block() != null && search.getPage() > 0 && search.getPage_block() > 0){
+                search.calStart();
+            }
             List<REPORT> list = reportService.list(search);
 
             if(list != null){
-                Integer cnt = contactService.listCnt(search);
+                Integer cnt = reportService.listCnt(search);
                 VoList<REPORT> result = new VoList<>(cnt, list);
-                result.setPage(search.getPage(), search.getPage_block());
+                //result.setPage(search.getPage(), search.getPage_block());
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_REPORT_SUCCESS", result);
             } else {
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_REPORT_NULL", null);

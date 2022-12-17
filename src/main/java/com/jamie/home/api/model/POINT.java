@@ -25,6 +25,9 @@ public class POINT {
     private String nickname;
     private String account;
     private String reject;
+    private Integer completeCnt;
+    private Integer requestCnt;
+    private Integer rejectCnt;
 
     public void setValues(Integer member, String type, Integer value, String content, String state) {
         this.member = member;

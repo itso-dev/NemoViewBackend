@@ -91,4 +91,8 @@ public class PointService extends BasicService{
         }
         return result;
     }
+
+    public POINT listCnts(SEARCH search) {
+        return pointDao.getListPointCnts(search);
+    }
 }

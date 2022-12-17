@@ -40,6 +40,14 @@
         WHERE 1=1
         <include refid="pointList"></include>
     </select>
+
+    <select id="getListPointCnts" resultType="com.jamie.home.api.model.POINT">
+        SELECT
+        (SELECT COUNT(*) FROM POINT WHERE TYPE = '2' AND STATE = '1') AS completeCnt,
+        (SELECT COUNT(*) FROM POINT WHERE TYPE = '2' AND STATE = '2') AS requestCnt,
+        (SELECT COUNT(*) FROM POINT WHERE TYPE = '2' AND STATE = '3') AS rejectCnt
+        FROM DUAL
+    </select>
     
     <insert id="insertPoint">
         INSERT INTO POINT
