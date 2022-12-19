@@ -103,4 +103,8 @@ public class MainService extends BasicService{
     public Integer increasePageView(SEARCH search) {
         return memberDao.updatePageView(search);
     }
+
+    public Integer getPointMonth(MEMBER member) {
+        return memberDao.getMemberPointMonth(member);
+    }
 }

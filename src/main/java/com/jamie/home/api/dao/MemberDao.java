@@ -59,4 +59,6 @@ public interface MemberDao {
     void updateDeviceToken(MEMBER member);
 
     Integer updatePageView(SEARCH search);
+
+    Integer getMemberPointMonth(MEMBER member);
 }

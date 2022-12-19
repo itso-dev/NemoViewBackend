@@ -1,9 +1,13 @@
 package com.jamie.home;
 
+import com.jamie.home.api.dao.MemberDao;
 import com.jamie.home.api.model.Keywords;
+import com.jamie.home.api.model.MEMBER;
+import com.jamie.home.api.service.MemberService;
 import com.jamie.home.util.KeywordUtils;
 import com.jamie.home.util.NiceUtils;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
@@ -14,32 +18,23 @@ import java.util.List;
 @SpringBootTest
 class HomeApplicationTests {
 
+    @Autowired
+    MemberService memberService;
+
     @Test
     void contextLoads() throws Exception {
-        /*Keywords k1 = new Keywords("1","test1");
-        Keywords k2 = new Keywords("1","test2");
-        Keywords k3 = new Keywords("1","test3");
-        Keywords k4 = new Keywords("2","test4");
-        Keywords k5 = new Keywords("3","test5");
-        Keywords k6 = new Keywords("3","test6");
+        MEMBER param = new MEMBER();
+        //param.setMember(815);
+        param.setMember(7);
 
-        List<Keywords> list1 = new ArrayList<>();
-        list1.add(k1);
-        list1.add(k2);
-        list1.add(k3);
-        List<Keywords> list2 = new ArrayList<>();
-        list2.add(k4);
-        List<Keywords> list3 = new ArrayList<>();
-        list3.add(k5);
-        list3.add(k6);
+        MEMBER member = memberService.get(param);
 
-        try {
-            String result = KeywordUtils.getKeywordsValue(list1,list2,list3);
-            System.out.println("::::::::::::::result" + result);
-        } catch (Exception e){
+        member.setPassword("1234");
 
-        }*/
-        //NiceUtils.makeToken();
+        memberService.modi(member);
+
+        System.out.println(member);
+
     }
 
 }

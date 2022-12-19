@@ -220,4 +220,14 @@
         ON DUPLICATE KEY
         UPDATE VIEW = VIEW + 1, UPDDATE = now()
     </update>
+
+    <select id="getMemberPointMonth" resultType="java.lang.Integer">
+        SELECT IFNULL(SUM(VALUE),0)
+            FROM POINT
+        WHERE 1=1
+            AND MEMBER = #{member}
+            AND TYPE = '2'
+            AND STATE IN ('1','2')
+            AND DATE_FORMAT(REGDATE, '%Y%m') = DATE_FORMAT(NOW(), '%Y%m')
+    </select>
 </mapper>

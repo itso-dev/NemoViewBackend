@@ -184,4 +184,21 @@ public class MainController {
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "UPDATE_FAIL", null);
         }
     }
+
+    @RequestMapping(value="/member/{key}/point/month", method= RequestMethod.GET)
+    public ResponseOverlays pageViewUp(@PathVariable("key") int key) {
+        try {
+            MEMBER member = new MEMBER();
+            member.setMember(key);
+            Integer result = mainService.getPointMonth(member);
+            if(result != null){
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_CATEGORY_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CATEGORY_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CATEGORY_FAIL", null);
+        }
+    }
 }
