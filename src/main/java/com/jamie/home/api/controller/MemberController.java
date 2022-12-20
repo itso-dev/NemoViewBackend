@@ -21,6 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -127,6 +128,9 @@ public class MemberController {
                     remember.setToken(jwt);
                     remember.setUuid(UUID.randomUUID().toString());
 
+                    logger.error("save remember :::::::: ");
+                    logger.error(remember.toString());
+
                     memberService.saveRemember(remember);
 
                     token.setRemember(remember.getUuid());
@@ -144,6 +148,7 @@ public class MemberController {
     @RequestMapping(value="/login/remember", method= RequestMethod.POST)
     public ResponseOverlays loginRemember(@Value("${jwt.token-long-validity-in-seconds}") Double expirySec, @Validated @RequestBody MEMBER member) {
         try {
+            logger.error("load remember :::::::: " + member.getRememberCode());
             REMEMBER remember = memberService.getRemember(member);
 
             if(remember != null){
