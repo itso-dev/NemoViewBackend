@@ -167,6 +167,7 @@ public class AdminController {
             if(search.getPage() != null && search.getPage_block() != null && search.getPage() > 0 && search.getPage_block() > 0){
                 search.calStart();
             }
+            search.setAdmin(true);
             List<REVIEW> list = reviewService.list(search);
 
             if(list != null){
