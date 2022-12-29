@@ -303,4 +303,10 @@ public class ReviewService extends BasicService{
     public Integer removeReply(REVIEW_REPLY reply) {
         return reviewDao.deleteReply(reply);
     }
+
+    public PROFILE_CNT listTotalCnt(SEARCH search) {
+        PROFILE_CNT result = reviewDao.listTotalCnt(search);
+        result.setReviewCnt(reviewDao.getListReviewCnt(search));
+        return result;
+    }
 }

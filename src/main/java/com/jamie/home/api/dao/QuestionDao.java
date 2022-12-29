@@ -1,5 +1,6 @@
 package com.jamie.home.api.dao;
 
+import com.jamie.home.api.model.PROFILE_CNT;
 import com.jamie.home.api.model.QUESTION;
 import com.jamie.home.api.model.QUESTION_ANSWER;
 import com.jamie.home.api.model.SEARCH;

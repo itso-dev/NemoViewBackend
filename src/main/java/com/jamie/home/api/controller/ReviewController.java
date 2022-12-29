@@ -43,6 +43,22 @@ public class ReviewController {
         }
     }
 
+    @RequestMapping(value="/cnt", method= RequestMethod.POST)
+    public ResponseOverlays listCnt(@Validated @RequestBody SEARCH search) {
+        try {
+            PROFILE_CNT result = reviewService.listTotalCnt(search);
+
+            if(result != null){
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_REVIEW_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_REVIEW_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_REVIEW_FAIL", null);
+        }
+    }
+
     @RequestMapping(value="/{key}", method= RequestMethod.GET)
     public ResponseOverlays get(@PathVariable("key") int key) {
         try {

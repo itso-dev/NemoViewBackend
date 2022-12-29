@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.parameters.P;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +34,22 @@ public class QuestionController {
             if(list != null){
                 Integer cnt = questionService.listCnt(search);
                 VoList<QUESTION> result = new VoList<>(cnt, list);
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_QUESTION_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_QUESTION_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_QUESTION_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/cnt", method= RequestMethod.POST)
+    public ResponseOverlays listCnt(@Validated @RequestBody SEARCH search) {
+        try {
+            PROFILE_CNT result = new PROFILE_CNT();
+            result.setQuestionCnt(questionService.listCnt(search));
+            if(result != null){
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_QUESTION_SUCCESS", result);
             } else {
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_QUESTION_NULL", null);

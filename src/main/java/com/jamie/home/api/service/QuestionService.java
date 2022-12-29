@@ -21,7 +21,8 @@ public class QuestionService extends BasicService{
         if(search.getAnswerMember() != null){
             for(int i=0; i<list.size(); i++){
                 search.setQuestion(list.get(i).getQuestion());
-                list.get(i).setAnswer(questionDao.getListQuestionAnswer(search));
+                List<QUESTION_ANSWER> list1 = questionDao.getListQuestionAnswer(search);
+                list.get(i).setAnswer(list1);
             }
         }
         return list;

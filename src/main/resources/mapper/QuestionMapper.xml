@@ -152,7 +152,7 @@
             LEFT JOIN MEMBER M on QA.MEMBER = M.MEMBER
         WHERE 1=1
             AND QA.QUESTION = #{question}
-            <if test="type != null">
+            <if test="answerMember != null">
                 AND QA.MEMBER = #{answerMember}
             </if>
             <if test="answer_key == null">
@@ -162,9 +162,6 @@
                 AND QA.ANSWER_KEY = #{answer_key}
             </if>
         ORDER BY QA.ANSWER DESC
-        <if test="start != null">
-            LIMIT #{start}, #{page_block}
-        </if>
     </select>
 
     <select id="getListQuestionAnswerCnt" resultType="java.lang.Integer">

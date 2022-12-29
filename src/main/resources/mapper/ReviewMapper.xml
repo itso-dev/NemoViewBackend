@@ -38,6 +38,9 @@
         <if test="state != null">
             AND R.STATE = #{state}
         </if>
+        <if test="antiState != null">
+            AND R.STATE != #{antiState}
+        </if>
         <if test="keywordList != null">
             AND (
             <foreach collection="keywordList" item="keyword" separator="OR">
@@ -263,6 +266,24 @@
 
     <select id="getReviewReply" resultType="com.jamie.home.api.model.REVIEW_REPLY">
         SELECT * FROM REVIEW_REPLY WHERE REPLY = #{reply}
+    </select>
+
+    <select id="listTotalCnt" resultType="com.jamie.home.api.model.PROFILE_CNT">
+        SELECT
+            IFNULL(COUNT(REVIEW),0) AS reviewTotalCnt,
+            IFNULL(SUM(HITS),0) AS reviewTotalHits,
+            IFNULL(
+                (
+                    SELECT COUNT(*)
+                    FROM REVIEW_LIKE
+                    WHERE DEL = 0 AND REVIEW IN (
+                        SELECT REVIEW FROM REVIEW WHERE STATE = 2 AND MEMBER = #{member}
+                    )
+                )
+            ,0) AS reviewTotalLikes
+        FROM REVIEW
+        WHERE MEMBER = #{member}
+            AND STATE = 2
     </select>
 
     <resultMap id="ReviewMap" type="com.jamie.home.api.model.REVIEW">

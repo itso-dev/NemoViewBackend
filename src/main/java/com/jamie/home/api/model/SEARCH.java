@@ -51,6 +51,7 @@ public class SEARCH {
 
     // 관리자
     private String state;
+    private String antiState;
     private Boolean admin;
     private Boolean needAnswer;
     private String valueType;
