@@ -54,11 +54,11 @@ public class ContactService extends BasicService{
             info.setValues(contactInfo.getMember(),
                     "5",
                     contactInfo.getContact(),
-                    "고객 센터로 문의한 질문에 답변이 등록되었어요. 지금 확인해 보세요!",
+                    "고객 센터로 문의한 질문에 답변이 등록되었어요.\n지금 확인해 보세요!",
                     "",
                     "[{\"name\":\"qna-icon.png\",\"uuid\":\"qna-icon\",\"path\":\"/image/mypage/qna-icon.png\"}]");
             infoDao.insertInfo(info);
-            sendPushMessage(contactInfo.getMember(), "문의하기", "고객 센터로 문의한 질문에 답변이 등록되었어요. 지금 확인해 보세요!");
+            sendPushMessage(contactInfo.getMember(), "문의하기", "고객 센터로 문의한 질문에 답변이 등록되었어요.\n지금 확인해 보세요!");
         }
 
         return contactDao.updateContactAnswer(contact);

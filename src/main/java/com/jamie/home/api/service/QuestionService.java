@@ -82,11 +82,11 @@ public class QuestionService extends BasicService{
                 info.setValues(memberList.get(i).getMember(),
                         "11",
                         question.getQuestion(),
-                        "다른 사용자가 도움을 필요로 하고 있어요! 지금 내용을 확인해 보세요!",
+                        "다른 사용자가 도움을 필요로 하고 있어요!\n지금 내용을 확인해 보세요!",
                         "",
                         "[{\"name\":\"input-check.png\",\"uuid\":\"input-check\",\"path\":\"/image/login/input-check.png\"}]");
                 infoDao.insertInfo(info);
-                sendPushMessage(memberList.get(i).getMember(), "질문하기", "다른 사용자가 도움을 필요로 하고 있어요! 지금 내용을 확인해 보세요!");
+                sendPushMessage(memberList.get(i).getMember(), "질문하기", "다른 사용자가 도움을 필요로 하고 있어요!\n지금 내용을 확인해 보세요!");
             }
         }
         return result;
@@ -147,11 +147,11 @@ public class QuestionService extends BasicService{
                 info.setValues(question.getMember(),
                         "8",
                         question.getQuestion(),
-                        "내 질문에 댓글이 달렸어요! 지금 댓글을 확인해 보세요!",
+                        "내 질문에 댓글이 달렸어요!\n지금 댓글을 확인해 보세요!",
                         "",
                         "[{\"name\":\"comment-off.png\",\"uuid\":\"comment-off\",\"path\":\"/image/common/comment-off.png\"}]");
                 infoDao.insertInfo(info);
-                sendPushMessage(question.getMember(), "질문댓글", "내 질문에 댓글이 달렸어요! 지금 댓글을 확인해 보세요!");
+                sendPushMessage(question.getMember(), "질문댓글", "내 질문에 댓글이 달렸어요!\n지금 댓글을 확인해 보세요!");
             } else {
                 QUESTION_ANSWER param = new QUESTION_ANSWER();
                 param.setAnswer(answer.getAnswer_key());
@@ -162,11 +162,11 @@ public class QuestionService extends BasicService{
                 info.setValues(question_answer.getMember(),
                         "13",
                         answer.getQuestion(),
-                        "내 댓글에 대댓글이 달렸어요! 지금 대댓글을 확인해 보세요!",
+                        "내 댓글에 대댓글이 달렸어요!\n지금 대댓글을 확인해 보세요!",
                         "",
                         "[{\"name\":\"comment-off.png\",\"uuid\":\"comment-off\",\"path\":\"/image/common/comment-off.png\"}]");
                 infoDao.insertInfo(info);
-                sendPushMessage(question_answer.getMember(), "질문댓글", "내 댓글에 대댓글이 달렸어요! 지금 대댓글을 확인해 보세요!");
+                sendPushMessage(question_answer.getMember(), "질문댓글", "내 댓글에 대댓글이 달렸어요!\n지금 대댓글을 확인해 보세요!");
             }
         }
 
@@ -200,11 +200,11 @@ public class QuestionService extends BasicService{
             info.setValues(infoAnswer.getMember(),
                     "7",
                     infoAnswer.getQuestion(),
-                    "내 댓글이 채택되었어요! 지급된 포인트를 확인해 보세요!",
+                    "내 댓글이 채택되었어요!\n지급된 포인트를 확인해 보세요!",
                     "",
                     "[{\"name\":\"comment-on.png\",\"uuid\":\"comment-on\",\"path\":\"/image/common/comment-on.png\"}]");
             infoDao.insertInfo(info);
-            sendPushMessage(infoAnswer.getMember(), "질문하기", "내 댓글이 채택되었어요! 지급된 포인트를 확인해 보세요!");
+            sendPushMessage(infoAnswer.getMember(), "질문하기", "내 댓글이 채택되었어요!\n지급된 포인트를 확인해 보세요!");
         }
 
         return result;

@@ -36,11 +36,11 @@ public class PointService extends BasicService{
             info.setValues(pointInfo.getMember(),
                     "3",
                     pointInfo.getMember(),
-                    "계좌로 환급이 완료되었어요! 변경 내역을 확인해 보세요!",
+                    "계좌로 환급이 완료되었어요!\n변경 내역을 확인해 보세요!",
                     "",
                     "[{\"name\":\"point_transfer.png\",\"uuid\":\"point_transfer\",\"path\":\"/image/mypage/point_transfer.png\"}]");
             infoDao.insertInfo(info);
-            sendPushMessage(pointInfo.getMember(), "포인트", "계좌로 환급이 완료되었어요! 변경 내역을 확인해 보세요!");
+            sendPushMessage(pointInfo.getMember(), "포인트", "계좌로 환급이 완료되었어요!\n변경 내역을 확인해 보세요!");
 
         } else if("3".equals(point.getState())) { // 정산 거절
             // 정산 거절 시 포인트 반납
@@ -56,11 +56,11 @@ public class PointService extends BasicService{
             info.setValues(pointInfo.getMember(),
                     "4",
                     pointInfo.getMember(),
-                    "환급 신청에 실패했어요! 지금 사유를 확인해 보세요!",
+                    "환급 신청에 실패했어요!\n지금 사유를 확인해 보세요!",
                     point.getReject(),
                     "[{\"name\":\"point-icon.png\",\"uuid\":\"point-icon\",\"path\":\"/image/mypage/point-icon.png\"}]");
             infoDao.insertInfo(info);
-            sendPushMessage(pointInfo.getMember(), "포인트", "환급 신청에 실패했어요! 지금 사유를 확인해 보세요!");
+            sendPushMessage(pointInfo.getMember(), "포인트", "환급 신청에 실패했어요!\n지금 사유를 확인해 보세요!");
         }
 
         return pointDao.updatePointState(point);
@@ -81,11 +81,11 @@ public class PointService extends BasicService{
             info.setValues(pointInfo.getMember(),
                     "3",
                     pointInfo.getMember(),
-                    "계좌로 환급이 완료되었어요! 변경 내역을 확인해 보세요!",
+                    "계좌로 환급이 완료되었어요!\n변경 내역을 확인해 보세요!",
                     "",
                     "[{\"name\":\"point_transfer.png\",\"uuid\":\"point_transfer\",\"path\":\"/image/mypage/point_transfer.png\"}]");
             infoDao.insertInfo(info);
-            sendPushMessage(pointInfo.getMember(), "포인트", "계좌로 환급이 완료되었어요! 변경 내역을 확인해 보세요!");
+            sendPushMessage(pointInfo.getMember(), "포인트", "계좌로 환급이 완료되었어요!\n변경 내역을 확인해 보세요!");
 
             result += pointDao.updatePointState(point);
         }

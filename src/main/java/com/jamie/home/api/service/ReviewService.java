@@ -211,11 +211,11 @@ public class ReviewService extends BasicService{
                 info.setValues(review.getMember(),
                         "9",
                         review.getReview(),
-                        "내 리뷰에 댓글이 달렸어요! 지금 댓글을 확인해 보세요!",
+                        "내 리뷰에 댓글이 달렸어요!\n지금 댓글을 확인해 보세요!",
                         "",
                         review.getPhoto());
                 infoDao.insertInfo(info);
-                sendPushMessage(review.getMember(), "리뷰댓글", "내 리뷰에 댓글이 달렸어요! 지금 댓글을 확인해 보세요!");
+                sendPushMessage(review.getMember(), "리뷰댓글", "내 리뷰에 댓글이 달렸어요!\n지금 댓글을 확인해 보세요!");
             } else { // 대댓글
                 REVIEW param = new REVIEW();
                 param.setReview(reply.getReview());
@@ -230,11 +230,11 @@ public class ReviewService extends BasicService{
                 info.setValues(review_reply.getMember(),
                         "12",
                         review.getReview(),
-                        "내 댓글에 대댓글이 달렸어요! 지금 대댓글을 확인해 보세요!",
+                        "내 댓글에 대댓글이 달렸어요!\n지금 대댓글을 확인해 보세요!",
                         "",
                         review.getPhoto());
                 infoDao.insertInfo(info);
-                sendPushMessage(review.getMember(), "리뷰댓글", "내 댓글에 대댓글이 달렸어요! 지금 대댓글을 확인해 보세요!");
+                sendPushMessage(review.getMember(), "리뷰댓글", "내 댓글에 대댓글이 달렸어요!\n지금 대댓글을 확인해 보세요!");
             }
         }
 
@@ -275,11 +275,11 @@ public class ReviewService extends BasicService{
             info.setValues(reviewInfo.getMember(),
                     "1",
                     reviewInfo.getReview(),
-                    "리뷰가 승인되어 "+review.getPoint()+"포인트가 지급 되었어요! 지금 등록된 리뷰를 확인해 보세요.",
+                    "리뷰가 승인되어 "+review.getPoint()+"포인트가 지급 되었어요!\n지금 등록된 리뷰를 확인해 보세요.",
                     "",
                     reviewInfo.getPhoto());
             infoDao.insertInfo(info);
-            sendPushMessage(reviewInfo.getMember(), "리뷰", "리뷰가 승인되어 "+review.getPoint()+"포인트가 지급 되었어요! 지금 등록된 리뷰를 확인해 보세요.");
+            sendPushMessage(reviewInfo.getMember(), "리뷰", "리뷰가 승인되어 "+review.getPoint()+"포인트가 지급 되었어요!\n지금 등록된 리뷰를 확인해 보세요.");
 
         } else if("4".equals(review.getState())) { // 리뷰 반려
             // 리뷰반려 알림 TYPE 2
@@ -287,11 +287,11 @@ public class ReviewService extends BasicService{
             info.setValues(reviewInfo.getMember(),
                     "2",
                     reviewInfo.getReview(),
-                    "리뷰 등록이 거절되었어요. 사유를 확인 후 다시 등록해 주세요.",
+                    "리뷰 등록이 거절되었어요.\n사유를 확인 후 다시 등록해 주세요.",
                     review.getReject(),
                     reviewInfo.getPhoto());
             infoDao.insertInfo(info);
-            sendPushMessage(reviewInfo.getMember(), "리뷰", "리뷰 등록이 거절되었어요. 사유를 확인 후 다시 등록해 주세요.");
+            sendPushMessage(reviewInfo.getMember(), "리뷰", "리뷰 등록이 거절되었어요.\n사유를 확인 후 다시 등록해 주세요.");
         }
         return reviewDao.updateReviewState(review);
     }

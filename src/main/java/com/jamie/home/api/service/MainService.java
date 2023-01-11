@@ -50,7 +50,7 @@ public class MainService extends BasicService{
             INFO info = new INFO();
             info.setMemberList(memberList);
             infoDao.insertInfo(info);
-            sendPushMessage(null, "포인트", "이번 달 환급 가능 금액이 늘어났어요. 지금 확인하고 환급 신청해 보세요!");
+            sendPushMessage(null, "포인트", "이번 달 환급 가능 금액이 늘어났어요.\n지금 확인하고 환급 신청해 보세요!");
         }
 
         return pointDao.updateAdminValue(search);

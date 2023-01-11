@@ -70,11 +70,11 @@ public class MemberService extends BasicService{
                 info.setValues(codeMember.getMember(),
                         "10",
                         codeMember.getMember(),
-                        "내 초대코드로 친구가 가입하여 포인트가 지급되었어요! 지급된 포인트를 확인해 보세요!",
+                        "내 초대코드로 친구가 가입하여 포인트가 지급되었어요!\n지급된 포인트를 확인해 보세요!",
                         "",
                         "[{\"name\":\"point-icon.png\",\"uuid\":\"point-icon\",\"path\":\"/image/mypage/point-icon.png\"}]");
                 infoDao.insertInfo(info);
-                sendPushMessage(codeMember.getMember(), "포인트", "내 초대코드로 친구가 가입하여 포인트가 지급되었어요! 지급된 포인트를 확인해 보세요!");
+                sendPushMessage(codeMember.getMember(), "포인트", "내 초대코드로 친구가 가입하여 포인트가 지급되었어요!\n지급된 포인트를 확인해 보세요!");
             }
         }
 
