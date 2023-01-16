@@ -23,7 +23,7 @@ public class InfoService extends BasicService{
         return infoDao.insertInfo(info);
     }
 
-    public Integer del(INFO info) {
-        return infoDao.updateInfoDel(info);
+    public Integer modify(INFO info) {
+        return infoDao.updateInfo(info);
     }
 }

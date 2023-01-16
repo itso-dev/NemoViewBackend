@@ -19,6 +19,7 @@ public class INFO {
     private String thumb;
     private String type;
     private Boolean del;
+    private Boolean show;
     private Date regdate;
     private Date upddate;
 

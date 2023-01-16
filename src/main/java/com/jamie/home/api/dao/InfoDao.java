@@ -16,5 +16,5 @@ public interface InfoDao {
 
     Integer insertInfo(INFO info);
 
-    Integer updateInfoDel(INFO info);
+    Integer updateInfo(INFO info);
 }

@@ -43,7 +43,8 @@ public class InfoController {
     public ResponseOverlays del(@PathVariable("key") int key, @Validated @RequestBody INFO info) {
         try {
             info.setInfo(key);
-            int result = infoService.del(info);
+            info.setDel(true);
+            int result = infoService.modify(info);
             if(result == 0){
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "DELETE_INFO_NOT_SAVE", null);
             } else {
@@ -58,7 +59,8 @@ public class InfoController {
     @RequestMapping(value="/del", method= RequestMethod.PUT)
     public ResponseOverlays delAll(@Validated @RequestBody INFO info) {
         try {
-            int result = infoService.del(info);
+            info.setDel(true);
+            int result = infoService.modify(info);
             if(result == 0){
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "DELETE_INFO_NOT_SAVE", null);
             } else {
@@ -67,6 +69,23 @@ public class InfoController {
         } catch (Exception e){
             logger.error(e.getLocalizedMessage());
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "DELETE_INFO_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/{key}/show", method= RequestMethod.PUT)
+    public ResponseOverlays checkShow(@PathVariable("key") int key, @Validated @RequestBody INFO info) {
+        try {
+            info.setInfo(key);
+            info.setShow(true);
+            int result = infoService.modify(info);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "CHECK_SHOW_INFO_NOT_SAVE", null);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "CHECK_SHOW_INFO_SUCCESS", info);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "CHECK_SHOW_INFO_FAIL", null);
         }
     }
 }

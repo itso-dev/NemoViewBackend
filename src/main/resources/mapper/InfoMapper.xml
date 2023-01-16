@@ -48,10 +48,15 @@
         </if>
     </insert>
 
-    <update id="updateInfoDel">
+    <update id="updateInfo">
         UPDATE INFO SET
-            DEL = true
-            ,UPDDATE = now()
+            UPDDATE = now()
+        <if test="del != null">
+            ,DEL = #{del}
+        </if>
+        <if test="show != null">
+            ,SHOW = #{show}
+        </if>
         WHERE 1=1
             AND MEMBER = #{member}
         <if test="info != null">
