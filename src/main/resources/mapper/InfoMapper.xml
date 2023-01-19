@@ -55,7 +55,7 @@
             ,DEL = #{del}
         </if>
         <if test="show != null">
-            ,SHOW = #{show}
+            ,`SHOW` = #{show}
         </if>
         WHERE 1=1
             AND MEMBER = #{member}

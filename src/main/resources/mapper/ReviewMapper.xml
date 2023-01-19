@@ -246,7 +246,12 @@
     </select>
 
     <update id="updateReviewState">
-        UPDATE REVIEW SET STATE = #{state} WHERE REVIEW = #{review}
+        UPDATE REVIEW
+        SET STATE = #{state}
+        <if test="reply_key == null">
+            , POINT  = ${point}
+        </if>
+        WHERE REVIEW = #{review}
     </update>
 
     <insert id="insertReviewKeywrod">
@@ -308,6 +313,7 @@
         <result column="HITS" property="hits"/>
         <result column="STATE" property="state"/>
         <result column="KEYWORDS" property="keywords"/>
+        <result column="POINT" property="point"/>
         <result column="REGDATE" property="regdate"/>
         <result column="UPDDATE" property="upddate"/>
         <result column="LIKE_YN" property="likeYn"/>
