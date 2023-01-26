@@ -53,13 +53,17 @@ public class MemberService extends BasicService{
                 search.setType("2");
                 search.setValueType("value");
                 Integer pointValue = pointDao.getAdminValue(search);
-                POINT point = new POINT();
-                point.setValues(member.getMember(), "1", pointValue, "회원가입", "1");
-                pointDao.insertPoint(point);
                 member.setPoint(pointValue);
                 memberDao.updateMemberPoint(member);
+                MEMBER memberInfo = memberDao.getMember(member);
+
+                POINT point = new POINT();
+                point.setValues(member.getMember(), "1", pointValue, memberInfo.getPoint() + pointValue, "회원가입", "1");
+                pointDao.insertPoint(point);
+
                 // 코드주인도 적립
                 point.setMember(codeMember.getMember());
+                point.setAccumulate(codeMember.getPoint() + pointValue);
                 point.setContent("친구 추천 코드");
                 pointDao.insertPoint(point);
                 codeMember.setPoint(pointValue);
@@ -156,15 +160,17 @@ public class MemberService extends BasicService{
 
     public Integer inputCode(MEMBER member) {
         int result = 0;
+        MEMBER memberinfo = memberDao.getMember(member);
         MEMBER codeMember = memberDao.getMemberByCode(member);
         if(codeMember != null) {
             POINT point = new POINT();
-            point.setValues(member.getMember(), "1", 1000, "친구 추천 코드", "1");
+            point.setValues(member.getMember(), "1", 1000, memberinfo.getPoint()+1000, "친구 추천 코드", "1");
             pointDao.insertPoint(point);
             member.setPoint(1000);
             memberDao.updateMemberPoint(member);
             // 코드주인도 적립
             point.setMember(codeMember.getMember());
+            point.setAccumulate(codeMember.getPoint() + 1000);
             pointDao.insertPoint(point);
             codeMember.setPoint(1000);
             memberDao.updateMemberPoint(codeMember);

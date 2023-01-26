@@ -51,15 +51,18 @@
     
     <insert id="insertPoint">
         INSERT INTO POINT
-            (MEMBER, TYPE, VALUE, CONTENT, STATE)
+            (MEMBER, TYPE, VALUE, ACCUMULATE, CONTENT, STATE)
         VALUES
-            (#{member},#{type},#{value},#{content},#{state});
+            (#{member},#{type},#{value},#{accumulate},#{content},#{state});
     </insert>
 
     <update id="updatePointState">
         UPDATE POINT SET
             STATE = #{state}
             ,UPDDATE = now()
+        <if test="state != null">
+            ,ACCUMULATE = #{accumulate}
+        </if>
         WHERE POINT = #{point}
     </update>
 

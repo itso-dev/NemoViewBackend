@@ -16,6 +16,7 @@ public class POINT {
     private Integer member;
     private String type;
     private Integer value;
+    private Integer accumulate;
     private String content;
     private String state;
     private Date regdate;
@@ -29,10 +30,11 @@ public class POINT {
     private Integer requestCnt;
     private Integer rejectCnt;
 
-    public void setValues(Integer member, String type, Integer value, String content, String state) {
+    public void setValues(Integer member, String type, Integer value, Integer accumulate, String content, String state) {
         this.member = member;
         this.type = type;
         this.value = value;
+        this.accumulate = accumulate;
         this.content = content;
         this.state = state;
     }

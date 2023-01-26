@@ -26,11 +26,21 @@ public class PointService extends BasicService{
         member.setMember(point.getMember());
         member.setPoint(point.getValue()*(-1));
         memberDao.updateMemberPoint(member);
+
+        // 누적금액 입력
+        MEMBER memberInfo = memberDao.getMember(member);
+        point.setAccumulate(memberInfo.getPoint());
         return pointDao.insertPoint(point);
     }
     public Integer modiPointState(POINT point) {
+        POINT pointInfo = pointDao.getPoint(point);
+        MEMBER member = new MEMBER();
+        member.setMember(pointInfo.getMember());
+        MEMBER memberInfo = memberDao.getMember(member);
+
         if("1".equals(point.getState())){ //정산 완료
-            POINT pointInfo = pointDao.getPoint(point);
+            point.setAccumulate(memberInfo.getPoint());
+
             // 정산 완료 알림 TYPE 3
             INFO info = new INFO();
             info.setValues(pointInfo.getMember(),
@@ -44,10 +54,7 @@ public class PointService extends BasicService{
 
         } else if("3".equals(point.getState())) { // 정산 거절
             // 정산 거절 시 포인트 반납
-            POINT pointInfo = pointDao.getPoint(point);
-            MEMBER member = new MEMBER();
-            member.setMember(pointInfo.getMember());
-            MEMBER memberInfo = memberDao.getMember(member);
+            point.setAccumulate(memberInfo.getPoint() + pointInfo.getValue());
             memberInfo.setPoint(pointInfo.getValue());
             memberDao.updateMemberPoint(memberInfo);
 

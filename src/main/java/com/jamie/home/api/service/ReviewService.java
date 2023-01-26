@@ -259,14 +259,15 @@ public class ReviewService extends BasicService{
         REVIEW reviewInfo = reviewDao.getReview(review);
         if("2".equals(review.getState()) && review.getPoint() != null){ // 리뷰 승인
             // 포인트 적립
-            POINT point = new POINT();
-            point.setValues(reviewInfo.getMember(), "1", review.getPoint(), "리뷰승인", "1");
-            pointDao.insertPoint(point);
-
-            // 회원 포인트 업데이트
             MEMBER member = new MEMBER();
             member.setMember(reviewInfo.getMember());
             MEMBER memberInfo = memberDao.getMember(member);
+
+            POINT point = new POINT();
+            point.setValues(reviewInfo.getMember(), "1", review.getPoint(), memberInfo.getPoint() + review.getPoint(), "리뷰승인", "1");
+            pointDao.insertPoint(point);
+
+            // 회원 포인트 업데이트
             memberInfo.setPoint(review.getPoint());
             memberDao.updateMemberPoint(memberInfo);
 

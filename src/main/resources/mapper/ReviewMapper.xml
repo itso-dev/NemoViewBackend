@@ -248,7 +248,7 @@
     <update id="updateReviewState">
         UPDATE REVIEW
         SET STATE = #{state}
-        <if test="reply_key == null">
+        <if test="point != null">
             , POINT  = ${point}
         </if>
         WHERE REVIEW = #{review}
