@@ -290,4 +290,20 @@ public class MemberController {
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_MEMBER_FAIL", false);
         }
     }
+
+    @RequestMapping(value="/{key}/alarm", method= RequestMethod.POST)
+    public ResponseOverlays alarmOnOff(@PathVariable("key") int key, @Validated @RequestBody MEMBER member) {
+        try {
+            member.setMember(key);
+            int result = memberService.alarmOnOff(member);
+            if(result != 0){
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_MEMBER_SUCCESS", true);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_MEMBER_NULL", false);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_MEMBER_FAIL", false);
+        }
+    }
 }

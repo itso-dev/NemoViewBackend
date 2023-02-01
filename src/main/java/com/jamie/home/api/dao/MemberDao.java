@@ -61,4 +61,7 @@ public interface MemberDao {
     Integer updatePageView(SEARCH search);
 
     Integer getMemberPointMonth(MEMBER member);
+
+    int insertMemberAlarm(MEMBER member);
+    int deleteMemberAlarm(MEMBER member);
 }

@@ -44,7 +44,7 @@
 
     <select id="getCategoryWithKeyword" resultMap="CategoryMap">
         SELECT C.CATEGORY, C.NAME, C.SEQ, C.STATE ,C.ICON,
-            CCG.GROUP AS CCG_GROUP, CC.CLASSIFICATION AS CC_CLASSIFICATION, CC.NAME AS CC_NAME, CCG.SEQ AS CC_SEQ, CCG.STATE AS CC_STATE,
+            CCG.GROUP AS CCG_GROUP, CC.CLASSIFICATION AS CC_CLASSIFICATION, CC.NAME AS CC_NAME, CCG.SEQ AS CC_SEQ, CCG.STATE AS CC_STATE, CCG.CNT AS CC_CNT,
             CK.KEYWORD AS CK_KEYWORD, CK.NAME AS CK_NAME
         FROM CATEGORY C
             LEFT JOIN CATEGORY_CLASSIFICATION_GROUP CCG on CCG.CATEGORY = C.CATEGORY
@@ -60,7 +60,7 @@
 
     <select id="getCategoryWithKeywordList" resultMap="CategoryMap">
         SELECT C.CATEGORY, C.NAME, C.SEQ, C.STATE ,C.ICON,
-            CCG.GROUP AS CCG_GROUP, CC.CLASSIFICATION AS CC_CLASSIFICATION, CC.NAME AS CC_NAME, CCG.SEQ AS CC_SEQ, CCG.STATE AS CC_STATE,
+            CCG.GROUP AS CCG_GROUP, CC.CLASSIFICATION AS CC_CLASSIFICATION, CC.NAME AS CC_NAME, CCG.SEQ AS CC_SEQ, CCG.STATE AS CC_STATE, CCG.CNT AS CC_CNT,
             CK.KEYWORD AS CK_KEYWORD, CK.NAME AS CK_NAME
         FROM CATEGORY C
             LEFT JOIN CATEGORY_CLASSIFICATION_GROUP CCG on CCG.CATEGORY = C.CATEGORY
@@ -98,7 +98,7 @@
     </insert>
 
     <insert id="insertCategoryClassificationGroup">
-        INSERT INTO CATEGORY_CLASSIFICATION_GROUP (CATEGORY, CLASSIFICATION, SEQ, STATE) VALUES (#{category}, #{classification}, #{seq}, #{state})
+        INSERT INTO CATEGORY_CLASSIFICATION_GROUP (CATEGORY, CLASSIFICATION, SEQ, STATE, CNT) VALUES (#{category}, #{classification}, #{seq}, #{state}, #{cnt})
     </insert>
 
     <update id="updateClassificationGroup">
@@ -106,6 +106,7 @@
             CLASSIFICATION = #{classification}
             ,SEQ = #{seq}
             ,STATE = #{state}
+            ,CNT = #{cnt}
             ,UPDDATE = NOW()
         WHERE 1=1
         AND `GROUP` = #{group}
@@ -228,6 +229,7 @@
             <result column="CC_NAME" property="name"/>
             <result column="CC_SEQ" property="seq"/>
             <result column="CC_STATE" property="state"/>
+            <result column="CC_CNT" property="cnt"/>
             <collection property="keywords" ofType="com.jamie.home.api.model.CATEGORY_KEYWORD">
                 <result column="CK_KEYWORD" property="keyword"/>
                 <result column="CK_NAME" property="name"/>

@@ -16,6 +16,7 @@ public class CATEGORY_CLASSIFICATION {
     private Integer classification;
     private String name;
     private Integer seq;
+    private Integer cnt;
     private String state;
 
     private List<CATEGORY_KEYWORD> keywords;

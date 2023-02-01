@@ -205,4 +205,12 @@ public class MemberService extends BasicService{
     public MEMBER checkDuplicate(MEMBER member) {
         return memberDao.checkDuplicate(member);
     }
+
+    public int alarmOnOff(MEMBER member) {
+        if(member.getAlarm()){ // on -> off insert
+            return memberDao.insertMemberAlarm(member);
+        } else { // off -> on delere
+            return memberDao.deleteMemberAlarm(member);
+        }
+    }
 }

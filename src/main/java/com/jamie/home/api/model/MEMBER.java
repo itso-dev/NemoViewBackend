@@ -37,6 +37,8 @@ public class MEMBER {
     private String keywords;
     @Enumerated(EnumType.STRING)
     private ROLE role;
+    private Boolean alarm;
+    private Integer member_alarm;
     private Date regdate;
     private Date upddate;
 

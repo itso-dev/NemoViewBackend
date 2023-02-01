@@ -55,6 +55,7 @@
     <select id="getMember" resultType="com.jamie.home.api.model.MEMBER">
         SELECT
             GET_MEMBER_KEYWORD(MEMBER) AS KEYWORDS, MEMBER.*
+            , IFNULL((SELECT MEMBER_ALARM FROM MEMBER_ALARM WHERE MEMBER = MEMBER.MEMBER),FALSE) AS MEMBER_ALARM
         FROM MEMBER
         WHERE MEMBER = #{member}
     </select>
@@ -79,6 +80,7 @@
     <select id="checkDuplicate" resultType="com.jamie.home.api.model.MEMBER">
         SELECT
             GET_MEMBER_KEYWORD(MEMBER) AS KEYWORDS, MEMBER.*
+            , IFNULL((SELECT MEMBER_ALARM FROM MEMBER_ALARM WHERE MEMBER = MEMBER.MEMBER),FALSE) AS MEMBER_ALARM
         FROM MEMBER
         WHERE 1=1
         <if test="email != null">AND EMAIL = #{email}</if>
@@ -190,6 +192,7 @@
     <select id="getListMemberSameKeyword" resultType="com.jamie.home.api.model.MEMBER">
         SELECT M.* FROM MEMBER M
         WHERE 1=1
+        AND MEMBER NOT IN (SELECT MEMBER FROM MEMBER_ALARM)
         AND
         <foreach collection="keywordList" item="keyword" separator="AND">
             <choose>
@@ -230,4 +233,13 @@
             AND STATE IN ('1','2')
             AND DATE_FORMAT(REGDATE, '%Y%m') = DATE_FORMAT(NOW(), '%Y%m')
     </select>
+
+    <insert id="insertMemberAlarm">
+        INSERT MEMBER_ALARM (MEMBER) VALUES (#{member})
+    </insert>
+
+    <insert id="deleteMemberAlarm">
+        DELETE FROM MEMBER_ALARM WHERE MEMBER = #{member}
+    </insert>
+
 </mapper>
