@@ -69,7 +69,21 @@
     <sql id="reviewListOrder">
         ORDER BY
         <if test="keywordList != null">
-            KEYWORD_CNT DESC,
+            (
+            <foreach collection="keywordList" item="keyword" separator="+">
+                <choose>
+                    <when test="keyword.type == '1'.toString()">
+                        (SELECT COUNT(*) FROM REVIEW WHERE REVIEW = R.REVIEW AND R.KEYWORDS LIKE CONCAT('%"',#{keyword.value},'"%'))
+                    </when>
+                    <when test="keyword.type == '2'.toString()">
+                        (SELECT COUNT(*) FROM REVIEW WHERE REVIEW = R.REVIEW AND #{keyword.key} IN (SELECT KEYWORD FROM REVIEW_KEYWORD WHERE REVIEW = R.REVIEW))
+                    </when>
+                    <otherwise>
+                        0
+                    </otherwise>
+                </choose>
+            </foreach>
+            ) DESC,
         </if>
         <if test="orderType != null">
             <choose>
@@ -95,23 +109,6 @@
             ,M.NAME MEMBER_NAME
             ,M.NICKNAME MEMBER_NICKNAME
             ,GET_MEMBER_KEYWORD(M.MEMBER) AS MEMBER_KEYWORDS
-        <if test="keywordList != null">
-            ,(
-            <foreach collection="keywordList" item="keyword" separator="+">
-                <choose>
-                    <when test="keyword.type == '1'.toString()">
-                        (SELECT COUNT(*) FROM REVIEW WHERE REVIEW = R.REVIEW AND R.KEYWORDS LIKE CONCAT('%"',#{keyword.value},'"%'))
-                    </when>
-                    <when test="keyword.type == '2'.toString()">
-                        (SELECT COUNT(*) FROM REVIEW WHERE REVIEW = R.REVIEW AND #{keyword.key} IN (SELECT KEYWORD FROM REVIEW_KEYWORD WHERE REVIEW = R.REVIEW))
-                    </when>
-                    <otherwise>
-                        0
-                    </otherwise>
-                </choose>
-            </foreach>
-            ) AS KEYWORD_CNT
-        </if>
         FROM REVIEW R
             LEFT JOIN MEMBER M on R.MEMBER = M.MEMBER
         WHERE 1=1

@@ -23,17 +23,19 @@ class HomeApplicationTests {
 
     @Test
     void contextLoads() throws Exception {
-        MEMBER param = new MEMBER();
-        //param.setMember(815);
-        param.setMember(7);
+/*        MEMBER param = new MEMBER();
+        param.setMember(4051);
+        //param.setEmail("j383170107@naver.com");
 
         MEMBER member = memberService.get(param);
 
-        member.setPassword("1234");
+        member.setPassword("Qwer1234!@");
+
+        System.out.println(member);
 
         memberService.modi(member);
 
-        System.out.println(member);
+        System.out.println(member);*/
 
     }
 

@@ -78,7 +78,7 @@
         SELECT IFNULL(SUM(VALUE),0)
             FROM POINT
         WHERE 1=1
-            AND REGDATE >= LAST_DAY(NOW() - interval 1 month) + interval 1 DAY
+            AND UPDDATE >= LAST_DAY(NOW() - interval 1 month) + interval 1 DAY
             AND STATE = '1'
             AND TYPE = '2'
     </select>

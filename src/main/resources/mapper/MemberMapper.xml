@@ -8,6 +8,9 @@
             <if test="searchType == 'member'.toString()">
                 AND MEMBER LIKE CONCAT('%',#{searchKeyword},'%')
             </if>
+            <if test="searchType == 'email'.toString()">
+                AND EMAIL LIKE CONCAT('%',#{searchKeyword},'%')
+            </if>
             <if test="searchType == 'nickname'.toString()">
                 AND NICKNAME LIKE CONCAT('%',#{searchKeyword},'%')
             </if>
