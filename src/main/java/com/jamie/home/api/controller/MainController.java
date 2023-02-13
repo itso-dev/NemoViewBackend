@@ -46,13 +46,13 @@ public class MainController {
         try {
             Integer result = mainService.getAdminValue(search);
             if(result != null){
-                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_CATEGORY_SUCCESS", result);
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_POINT_SUCCESS", result);
             } else {
-                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CATEGORY_NULL", null);
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_POINT_NULL", null);
             }
         } catch (Exception e){
             logger.error(e.getLocalizedMessage());
-            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CATEGORY_FAIL", null);
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_POINT_FAIL", null);
         }
     }
 
@@ -110,8 +110,7 @@ public class MainController {
         try {
             List<BANNER> list = mainService.listBanner(search);
             if(list != null){
-                Integer cnt = mainService.listCategoryCnt(search);
-                VoList<BANNER> result = new VoList<>(cnt, list);
+                VoList<BANNER> result = new VoList<>(list.size(), list);
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_BANNER_SUCCESS", result);
             } else {
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_BANNER_NULL", null);
@@ -160,13 +159,13 @@ public class MainController {
             List<String> list = mainService.listSearch(search);
             if(list != null){
                 VoList<String> result = new VoList<>(list.size(), list);
-                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_CATEGORY_SUCCESS", result);
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_KEYWORD_SUCCESS", result);
             } else {
-                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CATEGORY_NULL", null);
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_KEYWORD_NULL", null);
             }
         } catch (Exception e){
             logger.error(e.getLocalizedMessage());
-            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CATEGORY_FAIL", null);
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_KEYWORD_FAIL", null);
         }
     }
 
@@ -192,13 +191,13 @@ public class MainController {
             member.setMember(key);
             Integer result = mainService.getPointMonth(member);
             if(result != null){
-                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_CATEGORY_SUCCESS", result);
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_POINT_SUCCESS", result);
             } else {
-                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CATEGORY_NULL", null);
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_POINT_NULL", null);
             }
         } catch (Exception e){
             logger.error(e.getLocalizedMessage());
-            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CATEGORY_FAIL", null);
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_POINT_FAIL", null);
         }
     }
 }

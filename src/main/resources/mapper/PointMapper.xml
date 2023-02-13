@@ -20,9 +20,7 @@
     </sql>
     <select id="getListPoint" resultType="com.jamie.home.api.model.POINT">
         SELECT
-            P.*
-            ,(SELECT NICKNAME FROM MEMBER WHERE MEMBER = P.MEMBER) AS NICKNAME
-            ,(SELECT ACCOUNT FROM MEMBER WHERE MEMBER = P.MEMBER) AS ACCOUNT
+            P.*, M.NICKNAME, M.ACCOUNT, M.NAME
         FROM POINT P
             LEFT JOIN MEMBER M on P.MEMBER = M.MEMBER
         WHERE 1=1

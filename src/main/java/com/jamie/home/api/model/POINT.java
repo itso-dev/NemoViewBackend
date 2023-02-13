@@ -26,6 +26,7 @@ public class POINT {
     private String nickname;
     private String account;
     private String reject;
+    private String name;
     private Integer completeCnt;
     private Integer requestCnt;
     private Integer rejectCnt;

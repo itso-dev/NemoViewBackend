@@ -42,7 +42,7 @@ public class MainService extends BasicService{
         search.setValueType("value");
         Integer point = pointDao.getAdminValue(search);
 
-        if(point < search.getValue()){
+        /*if(point < search.getValue()){
             // 환급 가능 금액 수정 시 늘어났으면 전체 알림
             search.setAlertMember(true);
             List<MEMBER> memberList = memberDao.getListMember(search);
@@ -51,7 +51,7 @@ public class MainService extends BasicService{
             info.setMemberList(memberList);
             infoDao.insertInfo(info);
             sendPushMessage(null, "포인트", "이번 달 환급 가능 금액이 늘어났어요.\n지금 확인하고 환급 신청해 보세요!");
-        }
+        }*/
 
         return pointDao.updateAdminValue(search);
     }
