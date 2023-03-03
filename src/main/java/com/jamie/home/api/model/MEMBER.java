@@ -53,6 +53,7 @@ public class MEMBER {
     private String rememberCode;
 
     private Integer hits;
+    private Integer review_cnt;
 
     // device
     private String android_device_token;
