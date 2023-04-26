@@ -62,4 +62,14 @@ public interface CategoryDao {
     void updateReviewKeywords();
 
     void updateQuestionKeywords();
+
+    List<COMMON_KEYWORD> getListCommonKeyword(SEARCH search);
+
+    COMMON_KEYWORD getCommonKeyword(COMMON_KEYWORD common_keyword);
+
+    Integer insertCommonKeyword(COMMON_KEYWORD common_keyword);
+    Integer updateCommonKeyword(COMMON_KEYWORD common_keyword);
+    Integer deleteCommonKeyword(COMMON_KEYWORD common_keyword);
+
+    void deleteCommonKeywordAll(COMMON_KEYWORD common_keyword);
 }

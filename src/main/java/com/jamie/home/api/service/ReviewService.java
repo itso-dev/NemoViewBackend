@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -52,16 +53,16 @@ public class ReviewService extends BasicService{
                 )
         );
 
-        MEMBER param = new MEMBER();
+        /*MEMBER param = new MEMBER();
         param.setMember(review.getMember());
         MEMBER reviewMember = memberDao.getMember(param);
         List<Keywords> common = KeywordUtils.getCommonKeyword(reviewMember);
-
-        List<Keywords> mandatory = KeywordUtils.getMandatoryKeyword(review.getKeywordList());
+*/
+        //List<Keywords> mandatory = KeywordUtils.getMandatoryKeyword(review.getKeywordList());
 
         List<Keywords> input = KeywordUtils.getInputKeyword(review.getKeywordInputList());
         // 키워드 저장
-        review.setKeywords(KeywordUtils.getKeywordsValue(common, mandatory, input));
+        review.setKeywords(KeywordUtils.getKeywordsValue(null, null, input));
         List<KEYWORD> keywords = KeywordUtils.getMandatoryKeywordForSave(review.getKeywordList());
 
         review.setSavePhotos(null);
@@ -76,37 +77,33 @@ public class ReviewService extends BasicService{
             reviewDao.insertReviewKeywrod(search);
 
             // 리뷰 작성자 키워드 저장
-            List<KEYWORD> addList = new ArrayList<>();
-            List<KEYWORD> keywordList = memberDao.getListMemberKeyword(reviewMember);
-            for(int i=0; i<keywords.size(); i++){
-                boolean add = true;
-                for(int j=0; j<keywordList.size(); j++){
-                    if(keywordList.get(j).getKeyword().equals(keywords.get(i).getKeyword())){
-                        add = false;
-                        break;
-                    }
-                }
-                if(add){
-                    addList.add(keywords.get(i));
+            // 1. DB에 저장되어 있지만 keywordList에 들어오지 않은거 (삭제)
+            List<KEYWORD> keywordList_db = reviewDao.getListMemberKeywordInCategory(review);
+            List<Integer> keywordList_idx = keywords.stream().map(k -> k.getKeyword()).collect(Collectors.toList());
+            List<Integer> keywordList_db_idx = keywordList_db.stream().map(k -> k.getKeyword()).collect(Collectors.toList());
+            List<KEYWORD> keywordList_db_without_keywordList
+                    = keywordList_db.stream().filter(item -> !keywordList_idx.contains(item.getKeyword())).collect(Collectors.toList());
+
+            if(keywordList_db_without_keywordList.size() != 0){
+                MEMBER member = new MEMBER();
+                member.setMember(review.getMember());
+                member.setKeywordList_del(keywordList_db_without_keywordList);
+                for(int i=0; i<member.getKeywordList_del().size(); i++){
+                    member.getKeywordList_del().get(i).setMember(member.getMember());
+                    memberDao.deleteMemberKeyword(member.getKeywordList_del().get(i));
                 }
             }
 
-            for(int i=0; i<addList.size(); i++){
-                keywordList.add(addList.get(i));
+            // 2. keywordList에는 있지만 DB에는 저장되어 있지않은 키워드 (신규)
+            List<KEYWORD> keywordList_without_keywordList_db
+                    = keywords.stream().filter(item -> !keywordList_db_idx.contains(item.getKeyword())).collect(Collectors.toList());
+
+            if(keywordList_without_keywordList_db.size() != 0){
+                MEMBER member = new MEMBER();
+                member.setMember(review.getMember());
+                member.setKeywordList(keywordList_without_keywordList_db);
+                memberDao.insertMemberKeyword(member);
             }
-
-            // MEMBER_KEYWORD 수정
-            SEARCH search2 = new SEARCH();
-            search2.setMember(reviewMember.getMember());
-            memberDao.deleteAllMemberKeywrod(search2);
-            search2.setReview_keywords(keywordList);
-            memberDao.insertMemberKeywrod(search2);
-
-            // 회원정보에서 공통키워드 추출
-            List<Keywords> memberCommon = KeywordUtils.getCommonKeyword(reviewMember);
-            List<Keywords> memberMandatory = memberDao.getMandatoryKeyword(reviewMember);
-            reviewMember.setKeywords(KeywordUtils.getKeywordsValue(memberCommon, memberMandatory, null));
-            memberDao.updateMemberKeywords(reviewMember);
         }
         return result;
     }
@@ -132,16 +129,18 @@ public class ReviewService extends BasicService{
         review.setSavePhotos(null);
         review.setSaveVideos(null);
 
+/*
         MEMBER param = new MEMBER();
         param.setMember(review.getMember());
         MEMBER reviewMember = memberDao.getMember(param);
         List<Keywords> common = KeywordUtils.getCommonKeyword(reviewMember);
 
         List<Keywords> mandatory = KeywordUtils.getMandatoryKeyword(review.getKeywordList());
+*/
 
         List<Keywords> input = KeywordUtils.getInputKeyword(review.getKeywordInputList());
         // 키워드 저장
-        review.setKeywords(KeywordUtils.getKeywordsValue(common, mandatory, input));
+        review.setKeywords(KeywordUtils.getKeywordsValue(null, null, input));
         List<KEYWORD> keywords = KeywordUtils.getMandatoryKeywordForSave(review.getKeywordList());
 
         review.setSavePhotos(null);
@@ -158,37 +157,33 @@ public class ReviewService extends BasicService{
             reviewDao.insertReviewKeywrod(search);
 
             // 리뷰 작성자 키워드 저장
-            List<KEYWORD> addList = new ArrayList<>();
-            List<KEYWORD> keywordList = memberDao.getListMemberKeyword(reviewMember);
-            for(int i=0; i<keywords.size(); i++){
-                boolean add = true;
-                for(int j=0; j<keywordList.size(); j++){
-                    if(keywordList.get(j).getKeyword().equals(keywords.get(i).getKeyword())){
-                        add = false;
-                        break;
-                    }
-                }
-                if(add){
-                    addList.add(keywords.get(i));
+            // 1. DB에 저장되어 있지만 keywordList에 들어오지 않은거 (삭제)
+            List<KEYWORD> keywordList_db = reviewDao.getListMemberKeywordInCategory(review);
+            List<Integer> keywordList_idx = keywords.stream().map(k -> k.getKeyword()).collect(Collectors.toList());
+            List<Integer> keywordList_db_idx = keywordList_db.stream().map(k -> k.getKeyword()).collect(Collectors.toList());
+            List<KEYWORD> keywordList_db_without_keywordList
+                    = keywordList_db.stream().filter(item -> !keywordList_idx.contains(item.getKeyword())).collect(Collectors.toList());
+
+            if(keywordList_db_without_keywordList.size() != 0){
+                MEMBER member = new MEMBER();
+                member.setMember(review.getMember());
+                member.setKeywordList_del(keywordList_db_without_keywordList);
+                for(int i=0; i<member.getKeywordList_del().size(); i++){
+                    member.getKeywordList_del().get(i).setMember(member.getMember());
+                    memberDao.deleteMemberKeyword(member.getKeywordList_del().get(i));
                 }
             }
 
-            for(int i=0; i<addList.size(); i++){
-                keywordList.add(addList.get(i));
+            // 2. keywordList에는 있지만 DB에는 저장되어 있지않은 키워드 (신규)
+            List<KEYWORD> keywordList_without_keywordList_db
+                    = keywords.stream().filter(item -> !keywordList_db_idx.contains(item.getKeyword())).collect(Collectors.toList());
+
+            if(keywordList_without_keywordList_db.size() != 0){
+                MEMBER member = new MEMBER();
+                member.setMember(review.getMember());
+                member.setKeywordList(keywordList_without_keywordList_db);
+                memberDao.insertMemberKeyword(member);
             }
-
-            // MEMBER_KEYWORD 수정
-            SEARCH search2 = new SEARCH();
-            search2.setMember(reviewMember.getMember());
-            memberDao.deleteAllMemberKeywrod(search2);
-            search2.setReview_keywords(keywordList);
-            memberDao.insertMemberKeywrod(search2);
-
-            // 회원정보에서 공통키워드 추출
-            List<Keywords> memberCommon = KeywordUtils.getCommonKeyword(reviewMember);
-            List<Keywords> memberMandatory = memberDao.getMandatoryKeyword(reviewMember);
-            reviewMember.setKeywords(KeywordUtils.getKeywordsValue(memberCommon, memberMandatory, null));
-            memberDao.updateMemberKeywords(reviewMember);
         }
         return result;
     }

@@ -59,7 +59,6 @@ public class SEARCH {
     private String searchStartDate;
     private String searchEndDate;
     private String chkPointList;
-
     // 배너
     private Integer banner;
     private String location;

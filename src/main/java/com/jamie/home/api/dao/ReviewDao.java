@@ -27,4 +27,6 @@ public interface ReviewDao {
     REVIEW_REPLY getReviewReply(REVIEW_REPLY param_review_reply);
 
     PROFILE_CNT listTotalCnt(SEARCH search);
+
+    List<KEYWORD> getListMemberKeywordInCategory(REVIEW review);
 }

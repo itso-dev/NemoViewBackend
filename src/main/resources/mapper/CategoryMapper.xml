@@ -44,12 +44,18 @@
 
     <select id="getCategoryWithKeyword" resultMap="CategoryMap">
         SELECT C.CATEGORY, C.NAME, C.SEQ, C.STATE ,C.ICON,
-            CCG.GROUP AS CCG_GROUP, CC.CLASSIFICATION AS CC_CLASSIFICATION, CC.NAME AS CC_NAME, CCG.SEQ AS CC_SEQ, CCG.STATE AS CC_STATE, CCG.CNT AS CC_CNT,
+            CCG.GROUP AS CCG_GROUP, CC.CLASSIFICATION AS CC_CLASSIFICATION, CC.NAME AS CC_NAME, CCG.SEQ AS CC_SEQ, CCG.STATE AS CC_STATE, CC.CNT AS CC_CNT,
             CK.KEYWORD AS CK_KEYWORD, CK.NAME AS CK_NAME
+        <if test="member != null">
+            , IF(MK.KEYWORD,true,false) AS CK_CHK
+        </if>
         FROM CATEGORY C
             LEFT JOIN CATEGORY_CLASSIFICATION_GROUP CCG on CCG.CATEGORY = C.CATEGORY
             LEFT JOIN CATEGORY_CLASSIFICATION CC on CCG.CLASSIFICATION = CC.CLASSIFICATION
             LEFT JOIN CATEGORY_KEYWORD CK on CC.CLASSIFICATION = CK.CLASSIFICATION
+        <if test="member != null">
+            LEFT JOIN MEMBER_KEYWORD MK on CK.KEYWORD = MK.KEYWORD AND MEMBER = #{member}
+        </if>
         WHERE C.CATEGORY = #{category}
         <if test="state != null">
             AND C.STATE = #{state}
@@ -60,7 +66,7 @@
 
     <select id="getCategoryWithKeywordList" resultMap="CategoryMap">
         SELECT C.CATEGORY, C.NAME, C.SEQ, C.STATE ,C.ICON,
-            CCG.GROUP AS CCG_GROUP, CC.CLASSIFICATION AS CC_CLASSIFICATION, CC.NAME AS CC_NAME, CCG.SEQ AS CC_SEQ, CCG.STATE AS CC_STATE, CCG.CNT AS CC_CNT,
+            CCG.GROUP AS CCG_GROUP, CC.CLASSIFICATION AS CC_CLASSIFICATION, CC.NAME AS CC_NAME, CCG.SEQ AS CC_SEQ, CCG.STATE AS CC_STATE, CC.CNT AS CC_CNT,
             CK.KEYWORD AS CK_KEYWORD, CK.NAME AS CK_NAME
         FROM CATEGORY C
             LEFT JOIN CATEGORY_CLASSIFICATION_GROUP CCG on CCG.CATEGORY = C.CATEGORY
@@ -72,7 +78,7 @@
     </select>
 
     <select id="getClassificationWithKeyword" resultMap="ClassificationMap">
-        SELECT CC.CLASSIFICATION AS CC_CLASSIFICATION, CC.NAME AS CC_NAME,
+        SELECT CC.CLASSIFICATION AS CC_CLASSIFICATION, CC.NAME AS CC_NAME, CC.CNT AS CC_CNT,
             CK.KEYWORD AS CK_KEYWORD, CK.NAME AS CK_NAME
         FROM CATEGORY_CLASSIFICATION CC
             LEFT JOIN CATEGORY_KEYWORD CK on CC.CLASSIFICATION = CK.CLASSIFICATION
@@ -81,10 +87,16 @@
     </select>
 
     <select id="getClassificationWithKeywordList" resultMap="ClassificationMap">
-        SELECT CC.CLASSIFICATION AS CC_CLASSIFICATION, CC.NAME AS CC_NAME,
+        SELECT CC.CLASSIFICATION AS CC_CLASSIFICATION, CC.NAME AS CC_NAME, CC.CNT AS CC_CNT,
             CK.KEYWORD AS CK_KEYWORD, CK.NAME AS CK_NAME
+        <if test="member != null">
+            , IF(MK.KEYWORD,true,false) AS CK_CHK
+        </if>
         FROM CATEGORY_CLASSIFICATION CC
             LEFT JOIN CATEGORY_KEYWORD CK on CC.CLASSIFICATION = CK.CLASSIFICATION
+        <if test="member != null">
+            LEFT JOIN MEMBER_KEYWORD MK on CK.KEYWORD = MK.KEYWORD AND MEMBER = #{member}
+        </if>
         WHERE 1=1
         <include refid="categoryList"></include>
         ORDER BY CC.CLASSIFICATION, CK.KEYWORD
@@ -98,7 +110,7 @@
     </insert>
 
     <insert id="insertCategoryClassificationGroup">
-        INSERT INTO CATEGORY_CLASSIFICATION_GROUP (CATEGORY, CLASSIFICATION, SEQ, STATE, CNT) VALUES (#{category}, #{classification}, #{seq}, #{state}, #{cnt})
+        INSERT INTO CATEGORY_CLASSIFICATION_GROUP (CATEGORY, CLASSIFICATION, SEQ, STATE) VALUES (#{category}, #{classification}, #{seq}, #{state})
     </insert>
 
     <update id="updateClassificationGroup">
@@ -106,7 +118,6 @@
             CLASSIFICATION = #{classification}
             ,SEQ = #{seq}
             ,STATE = #{state}
-            ,CNT = #{cnt}
             ,UPDDATE = NOW()
         WHERE 1=1
         AND `GROUP` = #{group}
@@ -121,7 +132,7 @@
     </delete>
 
     <insert id="insertCategoryClassification" parameterType="com.jamie.home.api.model.CATEGORY_CLASSIFICATION" useGeneratedKeys="true" keyProperty="classification">
-        INSERT INTO CATEGORY_CLASSIFICATION (NAME) VALUES (#{name})
+        INSERT INTO CATEGORY_CLASSIFICATION (NAME, CNT) VALUES (#{name}, #{cnt})
     </insert>
 
     <delete id="deleteCategory">
@@ -202,7 +213,7 @@
     </update>
 
     <update id="updateClassification">
-        UPDATE CATEGORY_CLASSIFICATION SET NAME = #{name},UPDDATE = NOW() WHERE CLASSIFICATION = #{classification}
+        UPDATE CATEGORY_CLASSIFICATION SET NAME = #{name}, CNT = #{cnt}, UPDDATE = NOW() WHERE CLASSIFICATION = #{classification}
     </update>
 
     <update id="updateMemberKeywords">
@@ -216,6 +227,61 @@
     <update id="updateQuestionKeywords">
         UPDATE QUESTION SET KEYWORDS = GET_QUESTION_KEYWORD(QUESTION, MEMBER) WHERE 1=1
     </update>
+
+    <select id="getListCommonKeyword" resultType="com.jamie.home.api.model.COMMON_KEYWORD">
+        SELECT CK.*
+        <if test="member != null">
+            , (SELECT COUNT(*) FROM MEMBER_COMMON_KEYWORD MCK WHERE CK.COMMON_KEYWORD = MCK.COMMON_KEYWORD AND MEMBER = #{member}) AS SELECTED
+        </if>
+        FROM COMMON_KEYWORD CK
+        WHERE 1=1
+        <if test="category != null">
+            AND CK.CATEGORY = #{category}
+        </if>
+        <if test="category == null">
+            AND CK.CATEGORY IS NULL
+            <if test="searchKeyword != null">
+                <if test="searchType == 'category'.toString()">
+                    AND CK.NAME LIKE CONCAT('%',#{searchKeyword},'%')
+                </if>
+            </if>
+        </if>
+    </select>
+
+    <select id="getCommonKeyword" resultType="com.jamie.home.api.model.COMMON_KEYWORD">
+        SELECT * FROM COMMON_KEYWORD WHERE COMMON_KEYWORD = #{common_keyword}
+    </select>
+
+    <insert id="insertCommonKeyword" parameterType="com.jamie.home.api.model.COMMON_KEYWORD" useGeneratedKeys="true" keyProperty="common_keyword">
+        INSERT INTO COMMON_KEYWORD(
+            NAME, CNT
+        <if test="category != null">
+            ,CATEGORY
+        </if>
+
+        ) VALUES (
+            #{name}, #{cnt}
+        <if test="category != null">
+            ,#{category}
+        </if>
+        )
+    </insert>
+
+    <update id="updateCommonKeyword">
+        UPDATE COMMON_KEYWORD SET UPDDATE = NOW()
+        <if test="category != null">,CATEGORY = #{category}</if>
+        <if test="name != null">,NAME = #{name}</if>
+        <if test="cnt != null">,CNT = #{cnt}</if>
+        WHERE COMMON_KEYWORD = #{common_keyword}
+    </update>
+
+    <delete id="deleteCommonKeywordAll">
+        DELETE FROM COMMON_KEYWORD WHERE CATEGORY = #{common_keyword}
+    </delete>
+
+    <delete id="deleteCommonKeyword">
+        DELETE FROM COMMON_KEYWORD WHERE COMMON_KEYWORD = #{common_keyword}
+    </delete>
 
     <resultMap id="CategoryMap" type="com.jamie.home.api.model.CATEGORY">
         <result column="CATEGORY" property="category"/>
@@ -233,6 +299,7 @@
             <collection property="keywords" ofType="com.jamie.home.api.model.CATEGORY_KEYWORD">
                 <result column="CK_KEYWORD" property="keyword"/>
                 <result column="CK_NAME" property="name"/>
+                <result column="CK_CHK" property="selected"/>
             </collection>
         </collection>
     </resultMap>
@@ -240,9 +307,11 @@
     <resultMap id="ClassificationMap" type="com.jamie.home.api.model.CATEGORY_CLASSIFICATION">
         <result column="CC_CLASSIFICATION" property="classification"/>
         <result column="CC_NAME" property="name"/>
+        <result column="CC_CNT" property="cnt"/>
         <collection property="keywords" ofType="com.jamie.home.api.model.CATEGORY_KEYWORD">
             <result column="CK_KEYWORD" property="keyword"/>
             <result column="CK_NAME" property="name"/>
+            <result column="CK_CHK" property="selected"/>
         </collection>
     </resultMap>
 </mapper>

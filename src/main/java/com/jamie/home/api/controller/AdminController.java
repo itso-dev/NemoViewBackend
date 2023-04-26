@@ -847,4 +847,85 @@ public class AdminController {
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SEND_PUSH_FAIL", null);
         }
     }
+
+    @RequestMapping(value="/category/common/list", method= RequestMethod.POST)
+    public ResponseOverlays commonKeywordList(@Validated @RequestBody SEARCH search) {
+        try {
+            List<COMMON_KEYWORD_LIST> list = categoryService.listCommonKeyword(search);
+            if(list != null){
+                VoList<COMMON_KEYWORD_LIST> result = new VoList<>(list.size(), list);
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_COMMON_KEYWORD_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_COMMON_KEYWORD_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_COMMON_KEYWORD_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/category/common/{key}", method= RequestMethod.GET)
+    public ResponseOverlays getCommonKeyword(@PathVariable("key") int key) {
+        try {
+            COMMON_KEYWORD common_keyword = new COMMON_KEYWORD();
+            common_keyword.setCommon_keyword(key);
+            COMMON_KEYWORD_LIST result = categoryService.getCommonKeyword(common_keyword);
+            if(result != null){
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_COMMON_KEYWORD_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_COMMON_KEYWORD_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_COMMON_KEYWORD_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/category/common/save", method= RequestMethod.POST)
+    public ResponseOverlays saveCommonKeyword(@Validated @RequestBody COMMON_KEYWORD_LIST common_keyword_list) {
+        try {
+            int result = categoryService.saveCommonKeyword(common_keyword_list);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_COMMON_KEYWORD_NOT_SAVE", null);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_COMMON_KEYWORD_SUCCESS", common_keyword_list);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_COMMON_KEYWORD_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/category/common/{key}", method= RequestMethod.PUT)
+    public ResponseOverlays modiCommonKeyword(@PathVariable("key") int key, @Validated @RequestBody COMMON_KEYWORD_LIST common_keyword_list) {
+        try {
+            common_keyword_list.getCommon_keyword().setCommon_keyword(key);
+            int result = categoryService.modiCommonKeyword(common_keyword_list);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_COMMON_KEYWORD_NOT_SAVE", null);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_COMMON_KEYWORD_SUCCESS", common_keyword_list);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_COMMON_KEYWORD_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/category/common/{key}", method= RequestMethod.DELETE)
+    public ResponseOverlays removeCommonKeyword(@PathVariable("key") int key) {
+        try {
+            COMMON_KEYWORD common_keyword = new COMMON_KEYWORD();
+            common_keyword.setCommon_keyword(key);
+            int result = categoryService.removeCommonKeyword(common_keyword);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "DELETE_COMMON_KEYWORD_NOT_SAVE", null);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "DELETE_COMMON_KEYWORD_SUCCESS", common_keyword);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "DELETE_COMMON_KEYWORD_FAIL", null);
+        }
+    }
 }

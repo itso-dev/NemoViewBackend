@@ -126,15 +126,19 @@
         UPDATE MEMBER SET ACCOUNT = #{account} WHERE MEMBER = #{member}
     </update>
 
-    <insert id="insertMemberKeywrod">
+    <select id="getMemberKeyword" resultType="com.jamie.home.api.model.KEYWORD">
+        SELECT * FROM MEMBER_KEYWORD WHERE MEMBER = #{member}
+    </select>
+
+    <insert id="insertMemberKeyword">
         INSERT INTO MEMBER_KEYWORD (MEMBER, KEYWORD) VALUES
-        <foreach collection="review_keywords" item="keyword" separator=",">
+        <foreach collection="keywordList" item="keyword" separator=",">
             (#{member}, #{keyword.keyword})
         </foreach>
     </insert>
 
-    <delete id="deleteAllMemberKeywrod">
-        DELETE FROM MEMBER_KEYWORD WHERE MEMBER = #{member}
+    <delete id="deleteMemberKeyword">
+        DELETE FROM MEMBER_KEYWORD WHERE MEMBER = #{member} AND KEYWORD = #{keyword}
     </delete>
 
     <select id="find" resultType="com.jamie.home.api.model.MEMBER">
@@ -246,4 +250,26 @@
         DELETE FROM MEMBER_ALARM WHERE MEMBER = #{member}
     </insert>
 
+    <insert id="INSERT_COMMON_KEYWORD_FROM_MEMBER_DATA">
+        CALL INSERT_COMMON_KEYWORD_FROM_MEMBER_DATA(#{member});
+    </insert>
+
+    <insert id="INSERT_COMMON_KEYWORD">
+        CALL INSERT_COMMON_KEYWORD(#{member});
+    </insert>
+
+    <select id="getMemberCommonKeyword" resultType="com.jamie.home.api.model.KEYWORD">
+        SELECT * FROM MEMBER_COMMON_KEYWORD WHERE MEMBER = #{member}
+    </select>
+
+    <insert id="insertMemberCommonKeyword">
+        INSERT INTO MEMBER_COMMON_KEYWORD (MEMBER, COMMON_KEYWORD) VALUES
+        <foreach collection="commonKeywordList" item="keyword" separator=",">
+            (#{member}, #{keyword.common_keyword})
+        </foreach>
+    </insert>
+
+    <delete id="deleteMemberCommonKeyword">
+        DELETE FROM MEMBER_COMMON_KEYWORD WHERE MEMBER = #{member} AND COMMON_KEYWORD = #{common_keyword}
+    </delete>
 </mapper>

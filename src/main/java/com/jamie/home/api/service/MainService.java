@@ -107,4 +107,8 @@ public class MainService extends BasicService{
     public Integer getPointMonth(MEMBER member) {
         return memberDao.getMemberPointMonth(member);
     }
+
+    public List<COMMON_KEYWORD> listCommonKeyword(SEARCH search) {
+        return categoryDao.getListCommonKeyword(search);
+    }
 }

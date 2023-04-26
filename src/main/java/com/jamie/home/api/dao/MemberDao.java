@@ -37,8 +37,9 @@ public interface MemberDao {
 
     int updateMemberAccount(MEMBER member);
 
-    Integer insertMemberKeywrod(SEARCH search);
-    void deleteAllMemberKeywrod(SEARCH search);
+    List<KEYWORD> getMemberKeyword(MEMBER member);
+    Integer insertMemberKeyword(MEMBER member);
+    void deleteMemberKeyword(KEYWORD keyword);
 
     MEMBER find(SEARCH search);
 
@@ -64,4 +65,13 @@ public interface MemberDao {
 
     int insertMemberAlarm(MEMBER member);
     int deleteMemberAlarm(MEMBER member);
+
+    void INSERT_COMMON_KEYWORD_FROM_MEMBER_DATA(MEMBER member);
+
+    void INSERT_COMMON_KEYWORD(MEMBER member);
+
+    List<KEYWORD> getMemberCommonKeyword(MEMBER member);
+    Integer insertMemberCommonKeyword(MEMBER member);
+    void deleteMemberCommonKeyword(KEYWORD keyword);
+
 }

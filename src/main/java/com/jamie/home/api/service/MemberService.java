@@ -9,7 +9,9 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -39,9 +41,8 @@ public class MemberService extends BasicService{
         member.setRole(ROLE.ROLE_USER);
 
         // 공통키워드 추출
-        List<Keywords> common = KeywordUtils.getCommonKeyword(member);
-
-        member.setKeywords(KeywordUtils.getKeywordsValue(common, null, null));
+        //List<Keywords> common = KeywordUtils.getCommonKeyword(member);
+        //member.setKeywords(KeywordUtils.getKeywordsValue(common, null, null));
 
         MEMBER codeMember = memberDao.getMemberByCode(member);
 
@@ -121,29 +122,46 @@ public class MemberService extends BasicService{
         return memberDao.updateLogDate(member);
     }
 
-    public Integer modiKeywords(MEMBER member) throws JsonProcessingException {
-        MEMBER memberInfo = memberDao.getMember(member);
-        // 회원정보에서 공통키워드 추출
-        List<Keywords> common = KeywordUtils.getCommonKeyword(memberInfo);
-
-        // 직접 선택한 필수키워드 추출
-        List<Keywords> mandatory = KeywordUtils.getMandatoryKeyword(member.getKeywordList());
-
-        member.setKeywords(KeywordUtils.getKeywordsValue(common, mandatory, null));
-
-        int result = memberDao.updateMemberKeywords(member);
-
-        // MEMBER_KEYWORD 저장
-        List<KEYWORD> keywords = KeywordUtils.getMandatoryKeywordForSave(member.getKeywordList());
-
-        SEARCH search = new SEARCH();
-        search.setMember(member.getMember());
-        memberDao.deleteAllMemberKeywrod(search);
-        if(keywords != null && keywords.size() != 0){
-            search.setReview_keywords(keywords);
-            memberDao.insertMemberKeywrod(search);
+    public Integer modiKeywords(MEMBER member) throws Exception {
+        // 공통키워드 수정
+        // 1. 삭제
+        if(member.getCommonKeywordList_del() != null){
+            for(int i=0; i<member.getCommonKeywordList_del().size(); i++){
+                member.getCommonKeywordList_del().get(i).setMember(member.getMember());
+                memberDao.deleteMemberCommonKeyword(member.getCommonKeywordList_del().get(i));
+            }
         }
-        return result;
+        // 2. 조회
+        List<KEYWORD> memberCommonKeyword = memberDao.getMemberCommonKeyword(member);
+        List<Integer> memberCommonKeywordIdx = memberCommonKeyword.stream().map(k -> k.getCommon_keyword()).collect(Collectors.toList());
+        // 3. 겹치지 않는 키워드 입력
+        List<KEYWORD> insertMemberCommonKeyword
+                = member.getCommonKeywordList().stream().filter(item -> !memberCommonKeywordIdx.contains(item.getCommon_keyword())).collect(Collectors.toList());
+        if(insertMemberCommonKeyword.size() != 0){
+            member.setCommonKeywordList(insertMemberCommonKeyword);
+            memberDao.insertMemberCommonKeyword(member);
+        }
+
+        // 필수키워드 수정
+        // 1. 삭제
+        if(member.getKeywordList_del() != null){
+            for(int i=0; i<member.getKeywordList_del().size(); i++){
+                member.getKeywordList_del().get(i).setMember(member.getMember());
+                memberDao.deleteMemberKeyword(member.getKeywordList_del().get(i));
+            }
+        }
+        // 2. 조회
+        List<KEYWORD> memberKeyword = memberDao.getMemberKeyword(member);
+        List<Integer> memberKeywordIdx = memberKeyword.stream().map(k -> k.getKeyword()).collect(Collectors.toList());
+        // 3. 겹치지 않는 키워드 입력
+        List<KEYWORD> insertMemberKeyword
+                = member.getKeywordList().stream().filter(item -> !memberKeywordIdx.contains(item.getKeyword())).collect(Collectors.toList());
+        if(insertMemberKeyword.size() != 0){
+            member.setKeywordList(insertMemberKeyword);
+            memberDao.insertMemberKeyword(member);
+        }
+
+        return 1;
     }
 
     public Integer modiStateMember(MEMBER member) {

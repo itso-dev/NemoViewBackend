@@ -46,7 +46,10 @@ public class MEMBER {
     private ArrayList<MultipartFile> saveFiles;
     private String deleteFiles;
 
-    private String keywordList;
+    private List<KEYWORD> keywordList;
+    private List<KEYWORD> keywordList_del;
+    private List<KEYWORD> commonKeywordList;
+    private List<KEYWORD> commonKeywordList_del;
     private String inputCode;
 
     private Boolean remember;

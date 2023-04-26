@@ -22,10 +22,9 @@
             </if>
             <if test="searchType == null">
                 AND (
-                    R.NAME LIKE CONCAT('%',#{searchKeyword},'%') OR
-                    R.MNUMBER LIKE CONCAT('%',#{searchKeyword},'%') OR
-                    R.BRAND LIKE CONCAT('%',#{searchKeyword},'%') OR
-                    R.KEYWORDS LIKE CONCAT('%"',#{searchKeyword},'"%')
+                    MATCH(R.NAME) AGAINST (#{searchKeyword})
+                    OR MATCH(R.BRAND) AGAINST (#{searchKeyword})
+                    OR MATCH(R.KEYWORDS) AGAINST (#{searchKeyword})
                 )
             </if>
         </if>
@@ -46,7 +45,17 @@
             <foreach collection="keywordList" item="keyword" separator="OR">
                 <choose>
                     <when test="keyword.type == '1'.toString()">
-                        R.KEYWORDS LIKE CONCAT('%"',#{keyword.value},'"%')
+                        <choose>
+                            <when test="keyword.key == -1">
+                                #{keyword.value} = (SELECT GENDER FROM MEMBER WHERE MEMBER = R.MEMBER)
+                            </when>
+                            <when test="keyword.key == -2">
+                                #{keyword.value} = (SELECT GET_VALUE_BIRTHDAY(MEMBER) FROM MEMBER WHERE MEMBER = R.MEMBER)
+                            </when>
+                            <when test="keyword.key > 0">
+                                #{keyword.key} IN (SELECT COMMON_KEYWORD FROM MEMBER_COMMON_KEYWORD WHERE MEMBER = R.MEMBER)
+                            </when>
+                        </choose>
                     </when>
                     <when test="keyword.type == '2'.toString()">
                         #{keyword.key} IN (SELECT KEYWORD FROM REVIEW_KEYWORD WHERE REVIEW = R.REVIEW)
@@ -73,7 +82,17 @@
             <foreach collection="keywordList" item="keyword" separator="+">
                 <choose>
                     <when test="keyword.type == '1'.toString()">
-                        (SELECT COUNT(*) FROM REVIEW WHERE REVIEW = R.REVIEW AND R.KEYWORDS LIKE CONCAT('%"',#{keyword.value},'"%'))
+                        <choose>
+                            <when test="keyword.key == -1">
+                                (SELECT COUNT(*) FROM REVIEW WHERE REVIEW = R.REVIEW AND #{keyword.value} = (SELECT GENDER FROM MEMBER WHERE MEMBER = R.MEMBER))
+                            </when>
+                            <when test="keyword.key == -2">
+                                (SELECT COUNT(*) FROM REVIEW WHERE REVIEW = R.REVIEW AND #{keyword.value} = (SELECT GET_VALUE_BIRTHDAY(MEMBER) FROM MEMBER WHERE MEMBER = R.MEMBER))
+                            </when>
+                            <when test="keyword.key > 0">
+                                (SELECT COUNT(*) FROM REVIEW WHERE REVIEW = R.REVIEW AND #{keyword.key} IN (SELECT KEYWORD FROM MEMBER_KEYWORD WHERE MEMBER = R.MEMBER))
+                            </when>
+                        </choose>
                     </when>
                     <when test="keyword.type == '2'.toString()">
                         (SELECT COUNT(*) FROM REVIEW WHERE REVIEW = R.REVIEW AND #{keyword.key} IN (SELECT KEYWORD FROM REVIEW_KEYWORD WHERE REVIEW = R.REVIEW))
@@ -84,6 +103,11 @@
                 </choose>
             </foreach>
             ) DESC,
+        </if>
+        <if test="searchKeyword != null">
+            <if test="searchType == null">
+                COUNT_MATCH_KEYWORD(#{searchKeyword},R.REVIEW) DESC,
+            </if>
         </if>
         <if test="orderType != null">
             <choose>
@@ -104,7 +128,6 @@
             ,(SELECT COUNT(*) FROM REVIEW_REPLY RR WHERE RR.REVIEW = R.REVIEW) REPLY_TOT
             ,(SELECT NAME FROM CATEGORY C WHERE C.CATEGORY = R.CATEGORY) CATEGORY_NAME
             ,(SELECT COUNT(*) FROM REPORT WHERE `KEY` = R.REVIEW AND TYPE = '1') REPORT_CNT
-            ,(SELECT COUNT(*) FROM INFO WHERE TYPE = 1 AND `KEY` = R.REVIEW) MODI_CNT
             ,M.PROFILE MEMBER_PROFILE
             ,M.NAME MEMBER_NAME
             ,M.NICKNAME MEMBER_NICKNAME
@@ -286,6 +309,13 @@
         FROM REVIEW
         WHERE MEMBER = #{member}
             AND STATE = 2
+    </select>
+
+    <select id="getListMemberKeywordInCategory" resultType="com.jamie.home.api.model.KEYWORD">
+        SELECT *
+        FROM MEMBER_KEYWORD
+        WHERE MEMBER = #{member}
+        AND KEYWORD IN (SELECT KEYWORD FROM CATEGORY_KEYWORD WHERE CLASSIFICATION IN (SELECT CLASSIFICATION FROM CATEGORY_CLASSIFICATION_GROUP WHERE CATEGORY = #{category}))
     </select>
 
     <resultMap id="ReviewMap" type="com.jamie.home.api.model.REVIEW">

@@ -13,6 +13,7 @@ import java.util.List;
 @ToString
 public class CATEGORY {
     private Integer category;
+    private Integer member;
     private String name;
     private Integer seq;
     private String state;

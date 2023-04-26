@@ -200,4 +200,21 @@ public class MainController {
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_POINT_FAIL", null);
         }
     }
+
+    @RequestMapping(value="/common/keyword/list", method= RequestMethod.POST)
+    public ResponseOverlays listMember(@Validated @RequestBody SEARCH search) {
+        try {
+            List<COMMON_KEYWORD> list = mainService.listCommonKeyword(search);
+            if(list != null){
+                VoList<COMMON_KEYWORD> result = new VoList<>(list.size(), list);
+                //result.setPage(search.getPage(), search.getPage_block());
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_COMMON_KEYWORD_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_COMMON_KEYWORD_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_COMMON_KEYWORD_FAIL", null);
+        }
+    }
 }
