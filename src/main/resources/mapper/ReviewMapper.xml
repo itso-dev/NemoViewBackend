@@ -318,6 +318,10 @@
         AND KEYWORD IN (SELECT KEYWORD FROM CATEGORY_KEYWORD WHERE CLASSIFICATION IN (SELECT CLASSIFICATION FROM CATEGORY_CLASSIFICATION_GROUP WHERE CATEGORY = #{category}))
     </select>
 
+    <select id="getCountReviewModify" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM INFO WHERE TYPE = 1 AND `KEY` = #{review}
+    </select>
+
     <resultMap id="ReviewMap" type="com.jamie.home.api.model.REVIEW">
         <result column="REVIEW" property="review"/>
         <result column="MEMBER" property="member"/>

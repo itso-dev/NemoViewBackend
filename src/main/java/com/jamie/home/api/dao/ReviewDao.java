@@ -29,4 +29,6 @@ public interface ReviewDao {
     PROFILE_CNT listTotalCnt(SEARCH search);
 
     List<KEYWORD> getListMemberKeywordInCategory(REVIEW review);
+
+    Integer getCountReviewModify(REVIEW review);
 }

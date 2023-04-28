@@ -23,7 +23,11 @@ public class ReviewService extends BasicService{
                 searchDao.insertSearchKeyword(search);
             }
         }
-        return reviewDao.getListReview(search);
+        List<REVIEW> list = reviewDao.getListReview(search);
+        for(int i=0; i<list.size(); i++){
+            list.get(i).setModiCnt(reviewDao.getCountReviewModify(list.get(i)));
+        }
+        return list;
     }
 
     public Integer listCnt(SEARCH search) {
@@ -31,7 +35,9 @@ public class ReviewService extends BasicService{
     }
 
     public REVIEW get(REVIEW review){
-        return reviewDao.getReview(review);
+        REVIEW result = reviewDao.getReview(review);
+        result.setModiCnt(reviewDao.getCountReviewModify(result));
+        return result;
     }
 
     public Integer upHits(REVIEW review){
