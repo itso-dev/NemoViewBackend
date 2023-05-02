@@ -74,4 +74,7 @@ public interface MemberDao {
     Integer insertMemberCommonKeyword(MEMBER member);
     void deleteMemberCommonKeyword(KEYWORD keyword);
 
+    MEMBER getMemberCheckIn(MEMBER member);
+
+    Integer insertMemberCheckIn(MEMBER member);
 }

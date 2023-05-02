@@ -79,6 +79,7 @@
             ,(SELECT COUNT(*) FROM QUESTION_ANSWER QA WHERE QA.QUESTION = Q.QUESTION AND CHOOSE = TRUE) AS ANSWER_YN
             ,(SELECT COUNT(*) FROM QUESTION_ANSWER QA WHERE QA.QUESTION = Q.QUESTION) AS ANSWER_CNT
             ,(SELECT COUNT(*) FROM REPORT WHERE TYPE = '3' AND `KEY` = Q.QUESTION) AS REPORT_CNT
+            ,(SELECT COUNT(*) FROM QUESTION_LIKE QL WHERE QL.QUESTION = Q.QUESTION) AS LIKE_CNT
             , M.MEMBER AS MEMBER_MEMBER
             , M.PROFILE AS MEMBER_PROFILE
             , M.NAME AS MEMBER_NAME
@@ -105,6 +106,7 @@
         SELECT GET_QUESTION_KEYWORD(Q.QUESTION, Q.MEMBER) AS KEYWORDS, Q.*
             ,(SELECT COUNT(*) FROM QUESTION_ANSWER QA WHERE QA.QUESTION = Q.QUESTION AND CHOOSE = TRUE) AS ANSWER_YN
             ,(SELECT COUNT(*) FROM QUESTION_ANSWER QA WHERE QA.QUESTION = Q.QUESTION) AS ANSWER_CNT
+            ,(SELECT COUNT(*) FROM QUESTION_LIKE QL WHERE QL.QUESTION = Q.QUESTION) AS LIKE_CN
             , M.MEMBER AS MEMBER_MEMBER
             , M.PROFILE AS MEMBER_PROFILE
             , M.NAME AS MEMBER_NAME
@@ -123,9 +125,9 @@
 
     <insert id="insertQuestion" parameterType="com.jamie.home.api.model.QUESTION" useGeneratedKeys="true" keyProperty="question">
         INSERT INTO QUESTION
-            (MEMBER, TYPE, TITLE, CONTENT, NOKEYWORD, POINT, STATE, KEYWORDS)
+            (MEMBER, TYPE, TITLE, CONTENT, NOKEYWORD, POINT, STATE, KEYWORDS, FILES)
         VALUES
-            (#{member}, #{type}, #{title}, #{content}, #{nokeyword}, #{point}, #{state}, #{keywords})
+            (#{member}, #{type}, #{title}, #{content}, #{nokeyword}, #{point}, #{state}, #{keywords}, #{files})
     </insert>
 
     <update id="updateQuestion">
@@ -137,6 +139,7 @@
             ,POINT = #{point}
             ,STATE = #{state}
             ,KEYWORDS = #{keywords}
+            ,FILES = #{files}
             ,UPDDATE = now()
         WHERE QUESTION = #{question}
     </update>
@@ -225,6 +228,18 @@
         DELETE FROM QUESTION_ANSWER WHERE ANSWER = #{answer}
     </delete>
 
+    <select id="getQuestionLike" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM QUESTION_LIKE WHERE QUESTION = #{question} AND MEMBER = #{member}
+    </select>
+
+    <insert id="insertQuestionLike">
+        INSERT INTO QUESTION_LIKE (QUESTION, MEMBER) VALUES (#{question}, #{member})
+    </insert>
+
+    <delete id="deleteQuestionLike">
+        DELETE FROM QUESTION_LIKE WHERE QUESTION = #{question} AND MEMBER = #{member}
+    </delete>
+
     <resultMap id="QuestionMap" type="com.jamie.home.api.model.QUESTION">
         <result column="QUESTION" property="question"/>
         <result column="MEMBER" property="member"/>
@@ -236,9 +251,13 @@
         <result column="POINT" property="point"/>
         <result column="STATE" property="state"/>
         <result column="KEYWORDS" property="keywords"/>
+        <result column="FILES" property="files"/>
+        <result column="REGDATE" property="regdate"/>
+        <result column="UPDDATE" property="upddate"/>
         <result column="ANSWER_YN" property="answerYn"/>
         <result column="ANSWER_CNT" property="answerCnt"/>
         <result column="REPORT_CNT" property="reportCnt"/>
+        <result column="LIKE_CNT" property="likeCnt"/>
         <association property="memberVO" column="MEMBER" javaType="com.jamie.home.api.model.MEMBER">
             <result column="MEMBER_PROFILE" property="profile"/>
             <result column="MEMBER_NAME" property="name"/>

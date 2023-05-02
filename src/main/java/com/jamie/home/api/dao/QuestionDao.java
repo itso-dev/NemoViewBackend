@@ -40,4 +40,10 @@ public interface QuestionDao {
     QUESTION_ANSWER getAnswer(QUESTION_ANSWER answer);
 
     Integer deleteAnswer(QUESTION_ANSWER answer);
+
+    Integer getQuestionLike(QUESTION question);
+
+    Integer deleteQuestionLike(QUESTION question);
+
+    Integer insertQuestionLike(QUESTION question);
 }

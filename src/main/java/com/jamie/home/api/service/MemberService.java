@@ -231,4 +231,18 @@ public class MemberService extends BasicService{
             return memberDao.deleteMemberAlarm(member);
         }
     }
+
+    public MEMBER getCheckIn(MEMBER member) {
+        return memberDao.getMemberCheckIn(member);
+    }
+
+    public Integer saveCheckIn(MEMBER member) {
+        int result = 0;
+        MEMBER data = memberDao.getMemberCheckIn(member);
+
+        if(data == null){
+            result = memberDao.insertMemberCheckIn(member);
+        }
+        return result;
+    }
 }

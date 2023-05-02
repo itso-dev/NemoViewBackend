@@ -26,6 +26,7 @@ public class ReviewService extends BasicService{
         List<REVIEW> list = reviewDao.getListReview(search);
         for(int i=0; i<list.size(); i++){
             list.get(i).setModiCnt(reviewDao.getCountReviewModify(list.get(i)));
+            //list.get(i).setMatchCnt(reviewDao.getCountReviewMatchkeyword(list.get(i)));
         }
         return list;
     }

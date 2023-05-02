@@ -60,4 +60,5 @@ public class REVIEW {
     private Integer reply_key;
 
     private Integer keywordCnt;
+    private Integer matchCnt;
 }

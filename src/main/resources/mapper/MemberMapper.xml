@@ -272,4 +272,13 @@
     <delete id="deleteMemberCommonKeyword">
         DELETE FROM MEMBER_COMMON_KEYWORD WHERE MEMBER = #{member} AND COMMON_KEYWORD = #{common_keyword}
     </delete>
+
+    <select id="getMemberCheckIn" resultType="com.jamie.home.api.model.MEMBER">
+        SELECT * FROM MEMBER
+        WHERE MEMBER = (SELECT MEMBER FROM MEMBER_CHECKIN WHERE MEMBER = #{member} AND DATE_FORMAT(REGDATE, '%Y%m%d') = DATE_FORMAT(NOW(), '%Y%m%d'))
+    </select>
+
+    <insert id="insertMemberCheckIn">
+        INSERT INTO MEMBER_CHECKIN (MEMBER) VALUES (#{member})
+    </insert>
 </mapper>

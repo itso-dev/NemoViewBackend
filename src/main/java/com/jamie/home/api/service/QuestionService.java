@@ -2,6 +2,7 @@ package com.jamie.home.api.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.jamie.home.api.model.*;
+import com.jamie.home.util.FileUtils;
 import com.jamie.home.util.KeywordUtils;
 import javassist.compiler.ast.Keyword;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,13 @@ public class QuestionService extends BasicService{
     }
 
     public Integer save(QUESTION question) throws Exception {
+        // 파일 저장
+        question.setFiles(
+                FileUtils.saveFiles(
+                        question.getFiles_new(),
+                        uploadDir
+                )
+        );
         MEMBER param = new MEMBER();
         param.setMember(question.getMember());
         MEMBER memberInfo = memberDao.getMember(param);
@@ -94,6 +102,14 @@ public class QuestionService extends BasicService{
     }
 
     public Integer modi(QUESTION question) throws Exception {
+        question.setFiles(
+                FileUtils.modiFiles(
+                        question.getFiles(),
+                        question.getFiles_del(),
+                        question.getFiles_new(),
+                        uploadDir
+                )
+        );
         MEMBER param = new MEMBER();
         param.setMember(question.getMember());
         MEMBER memberInfo = memberDao.getMember(param);
@@ -218,5 +234,14 @@ public class QuestionService extends BasicService{
 
     public Integer removeAnswer(QUESTION_ANSWER answer) {
         return questionDao.deleteAnswer(answer);
+    }
+
+    public int like(QUESTION question) {
+        Integer result = questionDao.getQuestionLike(question);
+        if(result != null && result != 0){
+            return questionDao.deleteQuestionLike(question);
+        } else {
+            return questionDao.insertQuestionLike(question);
+        }
     }
 }

@@ -306,4 +306,36 @@ public class MemberController {
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_MEMBER_FAIL", false);
         }
     }
+
+    @RequestMapping(value="/{key}/checkin", method= RequestMethod.GET)
+    public ResponseOverlays checkin(@PathVariable("key") int key) {
+        try {
+            MEMBER member = new MEMBER();
+            member.setMember(key);
+            MEMBER result = memberService.getCheckIn(member);
+            if(result != null){
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_MEMBER_SUCCESS", true);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_MEMBER_NULL", false);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_MEMBER_FAIL", false);
+        }
+    }
+
+    @RequestMapping(value="/checkin", method= RequestMethod.POST)
+    public ResponseOverlays checkin(@Validated @RequestBody MEMBER member) {
+        try {
+            int result = memberService.saveCheckIn(member);
+            if(result != 0){
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_MEMBER_SUCCESS", true);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_MEMBER_NULL", false);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_MEMBER_FAIL", false);
+        }
+    }
 }
