@@ -236,12 +236,16 @@ public class QuestionService extends BasicService{
         return questionDao.deleteAnswer(answer);
     }
 
-    public int like(QUESTION question) {
+    public Integer like(QUESTION question) {
         Integer result = questionDao.getQuestionLike(question);
         if(result != null && result != 0){
             return questionDao.deleteQuestionLike(question);
         } else {
             return questionDao.insertQuestionLike(question);
         }
+    }
+
+    public Integer getLike(QUESTION question) {
+        return questionDao.getQuestionLike(question);
     }
 }

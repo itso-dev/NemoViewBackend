@@ -115,13 +115,29 @@ public class QuestionController {
             question.setQuestion(key);
             int result = questionService.like(question);
             if(result == 0){
-                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_REVIEW_LIKE_NOT_SAVE", false);
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_QUESTION_LIKE_NOT_SAVE", false);
             } else {
-                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_REVIEW_LIKE_SUCCESS", true);
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_QUESTION_LIKE_SUCCESS", true);
             }
         } catch (Exception e){
             logger.error(e.getLocalizedMessage());
-            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_REVIEW_LIKE_FAIL", null);
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_QUESTION_LIKE_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/{key}/islike", method= RequestMethod.POST)
+    public ResponseOverlays islike(@PathVariable("key") int key, @Validated @RequestBody QUESTION question) {
+        try {
+            question.setQuestion(key);
+            int result = questionService.getLike(question);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_QUESTION_LIKE_NULL", false);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_QUESTION_LIKE_SUCCESS", true);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_QUESTION_LIKE_FAIL", null);
         }
     }
 
