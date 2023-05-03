@@ -57,6 +57,8 @@ public class MEMBER {
 
     private Integer hits;
     private Integer review_cnt;
+    private Boolean member_checkin;
+    private Boolean common_check;
 
     // device
     private String android_device_token;

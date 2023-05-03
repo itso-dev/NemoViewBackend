@@ -239,9 +239,13 @@ public class MemberService extends BasicService{
     public Integer saveCheckIn(MEMBER member) {
         int result = 0;
         MEMBER data = memberDao.getMemberCheckIn(member);
+        MEMBER member_info = memberDao.getMember(member);
 
         if(data == null){
             result = memberDao.insertMemberCheckIn(member);
+            POINT point = new POINT();
+            point.setValues(member.getMember(), "1", 10, member_info.getPoint() + 10, "출석체크", "1");
+            pointDao.insertPoint(point);
         }
         return result;
     }
