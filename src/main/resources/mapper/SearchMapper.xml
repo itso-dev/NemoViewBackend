@@ -13,7 +13,7 @@
     <select id="getListSearch" resultType="java.lang.String">
         SELECT KEYWORD, COUNT(*)
         FROM SEARCH
-        WHERE REGDATE >= DATE_FORMAT(NOW() - interval 7 day, '%Y%m%d')
+        WHERE DATE_FORMAT(REGDATE, '%Y%m') = DATE_FORMAT(NOW(), '%Y%m')
         GROUP BY KEYWORD
         ORDER BY COUNT(*) DESC
         LIMIT 0,5
