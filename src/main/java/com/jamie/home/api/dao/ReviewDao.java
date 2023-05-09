@@ -31,4 +31,10 @@ public interface ReviewDao {
     List<KEYWORD> getListMemberKeywordInCategory(REVIEW review);
 
     Integer getCountReviewModify(REVIEW review);
+
+    Integer getReviewReplyLike(REVIEW_REPLY reply);
+
+    Integer deleteReviewReplyLike(REVIEW_REPLY reply);
+
+    Integer insertReviewReplyLike(REVIEW_REPLY reply);
 }

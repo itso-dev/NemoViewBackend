@@ -83,13 +83,13 @@ public class QuestionController {
         try {
             int result = questionService.save(question);
             if(result == 0){
-                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_QUESTION_NOT_SAVE", null);
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_QUESTION_NOT_SAVE", false);
             } else {
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_QUESTION_SUCCESS", true);
             }
         } catch (Exception e){
             logger.error(e.getLocalizedMessage());
-            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_QUESTION_FAIL", null);
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_QUESTION_FAIL", false);
         }
     }
 
@@ -99,13 +99,13 @@ public class QuestionController {
             question.setQuestion(key);
             int result = questionService.modi(question);
             if(result == 0){
-                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_QUESTION_NOT_SAVE", null);
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_QUESTION_NOT_SAVE", false);
             } else {
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_QUESTION_SUCCESS", true);
             }
         } catch (Exception e){
             logger.error(e.getLocalizedMessage());
-            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_QUESTION_FAIL", null);
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_QUESTION_FAIL", false);
         }
     }
 
@@ -160,19 +160,19 @@ public class QuestionController {
         }
     }
 
-    @RequestMapping(value="/{key}/answer/save", method= RequestMethod.POST)
-    public ResponseOverlays saveAnswer(@PathVariable("key") int key, @Validated @RequestBody QUESTION_ANSWER answer) {
+    @RequestMapping(value="/{key}/answer/save", method= RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseOverlays saveAnswer(@PathVariable("key") int key, @Validated @ModelAttribute QUESTION_ANSWER answer) {
         try {
             answer.setQuestion(key);
             int result = questionService.saveAnswer(answer);
             if(result == 0){
-                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_QUESTION_ANSWER_NOT_SAVE", null);
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_QUESTION_ANSWER_NOT_SAVE", false);
             } else {
-                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_QUESTION_ANSWER_SUCCESS", answer);
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_QUESTION_ANSWER_SUCCESS", true);
             }
         } catch (Exception e){
             logger.error(e.getLocalizedMessage());
-            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_QUESTION_ANSWER_FAIL", null);
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_QUESTION_ANSWER_FAIL", false);
         }
     }
 
@@ -205,6 +205,22 @@ public class QuestionController {
         } catch (Exception e){
             logger.error(e.getLocalizedMessage());
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_QUESTION_REMOVE_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/answer/{key}/like", method= RequestMethod.POST)
+    public ResponseOverlays likeAnswer(@PathVariable("key") int key, @Validated @RequestBody QUESTION_ANSWER answer) {
+        try {
+            answer.setAnswer(key);
+            int result = questionService.likeAnswer(answer);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_ANSWER_LIKE_NOT_SAVE", false);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_ANSWER_LIKE_SUCCESS", true);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_ANSWER_LIKE_FAIL", null);
         }
     }
 }

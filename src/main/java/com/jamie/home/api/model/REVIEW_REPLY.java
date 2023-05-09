@@ -15,6 +15,8 @@ public class REVIEW_REPLY {
     private Integer review;
     private Integer member;
     private String content;
+    private Integer likeCnt;
+    private Integer likeYn;
 
     private MEMBER memberVO;
     private List<REVIEW_REPLY> re_replyList;

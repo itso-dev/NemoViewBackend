@@ -226,4 +226,20 @@ public class ReviewController {
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_REVIEW_FAIL", null);
         }
     }
+    
+    @RequestMapping(value="/reply/{key}/like", method= RequestMethod.POST)
+    public ResponseOverlays likeReply(@PathVariable("key") int key, @Validated @RequestBody REVIEW_REPLY reply) {
+        try {
+            reply.setReply(key);
+            int result = reviewService.likeReply(reply);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_REPLY_LIKE_NOT_SAVE", false);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_REPLY_LIKE_SUCCESS", true);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_REPLY_LIKE_FAIL", null);
+        }
+    }
 }

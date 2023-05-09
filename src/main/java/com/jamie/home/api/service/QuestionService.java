@@ -150,7 +150,14 @@ public class QuestionService extends BasicService{
         return questionDao.getListQuestionAnswerCnt(search);
     }
 
-    public Integer saveAnswer(QUESTION_ANSWER answer) {
+    public Integer saveAnswer(QUESTION_ANSWER answer) throws Exception {
+        // 파일 저장
+        answer.setFiles(
+                FileUtils.saveFiles(
+                        answer.getFiles_new(),
+                        uploadDir
+                )
+        );
         int result = questionDao.insertQuestionAnswer(answer);
 
         if(result != 0) {
@@ -247,5 +254,14 @@ public class QuestionService extends BasicService{
 
     public Integer getLike(QUESTION question) {
         return questionDao.getQuestionLike(question);
+    }
+
+    public int likeAnswer(QUESTION_ANSWER answer) {
+        Integer result = questionDao.getQuestionAnswerLike(answer);
+        if(result != null && result != 0){
+            return questionDao.deleteQuestionAnswerLike(answer);
+        } else {
+            return questionDao.insertQuestionAnswerLike(answer);
+        }
     }
 }

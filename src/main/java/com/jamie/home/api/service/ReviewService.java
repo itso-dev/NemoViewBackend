@@ -312,4 +312,13 @@ public class ReviewService extends BasicService{
         result.setReviewCnt(reviewDao.getListReviewCnt(search));
         return result;
     }
+
+    public int likeReply(REVIEW_REPLY reply) {
+        Integer result = reviewDao.getReviewReplyLike(reply);
+        if(result != null && result != 0){
+            return reviewDao.deleteReviewReplyLike(reply);
+        } else {
+            return reviewDao.insertReviewReplyLike(reply);
+        }
+    }
 }

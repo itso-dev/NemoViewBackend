@@ -151,6 +151,10 @@
             , M.NAME AS MEMBER_NAME
             , M.NICKNAME AS MEMBER_NICKNAME
             , GET_MEMBER_KEYWORD(M.MEMBER) AS MEMBER_KEYWORDS
+            ,(SELECT COUNT(*) FROM QUESTION_ANSWER_LIKE QAL WHERE QAL.ANSWER = QA.ANSWER) AS LIKE_CNT
+        <if test="member != null">
+            ,(SELECT COUNT(*) FROM QUESTION_ANSWER_LIKE QAL WHERE QAL.ANSWER = QA.ANSWER AND QAL.MEMBER = #{member}) LIKE_YN
+        </if>
         FROM QUESTION_ANSWER QA
             LEFT JOIN MEMBER M on QA.MEMBER = M.MEMBER
         WHERE 1=1
@@ -182,13 +186,13 @@
 
     <insert id="insertQuestionAnswer">
         INSERT INTO QUESTION_ANSWER (
-            QUESTION, MEMBER, CONTENT
+            QUESTION, MEMBER, CONTENT, FILES
         <if test="answer_key != null">
             , ANSWER_KEY
         </if>
         )
         VALUES (
-            #{question}, #{member}, #{content}
+            #{question}, #{member}, #{content}, #{files}
         <if test="answer_key != null">
             , #{answer_key}
         </if>
@@ -240,6 +244,18 @@
         DELETE FROM QUESTION_LIKE WHERE QUESTION = #{question} AND MEMBER = #{member}
     </delete>
 
+    <select id="getQuestionAnswerLike" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM QUESTION_ANSWER_LIKE WHERE ANSWER = #{answer} AND MEMBER = #{member}
+    </select>
+
+    <insert id="insertQuestionAnswerLike">
+        INSERT INTO QUESTION_ANSWER_LIKE (ANSWER, MEMBER) VALUES (#{answer}, #{member})
+    </insert>
+
+    <delete id="deleteQuestionAnswerLike">
+        DELETE FROM QUESTION_ANSWER_LIKE WHERE ANSWER = #{answer} AND MEMBER = #{member}
+    </delete>
+
     <resultMap id="QuestionMap" type="com.jamie.home.api.model.QUESTION">
         <result column="QUESTION" property="question"/>
         <result column="MEMBER" property="member"/>
@@ -272,6 +288,9 @@
         <result column="MEMBER" property="member"/>
         <result column="CONTENT" property="content"/>
         <result column="CHOOSE" property="choose"/>
+        <result column="FILES" property="files"/>
+        <result column="LIKE_CNT" property="likeCnt"/>
+        <result column="LIKE_YN" property="likeYn"/>
         <association property="memberVO" column="MEMBER" javaType="com.jamie.home.api.model.MEMBER">
             <result column="MEMBER_PROFILE" property="profile"/>
             <result column="MEMBER_NAME" property="name"/>

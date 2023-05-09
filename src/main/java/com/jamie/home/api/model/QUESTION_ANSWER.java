@@ -18,6 +18,10 @@ public class QUESTION_ANSWER {
     private Integer member;
     private String content;
     private Boolean choose;
+    private Integer likeCnt;
+    private Integer likeYn;
+    private String files;
+    private ArrayList<MultipartFile> files_new;
 
     private MEMBER memberVO;
     private List<QUESTION_ANSWER> re_answerList;

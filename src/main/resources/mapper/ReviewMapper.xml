@@ -239,6 +239,10 @@
             M.NAME AS MEMBER_NAME,
             M.NICKNAME AS MEMBER_NICKNAME,
             GET_MEMBER_KEYWORD(M.MEMBER) AS MEMBER_KEYWORDS
+            ,(SELECT COUNT(*) FROM REVIEW_REPLY_LIKE RRL WHERE RRL.REPLY = RR.REPLY) AS LIKE_CNT
+        <if test="member != null">
+            ,(SELECT COUNT(*) FROM REVIEW_REPLY_LIKE RRL WHERE RRL.REPLY = RR.REPLY AND RRL.MEMBER = #{member}) LIKE_YN
+        </if>
         FROM REVIEW_REPLY RR
             LEFT JOIN MEMBER M on RR.MEMBER = M.MEMBER
         WHERE 1=1
@@ -322,6 +326,18 @@
         SELECT COUNT(*) FROM INFO WHERE TYPE = 1 AND `KEY` = #{review}
     </select>
 
+    <select id="getReviewReplyLike" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM REVIEW_REPLY_LIKE WHERE REPLY = #{reply} AND MEMBER = #{member}
+    </select>
+
+    <insert id="insertReviewReplyLike">
+        INSERT INTO REVIEW_REPLY_LIKE (REPLY, MEMBER) VALUES (#{reply}, #{member})
+    </insert>
+
+    <delete id="deleteReviewReplyLike">
+        DELETE FROM REVIEW_REPLY_LIKE WHERE REPLY = #{reply} AND MEMBER = #{member}
+    </delete>
+
     <resultMap id="ReviewMap" type="com.jamie.home.api.model.REVIEW">
         <result column="REVIEW" property="review"/>
         <result column="MEMBER" property="member"/>
@@ -367,6 +383,8 @@
         <result column="REVIEW" property="review"/>
         <result column="MEMBER" property="member"/>
         <result column="CONTENT" property="content"/>
+        <result column="LIKE_CNT" property="likeCnt"/>
+        <result column="LIKE_YN" property="likeYn"/>
         <association property="memberVO" column="MEMBER" javaType="com.jamie.home.api.model.MEMBER">
             <result column="MEMBER_PROFILE" property="profile"/>
             <result column="MEMBER_NAME" property="name"/>
