@@ -124,14 +124,16 @@ public class QuestionService extends BasicService{
         int result = questionDao.updateQuestion(question);
 
         // QUESTION_KEYWORD 저장
-        List<KEYWORD> keywords = KeywordUtils.getMandatoryKeywordForSave(question.getKeywordList());
+        if(question.getKeywordList() != null && !question.getKeywordList().equals("[]")){
+            List<KEYWORD> keywords = KeywordUtils.getMandatoryKeywordForSave(question.getKeywordList());
 
-        SEARCH search = new SEARCH();
-        search.setQuestion(question.getQuestion());
-        questionDao.deleteAllQuestionKeywrod(search);
-        if(keywords != null && keywords.size() != 0){
-            search.setReview_keywords(keywords);
-            questionDao.insertQuestionKeywrod(search);
+            SEARCH search = new SEARCH();
+            search.setQuestion(question.getQuestion());
+            questionDao.deleteAllQuestionKeywrod(search);
+            if(keywords != null && keywords.size() != 0){
+                search.setReview_keywords(keywords);
+                questionDao.insertQuestionKeywrod(search);
+            }
         }
         return result;
     }
