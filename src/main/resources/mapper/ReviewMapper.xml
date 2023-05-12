@@ -90,7 +90,7 @@
                                 (SELECT COUNT(*) FROM REVIEW WHERE REVIEW = R.REVIEW AND #{keyword.value} = (SELECT GET_VALUE_BIRTHDAY(MEMBER) FROM MEMBER WHERE MEMBER = R.MEMBER))
                             </when>
                             <when test="keyword.key > 0">
-                                (SELECT COUNT(*) FROM REVIEW WHERE REVIEW = R.REVIEW AND #{keyword.key} IN (SELECT KEYWORD FROM MEMBER_KEYWORD WHERE MEMBER = R.MEMBER))
+                                (SELECT COUNT(*) FROM REVIEW WHERE REVIEW = R.REVIEW AND #{keyword.key} IN (SELECT COMMON_KEYWORD FROM MEMBER_COMMON_KEYWORD WHERE MEMBER = R.MEMBER))
                             </when>
                         </choose>
                     </when>
