@@ -22,9 +22,10 @@
             </if>
             <if test="searchType == null">
                 AND (
-                    MATCH(R.NAME) AGAINST (#{searchKeyword})
-                    OR MATCH(R.BRAND) AGAINST (#{searchKeyword})
-                    OR MATCH(R.KEYWORDS) AGAINST (#{searchKeyword})
+                    MATCH(R.NAME) AGAINST (CONCAT(#{searchKeyword},'*') IN BOOLEAN MODE)
+                    OR MATCH(R.BRAND) AGAINST (CONCAT(#{searchKeyword},'*') IN BOOLEAN MODE)
+                    OR MATCH(R.MNUMBER) AGAINST (CONCAT(#{searchKeyword},'*') IN BOOLEAN MODE)
+                    OR MATCH(R.KEYWORDS) AGAINST (CONCAT(#{searchKeyword},'*') IN BOOLEAN MODE)
                 )
             </if>
         </if>
