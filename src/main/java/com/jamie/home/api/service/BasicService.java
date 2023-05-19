@@ -50,7 +50,7 @@ public class BasicService {
     JavaMailSender javaMailSender;
 
     public void sendPushMessage(Integer key, String title, String body){
-       /* if(key == null){ // 전체 푸시
+        if(key == null){ // 전체 푸시
             try {
                 FirebaseUtils.sendMessageTo(null,title,body);
             } catch (Exception e){
@@ -75,6 +75,6 @@ public class BasicService {
             } catch (Exception e){
                 logger.error(e.getLocalizedMessage());
             }
-        }*/
+        }
     }
 }

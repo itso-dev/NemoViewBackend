@@ -246,6 +246,9 @@ public class MemberService extends BasicService{
             POINT point = new POINT();
             point.setValues(member.getMember(), "1", 10, member_info.getPoint() + 10, "출석체크", "1");
             pointDao.insertPoint(point);
+
+            member.setPoint(point.getValue());
+            memberDao.updateMemberPoint(member);
         }
         return result;
     }
