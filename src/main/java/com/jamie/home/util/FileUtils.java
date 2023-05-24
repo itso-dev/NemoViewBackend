@@ -29,7 +29,7 @@ public class FileUtils {
     private static final Logger logger = LoggerFactory.getLogger(FileUtils.class);
     private static final ObjectMapper mapper = new ObjectMapper();
 
-    public static FILE fileUpload(MultipartFile file, String uploadDir) {
+    public static FILE fileUpload(MultipartFile file, String uploadDir) throws Exception {
         try {
             FILE result = new FILE();
             String uuid = UUID.randomUUID().toString();
@@ -54,7 +54,8 @@ public class FileUtils {
             return result;
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            logger.error(e.getLocalizedMessage());
+            throw new Exception("FileUtils fileUpload error");
         }
     }
 
@@ -253,7 +254,7 @@ public class FileUtils {
         if(saveFiles != null){
             for(MultipartFile file : saveFiles){
                 if(file.getSize() != 0){
-                    FILE fileVo = FileUtils.fileUpload(file, uploadDir);
+                    FILE fileVo = fileUpload(file, uploadDir);
                     newFileList.add(fileVo);
                 }
             }
