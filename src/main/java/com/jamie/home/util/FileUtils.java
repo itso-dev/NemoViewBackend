@@ -54,6 +54,8 @@ public class FileUtils {
             return result;
         } catch (Exception e) {
             e.printStackTrace();
+            logger.error("file name ::: "+file.getOriginalFilename());
+            logger.error("file size ::: "+file.getSize());
             logger.error(e.getLocalizedMessage());
             throw new Exception("FileUtils fileUpload error");
         }
