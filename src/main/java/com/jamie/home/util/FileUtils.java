@@ -37,7 +37,7 @@ public class FileUtils {
             String fileType = oriName.substring(oriName.indexOf("."));
             String path = upload(uploadDir, uuid+fileType, file.getBytes());
 
-            if(MediaUtils.getMediaType(fileType.substring(1)) != null){
+            if(MediaUtils.getMediaType(fileType.substring(1)) != null && file.getSize() >= (1*1024*1024)){
                 String uuid2 = UUID.randomUUID().toString();
                 if(file.getSize() >= (10*1024*1024)){
                     path = uploadResizeImage(path, uploadDir, uuid2+fileType, 0.1f);
