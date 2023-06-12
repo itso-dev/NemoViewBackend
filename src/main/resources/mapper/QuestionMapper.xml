@@ -266,6 +266,10 @@
         INSERT INTO QUESTION_MEMBER_NEW (QUESTION, MEMBER) VALUES (#{question}, #{member})
     </insert>
 
+    <select id="getQuestionMemberNew" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM QUESTION_MEMBER_NEW WHERE QUESTION = #{question} AND MEMBER = #{member}
+    </select>
+
     <resultMap id="QuestionMap" type="com.jamie.home.api.model.QUESTION">
         <result column="QUESTION" property="question"/>
         <result column="MEMBER" property="member"/>

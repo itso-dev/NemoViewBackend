@@ -268,6 +268,11 @@ public class QuestionService extends BasicService{
     }
 
     public int saveClickNew(QUESTION question) {
-        return questionDao.insertQuestionMemberNew(question);
+        Integer result = questionDao.getQuestionMemberNew(question);
+        if(result != null && result != 0){
+            return 1;
+        } else {
+            return questionDao.insertQuestionMemberNew(question);
+        }
     }
 }

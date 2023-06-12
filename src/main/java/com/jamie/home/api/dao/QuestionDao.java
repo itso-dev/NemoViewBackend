@@ -54,4 +54,6 @@ public interface QuestionDao {
     Integer insertQuestionAnswerLike(QUESTION_ANSWER answer);
 
     Integer insertQuestionMemberNew(QUESTION question);
+
+    Integer getQuestionMemberNew(QUESTION question);
 }
