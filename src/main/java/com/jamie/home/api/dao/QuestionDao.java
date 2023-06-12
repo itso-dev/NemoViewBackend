@@ -52,4 +52,6 @@ public interface QuestionDao {
     Integer deleteQuestionAnswerLike(QUESTION_ANSWER answer);
 
     Integer insertQuestionAnswerLike(QUESTION_ANSWER answer);
+
+    Integer insertQuestionMemberNew(QUESTION question);
 }

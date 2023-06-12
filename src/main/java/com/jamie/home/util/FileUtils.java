@@ -30,13 +30,13 @@ public class FileUtils {
     private static final ObjectMapper mapper = new ObjectMapper();
 
     public static FILE fileUpload(MultipartFile file, String uploadDir) throws Exception {
-        try {
-            FILE result = new FILE();
-            String uuid = UUID.randomUUID().toString();
-            String oriName = file.getOriginalFilename();
-            String fileType = oriName.substring(oriName.indexOf("."));
-            String path = upload(uploadDir, uuid+fileType, file.getBytes());
+        FILE result = new FILE();
+        String uuid = UUID.randomUUID().toString();
+        String oriName = file.getOriginalFilename();
+        String fileType = oriName.substring(oriName.indexOf("."));
+        String path = upload(uploadDir, uuid+fileType, file.getBytes());
 
+        try {
             if(MediaUtils.getMediaType(fileType.substring(1)) != null && file.getSize() >= (1*1024*1024)){
                 String uuid2 = UUID.randomUUID().toString();
                 if(file.getSize() >= (10*1024*1024)){
@@ -47,18 +47,17 @@ public class FileUtils {
                     path = uploadResizeImage(path, uploadDir, uuid2+fileType, 0.3f);
                 }
             }
-
-            result.setName(file.getOriginalFilename());
-            result.setUuid(uuid);
-            result.setPath(path);
-            return result;
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("file name ::: "+file.getOriginalFilename());
-            logger.error("file size ::: "+file.getSize());
+            logger.error("file path ::: "+path);
+            logger.error("FileUtils fileUpload error. Resizing fail.");
             logger.error(e.getLocalizedMessage());
-            throw new Exception("FileUtils fileUpload error");
         }
+
+        result.setName(file.getOriginalFilename());
+        result.setUuid(uuid);
+        result.setPath(path);
+        return result;
     }
 
     public static String upload(String uploadPath, String originalName, byte[] fileData)throws Exception{

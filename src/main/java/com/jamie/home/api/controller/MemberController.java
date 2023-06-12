@@ -96,7 +96,7 @@ public class MemberController {
     }
 
     @RequestMapping(value="/login", method= RequestMethod.POST)
-    public ResponseOverlays login(@Value("${jwt.token-validity-in-seconds}") Double expirySec, @Validated @RequestBody MEMBER member) {
+    public ResponseOverlays login(@Value("${jwt.token-validity-in-seconds}") Double expirySec, @Value("${jwt.token-long-validity-in-seconds}") Double expiryLongSec, @Validated @RequestBody MEMBER member) {
         try {
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(member.getEmail(), member.getPassword());
@@ -106,12 +106,15 @@ public class MemberController {
 
             String jwt = null;
             TOKEN token = null;
+            Double expirySecTime = 0.0;
             if(member.getRemember() != null && member.getRemember().booleanValue()){
                 jwt = tokenProvider.createLongToken(authentication);
+                expirySecTime = expiryLongSec;
                 HttpHeaders httpHeaders = new HttpHeaders();
                 httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
             } else {
                 jwt = tokenProvider.createToken(authentication);
+                expirySecTime = expirySec;
                 HttpHeaders httpHeaders = new HttpHeaders();
                 httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
             }
@@ -121,7 +124,7 @@ public class MemberController {
                 memberService.updateLogDate(result);
                 member.setMember(result.getMember());
                 memberService.updateDeviceToken(member);
-                token = new TOKEN(result, jwt, (expirySec/3600.0));
+                token = new TOKEN(result, jwt, (expirySecTime/3600.0));
                 if(member.getRemember() != null && member.getRemember().booleanValue()){
                     REMEMBER remember = new REMEMBER();
                     remember.setMember(result.getMember());

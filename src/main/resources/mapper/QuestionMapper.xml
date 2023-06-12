@@ -84,6 +84,9 @@
             , M.PROFILE AS MEMBER_PROFILE
             , M.NAME AS MEMBER_NAME
             , M.NICKNAME AS MEMBER_NICKNAME
+        <if test="member != null">
+            ,(SELECT COUNT(*) FROM QUESTION_MEMBER_NEW QMN WHERE QMN.QUESTION = Q.QUESTION AND QMN.MEMBER = #{member} )AS SHOW_NEW
+        </if>
         FROM QUESTION Q
             LEFT JOIN MEMBER M on Q.MEMBER = M.MEMBER
         WHERE 1=1
@@ -111,6 +114,9 @@
             , M.PROFILE AS MEMBER_PROFILE
             , M.NAME AS MEMBER_NAME
             , M.NICKNAME AS MEMBER_NICKNAME
+        <if test="member != null">
+            ,(SELECT COUNT(*) FROM QUESTION_MEMBER_NEW QMN WHERE QMN.QUESTION = Q.QUESTION AND QMN.MEMBER = #{member} )AS SHOW_NEW
+        </if>
         FROM QUESTION Q
             LEFT JOIN MEMBER M on Q.MEMBER = M.MEMBER
         WHERE 1=1
@@ -256,6 +262,10 @@
         DELETE FROM QUESTION_ANSWER_LIKE WHERE ANSWER = #{answer} AND MEMBER = #{member}
     </delete>
 
+    <insert id="insertQuestionMemberNew">
+        INSERT INTO QUESTION_MEMBER_NEW (QUESTION, MEMBER) VALUES (#{question}, #{member})
+    </insert>
+
     <resultMap id="QuestionMap" type="com.jamie.home.api.model.QUESTION">
         <result column="QUESTION" property="question"/>
         <result column="MEMBER" property="member"/>
@@ -274,6 +284,7 @@
         <result column="ANSWER_CNT" property="answerCnt"/>
         <result column="REPORT_CNT" property="reportCnt"/>
         <result column="LIKE_CNT" property="likeCnt"/>
+        <result column="SHOW_NEW" property="showNew"/>
         <association property="memberVO" column="MEMBER" javaType="com.jamie.home.api.model.MEMBER">
             <result column="MEMBER_PROFILE" property="profile"/>
             <result column="MEMBER_NAME" property="name"/>

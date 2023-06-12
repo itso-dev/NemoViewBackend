@@ -266,4 +266,8 @@ public class QuestionService extends BasicService{
             return questionDao.insertQuestionAnswerLike(answer);
         }
     }
+
+    public int saveClickNew(QUESTION question) {
+        return questionDao.insertQuestionMemberNew(question);
+    }
 }

@@ -33,6 +33,7 @@ public class QUESTION {
     private Integer answerCnt;
     private Integer reportCnt;
     private Integer likeCnt;
+    private Integer showNew;
     private MEMBER memberVO;
     private List<QUESTION_ANSWER> answer;
 
