@@ -17,6 +17,7 @@ public class REVIEW_REPLY {
     private String content;
     private Integer likeCnt;
     private Integer likeYn;
+    private Integer reReplyYn;
 
     private MEMBER memberVO;
     private List<REVIEW_REPLY> re_replyList;

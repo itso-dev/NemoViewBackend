@@ -243,6 +243,9 @@
             ,(SELECT COUNT(*) FROM REVIEW_REPLY_LIKE RRL WHERE RRL.REPLY = RR.REPLY) AS LIKE_CNT
         <if test="member != null">
             ,(SELECT COUNT(*) FROM REVIEW_REPLY_LIKE RRL WHERE RRL.REPLY = RR.REPLY AND RRL.MEMBER = #{member}) LIKE_YN
+            <if test="reply_key == null">
+            ,(SELECT COUNT(*) FROM REVIEW_REPLY WHERE REPLY_KEY = RR.REPLY AND MEMBER = #{member}) RE_REPLY_YN
+            </if>
         </if>
         FROM REVIEW_REPLY RR
             LEFT JOIN MEMBER M on RR.MEMBER = M.MEMBER
@@ -386,6 +389,7 @@
         <result column="CONTENT" property="content"/>
         <result column="LIKE_CNT" property="likeCnt"/>
         <result column="LIKE_YN" property="likeYn"/>
+        <result column="RE_REPLY_YN" property="reReplyYn"/>
         <association property="memberVO" column="MEMBER" javaType="com.jamie.home.api.model.MEMBER">
             <result column="MEMBER_PROFILE" property="profile"/>
             <result column="MEMBER_NAME" property="name"/>

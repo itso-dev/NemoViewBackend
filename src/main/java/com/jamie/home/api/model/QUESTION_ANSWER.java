@@ -20,6 +20,7 @@ public class QUESTION_ANSWER {
     private Boolean choose;
     private Integer likeCnt;
     private Integer likeYn;
+    private Integer reAnswerYn;
     private String files;
     private ArrayList<MultipartFile> files_new;
 

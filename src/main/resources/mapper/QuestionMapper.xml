@@ -160,6 +160,9 @@
             ,(SELECT COUNT(*) FROM QUESTION_ANSWER_LIKE QAL WHERE QAL.ANSWER = QA.ANSWER) AS LIKE_CNT
         <if test="member != null">
             ,(SELECT COUNT(*) FROM QUESTION_ANSWER_LIKE QAL WHERE QAL.ANSWER = QA.ANSWER AND QAL.MEMBER = #{member}) LIKE_YN
+            <if test="answer_key == null">
+                ,(SELECT COUNT(*) FROM QUESTION_ANSWER WHERE ANSWER_KEY = QA.ANSWER AND MEMBER = #{member}) RE_ANSWER_YN
+            </if>
         </if>
         FROM QUESTION_ANSWER QA
             LEFT JOIN MEMBER M on QA.MEMBER = M.MEMBER
@@ -306,6 +309,7 @@
         <result column="FILES" property="files"/>
         <result column="LIKE_CNT" property="likeCnt"/>
         <result column="LIKE_YN" property="likeYn"/>
+        <result column="RE_ANSWER_YN" property="reAnswerYn"/>
         <association property="memberVO" column="MEMBER" javaType="com.jamie.home.api.model.MEMBER">
             <result column="MEMBER_PROFILE" property="profile"/>
             <result column="MEMBER_NAME" property="name"/>
