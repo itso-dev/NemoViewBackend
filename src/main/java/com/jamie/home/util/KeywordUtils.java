@@ -36,15 +36,17 @@ public class KeywordUtils {
     public static List<Keywords> getCommonKeyword(MEMBER member) {
         List<Keywords> list = new ArrayList<>();
         // 1. 성별
-        list.add(new Keywords(commonType, 0, member.getGender()));
+        list.add(new Keywords(commonType, -1, member.getGender()));
         // 2. 연령대 (회원 가입 과정에서 생년월일 입력 시 자동생성)
-        list.add(new Keywords(commonType, 0, getAges(member.getBirthday())));
+        list.add(new Keywords(commonType, -2, getAges(member.getBirthday())));
+/*
         // 3. 직업
         list.add(new Keywords(commonType, 0, member.getJob()));
         // 4. 한 달 지출 정도
         list.add(new Keywords(commonType, 0, member.getMoney()));
         // 5. 거주 지역 ( “시/도” 분류)
         list.add(new Keywords(commonType, 0, member.getLocation()));
+*/
         return list;
     }
 

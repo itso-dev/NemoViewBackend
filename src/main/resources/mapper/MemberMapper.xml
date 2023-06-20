@@ -207,21 +207,16 @@
     </select>
 
     <select id="getListMemberSameKeyword" resultType="com.jamie.home.api.model.MEMBER">
-        SELECT M.* FROM MEMBER M
+        SELECT DISTINCT M.MEMBER
+        FROM MEMBER M
+            LEFT JOIN MEMBER_ALARM MA on M.MEMBER = MA.MEMBER
         WHERE 1=1
-        AND MEMBER NOT IN (SELECT MEMBER FROM MEMBER_ALARM)
-        AND
-        <foreach collection="keywordList" item="keyword" separator="AND">
+        AND MA.MEMBER_ALARM IS NULL
+        <foreach collection="keywordList" item="keyword" separator=" ">
             <choose>
-                <when test="keyword.type == '1'.toString()">
-                    M.KEYWORDS LIKE CONCAT('%"',#{keyword.value},'"%')
-                </when>
                 <when test="keyword.type == '2'.toString()">
-                    #{keyword.key} IN (SELECT KEYWORD FROM MEMBER_KEYWORD WHERE MEMBER = M.MEMBER)
+                    AND (SELECT COUNT(MKEYWORD) FROM MEMBER_KEYWORD MK WHERE MK.MEMBER = M.MEMBER AND MK.KEYWORD = #{keyword.key})
                 </when>
-                <otherwise>
-                    1 = 1
-                </otherwise>
             </choose>
         </foreach>
     </select>
