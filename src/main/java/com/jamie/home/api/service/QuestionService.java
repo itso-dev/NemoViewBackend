@@ -83,8 +83,8 @@ public class QuestionService extends BasicService{
         }
 
         // 질문등록 시 전체 알림 TYPE 11
-        if(!question.getNokeyword()){
-            search.setKeywordList(KeywordUtils.getKeywordListFromSearch(question.getKeywords()));
+        search.setKeywordList(KeywordUtils.getKeywordListFromSearch(question.getKeywords()));
+        if(search.getKeywordList() != null && search.getKeywordList().size() > 0){
             List<MEMBER> memberList = memberDao.getListMemberSameKeyword(search);
             for(int i=0; i<memberList.size(); i++){
                 INFO info = new INFO();
