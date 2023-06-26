@@ -17,4 +17,6 @@ public interface InfoDao {
     Integer insertInfo(INFO info);
 
     Integer updateInfo(INFO info);
+
+    void insertInfoAll(SEARCH search);
 }

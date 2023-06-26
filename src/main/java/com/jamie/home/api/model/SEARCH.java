@@ -73,6 +73,7 @@ public class SEARCH {
     private String title;
     private String body;
 
+    private List<INFO> info_list;
     public void calStart(){
         this.start = (this.page-1) * this.page_block;
     }

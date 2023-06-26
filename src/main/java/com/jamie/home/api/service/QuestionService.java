@@ -86,6 +86,7 @@ public class QuestionService extends BasicService{
         search.setKeywordList(KeywordUtils.getKeywordListFromSearch(question.getKeywords()));
         if(search.getKeywordList() != null && search.getKeywordList().size() > 0){
             List<MEMBER> memberList = memberDao.getListMemberSameKeyword(search);
+            List<INFO> infoList = new ArrayList<>();
             for(int i=0; i<memberList.size(); i++){
                 INFO info = new INFO();
                 info.setValues(memberList.get(i).getMember(),
@@ -94,9 +95,11 @@ public class QuestionService extends BasicService{
                         "다른 사용자가 도움을 필요로 하고 있어요!\n지금 내용을 확인해 보세요!",
                         "",
                         "[{\"name\":\"input-check.png\",\"uuid\":\"input-check\",\"path\":\"/image/login/input-check.png\"}]");
-                infoDao.insertInfo(info);
+                infoList.add(info);
                 sendPushMessage(memberList.get(i).getMember(), "질문하기", "다른 사용자가 도움을 필요로 하고 있어요!\n지금 내용을 확인해 보세요!");
             }
+            search.setInfo_list(infoList);
+            infoDao.insertInfoAll(search);
         }
         return result;
     }

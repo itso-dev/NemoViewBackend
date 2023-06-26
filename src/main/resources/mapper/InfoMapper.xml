@@ -48,6 +48,22 @@
         </if>
     </insert>
 
+    <insert id="insertInfoAll">
+        INSERT INTO INFO
+            (MEMBER, `KEY`, TITLE, CONTENT, THUMB, TYPE)
+        VALUES
+        <foreach collection="info_list" item="info" separator=",">
+            (
+                #{info.member},
+                #{info.key},
+                #{info.title},
+                #{info.content},
+                #{info.thumb},
+                #{info.type}
+            )
+        </foreach>
+    </insert>
+
     <update id="updateInfo">
         UPDATE INFO SET
             UPDDATE = now()
