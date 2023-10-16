@@ -37,4 +37,5 @@ public interface ReviewDao {
     Integer deleteReviewReplyLike(REVIEW_REPLY reply);
 
     Integer insertReviewReplyLike(REVIEW_REPLY reply);
+    Integer deleteReview(REVIEW review);
 }

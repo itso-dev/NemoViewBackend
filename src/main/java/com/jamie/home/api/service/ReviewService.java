@@ -351,4 +351,18 @@ public class ReviewService extends BasicService{
             return reviewDao.insertReviewReplyLike(reply);
         }
     }
+
+    public void removeDeleteReview() throws Exception {
+        SEARCH search = new SEARCH();
+        search.setState("3");
+        List<REVIEW> list = reviewDao.getListReview(search);
+        for(int i=0; i<list.size(); i++){
+            System.out.println("review ::: " + list.get(i).getReview());
+            System.out.println("photo ::: " + list.get(i).getPhoto());
+            System.out.println("video ::: " + list.get(i).getVideo());
+            FileUtils.modiFiles(null, list.get(i).getPhoto(), null, uploadDir);
+            FileUtils.modiFiles(null, list.get(i).getVideo(), null, uploadDir);
+            reviewDao.deleteReview(list.get(i));
+        }
+    }
 }
