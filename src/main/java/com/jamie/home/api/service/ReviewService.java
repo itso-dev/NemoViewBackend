@@ -224,6 +224,22 @@ public class ReviewService extends BasicService{
             int result = reviewDao.insertReviewReply(reply);
 
             if(result != 0){
+                // 오늘 첫등록 일때 포인트 지급
+                SEARCH paramSearch = new SEARCH();
+                paramSearch.setMember(reply.getMember());
+                paramSearch.setTodayCnt(true);
+                Integer todayCnt = reviewDao.getListReviewReplyCnt(paramSearch);
+
+                if(todayCnt != null && todayCnt.intValue() == 1){
+                    MEMBER member = new MEMBER();
+                    member.setMember(reply.getMember());
+                    MEMBER memberInfo = memberDao.getMember(member);
+
+                    POINT point = new POINT();
+                    point.setValues(memberInfo.getMember(), "1", 3, memberInfo.getPoint() + 3, "리뷰 댓글 작성", "1");
+                    pointDao.insertPoint(point);
+                }
+
                 if(reply.getReply_key() == null){ // 댓글
                     REVIEW param = new REVIEW();
                     param.setReview(reply.getReview());
@@ -268,18 +284,18 @@ public class ReviewService extends BasicService{
         }
     }
 
-    public List<REVIEW_REPLY> listReply(REVIEW review) {
-        List<REVIEW_REPLY> list = reviewDao.getListReviewReply(review);
+    public List<REVIEW_REPLY> listReply(SEARCH search) {
+        List<REVIEW_REPLY> list = reviewDao.getListReviewReply(search);
         for(int i=0; i< list.size(); i++){
             REVIEW_REPLY reply = list.get(i);
-            review.setReply_key(reply.getReply());
-            list.get(i).setRe_replyList(reviewDao.getListReviewReply(review));
+            search.setReply_key(reply.getReply());
+            list.get(i).setRe_replyList(reviewDao.getListReviewReply(search));
         }
         return list;
     }
 
-    public Integer listReplyCnt(REVIEW review) {
-        return reviewDao.getListReviewReplyCnt(review);
+    public Integer listReplyCnt(SEARCH search) {
+        return reviewDao.getListReviewReplyCnt(search);
     }
 
     public Integer modiReviewState(REVIEW review) throws Exception {

@@ -101,6 +101,21 @@ public class QuestionService extends BasicService{
             search.setInfo_list(infoList);
             infoDao.insertInfoAll(search);
         }
+
+        // 오늘 첫등록 일때 포인트 지급
+        SEARCH paramSearch = new SEARCH();
+        paramSearch.setMember(question.getMember());
+        paramSearch.setTodayCnt(true);
+        Integer todayCnt = questionDao.getListQuestionCnt(paramSearch);
+        if(todayCnt != null && todayCnt.intValue() == 1){
+            MEMBER member = new MEMBER();
+            member.setMember(search.getMember());
+            MEMBER memberInfo2 = memberDao.getMember(member);
+
+            POINT point = new POINT();
+            point.setValues(memberInfo2.getMember(), "1", 10, memberInfo2.getPoint() + 10, "커뮤니티 글 작성", "1");
+            pointDao.insertPoint(point);
+        }
         return result;
     }
 
@@ -166,6 +181,22 @@ public class QuestionService extends BasicService{
         int result = questionDao.insertQuestionAnswer(answer);
 
         if(result != 0) {
+            // 오늘 첫등록 일때 포인트 지급
+            SEARCH paramSearch = new SEARCH();
+            paramSearch.setMember(answer.getMember());
+            paramSearch.setTodayCnt(true);
+            Integer todayCnt = questionDao.getListQuestionAnswerCnt(paramSearch);
+
+            if(todayCnt != null && todayCnt.intValue() == 1){
+                MEMBER member = new MEMBER();
+                member.setMember(answer.getMember());
+                MEMBER memberInfo = memberDao.getMember(member);
+
+                POINT point = new POINT();
+                point.setValues(memberInfo.getMember(), "1", 3, memberInfo.getPoint() + 3, "커뮤니티 댓글 작성", "1");
+                pointDao.insertPoint(point);
+            }
+
             if(answer.getAnswer_key() == null){ // 답변
                 QUESTION param = new QUESTION();
                 param.setQuestion(answer.getQuestion());

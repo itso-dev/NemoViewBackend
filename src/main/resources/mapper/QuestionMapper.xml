@@ -50,7 +50,10 @@
                     AND QKEYWORD IS NOT NULL
             )
         </if>
-
+        <if test="todayCnt">
+            AND MEMBER = #{member}
+            AND DATE_FORMAT(REGDATE, '%Y%m%d') = DATE_FORMAT(NOW(), '%Y%m%d'))
+        </if>
     </sql>
     <sql id="questionListOrder">
         ORDER BY
@@ -191,6 +194,10 @@
         <if test="answer_key != null">
             AND ANSWER_KEY = #{answer_key}
         </if>
+        <if test="todayCnt">
+            AND MEMBER = #{member}
+            AND DATE_FORMAT(REGDATE, '%Y%m%d') = DATE_FORMAT(NOW(), '%Y%m%d'))
+        </if>
     </select>
 
     <insert id="insertQuestionAnswer">
@@ -310,6 +317,8 @@
         <result column="LIKE_CNT" property="likeCnt"/>
         <result column="LIKE_YN" property="likeYn"/>
         <result column="RE_ANSWER_YN" property="reAnswerYn"/>
+        <result column="REGDATE" property="regdate"/>
+        <result column="UPDDATE" property="upddate"/>
         <association property="memberVO" column="MEMBER" javaType="com.jamie.home.api.model.MEMBER">
             <result column="MEMBER_PROFILE" property="profile"/>
             <result column="MEMBER_NAME" property="name"/>

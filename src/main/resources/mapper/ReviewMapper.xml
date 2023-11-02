@@ -29,6 +29,9 @@
                 )
             </if>
         </if>
+        <if test="type != null">
+            AND R.TYPE = #{type}
+        </if>
         <if test="category != null">
             AND R.CATEGORY = #{category}
         </if>
@@ -179,19 +182,20 @@
 
     <insert id="insertReview" parameterType="com.jamie.home.api.model.REVIEW" useGeneratedKeys="true" keyProperty="review">
         INSERT INTO REVIEW (
-            MEMBER, CATEGORY, BRAND, NAME, MNUMBER, PHOTO, VIDEO,
+            MEMBER, TYPE, CATEGORY, BRAND, NAME, MNUMBER, PHOTO, VIDEO,
             GRADE, MOTIVE, PLUS, MINUS,
-            PROPOSER, STORE, PRICE, LINK, USETIME, TIP, KEYWORDS
+            PROPOSER, STORE, PRICE, LINK, USETIME, TIP, KEYWORDS, COMMENT
         ) VALUES (
-            #{member}, #{category}, #{brand}, #{name}, #{mnumber}, #{photo}, #{video},
+            #{member}, #{type}, #{category}, #{brand}, #{name}, #{mnumber}, #{photo}, #{video},
             #{grade}, #{motive}, #{plus}, #{minus},
-            #{proposer}, #{store}, #{price}, #{link}, #{usetime}, #{tip}, #{keywords}
+            #{proposer}, #{store}, #{price}, #{link}, #{usetime}, #{tip}, #{keywords}, #{comment}
         )
     </insert>
 
     <update id="updateReview">
         UPDATE REVIEW SET
-            CATEGORY = #{category}
+            TYPE = #{type}
+            ,CATEGORY = #{category}
             ,BRAND = #{brand}
             ,NAME = #{name}
             ,MNUMBER = #{mnumber}
@@ -209,6 +213,7 @@
             ,TIP = #{tip}
             ,KEYWORDS = #{keywords}
             ,STATE = #{state}
+            ,COMMENT = #{comment}
             ,UPDDATE = now()
         WHERE REVIEW = #{review}
     </update>
@@ -264,12 +269,18 @@
         SELECT COUNT(*)
         FROM REVIEW_REPLY
         WHERE 1=1
+        <if test="review == null">
             AND REVIEW = #{review}
+        </if>
         <if test="reply_key == null">
             AND REPLY_KEY IS NULL
         </if>
         <if test="reply_key != null">
             AND REPLY_KEY = #{reply_key}
+        </if>
+        <if test="todayCnt">
+            AND MEMBER = #{member}
+            AND DATE_FORMAT(REGDATE, '%Y%m%d') = DATE_FORMAT(NOW(), '%Y%m%d'))
         </if>
     </select>
 
@@ -349,6 +360,7 @@
     <resultMap id="ReviewMap" type="com.jamie.home.api.model.REVIEW">
         <result column="REVIEW" property="review"/>
         <result column="MEMBER" property="member"/>
+        <result column="TYPE" property="type"/>
         <result column="CATEGORY" property="category"/>
         <result column="BRAND" property="brand"/>
         <result column="NAME" property="name"/>
@@ -369,6 +381,7 @@
         <result column="STATE" property="state"/>
         <result column="KEYWORDS" property="keywords"/>
         <result column="POINT" property="point"/>
+        <result column="COMMENT" property="comment"/>
         <result column="REGDATE" property="regdate"/>
         <result column="UPDDATE" property="upddate"/>
         <result column="LIKE_YN" property="likeYn"/>
@@ -394,6 +407,8 @@
         <result column="LIKE_CNT" property="likeCnt"/>
         <result column="LIKE_YN" property="likeYn"/>
         <result column="RE_REPLY_YN" property="reReplyYn"/>
+        <result column="REGDATE" property="regdate"/>
+        <result column="UPDDATE" property="upddate"/>
         <association property="memberVO" column="MEMBER" javaType="com.jamie.home.api.model.MEMBER">
             <result column="MEMBER_PROFILE" property="profile"/>
             <result column="MEMBER_NAME" property="name"/>

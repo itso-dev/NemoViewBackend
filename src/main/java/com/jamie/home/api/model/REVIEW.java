@@ -15,6 +15,7 @@ import java.util.List;
 public class REVIEW {
     private Integer review;
     private Integer member;
+    private String type;
     private Integer category;
     private String brand;
     private String name;
@@ -34,6 +35,7 @@ public class REVIEW {
     private Integer hits;
     private String state;
     private String keywords;
+    private String comment;
     private Date regdate;
     private Date upddate;
 

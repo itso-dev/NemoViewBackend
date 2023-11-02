@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -18,6 +19,8 @@ public class REVIEW_REPLY {
     private Integer likeCnt;
     private Integer likeYn;
     private Integer reReplyYn;
+    private Date regdate;
+    private Date upddate;
 
     private MEMBER memberVO;
     private List<REVIEW_REPLY> re_replyList;

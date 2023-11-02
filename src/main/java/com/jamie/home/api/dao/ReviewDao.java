@@ -17,8 +17,8 @@ public interface ReviewDao {
     Integer updateReview(REVIEW review);
     Integer upsertReviewlike(REVIEW_LIKE like);
     Integer insertReviewReply(REVIEW_REPLY reply);
-    List<REVIEW_REPLY> getListReviewReply(REVIEW review);
-    Integer getListReviewReplyCnt(REVIEW review);
+    List<REVIEW_REPLY> getListReviewReply(SEARCH search);
+    Integer getListReviewReplyCnt(SEARCH search);
     Integer insertReviewKeywrod(SEARCH search);
     //관리자
     Integer updateReviewState(REVIEW review);

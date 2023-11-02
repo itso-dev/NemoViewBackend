@@ -161,13 +161,13 @@ public class ReviewController {
     }
 
     @RequestMapping(value="/{key}/reply/list", method= RequestMethod.POST)
-    public ResponseOverlays listReply(@PathVariable("key") int key, @Validated @RequestBody REVIEW review) {
+    public ResponseOverlays listReply(@PathVariable("key") int key, @Validated @RequestBody SEARCH search) {
         try {
-            review.setReview(key);
-            List<REVIEW_REPLY> list = reviewService.listReply(review);
+            search.setReview(key);
+            List<REVIEW_REPLY> list = reviewService.listReply(search);
 
             if(list != null){
-                Integer cnt = reviewService.listReplyCnt(review);
+                Integer cnt = reviewService.listReplyCnt(search);
                 VoList<REVIEW_REPLY> result = new VoList<>(cnt, list);
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_REVIEW_REPLY_SUCCESS", result);
             } else {

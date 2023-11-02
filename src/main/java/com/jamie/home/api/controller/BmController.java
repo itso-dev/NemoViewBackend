@@ -76,4 +76,23 @@ public class BmController {
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_COMMON_KEYWORD_FAIL", null);
         }
     }
+
+    @RequestMapping(value="/ad/open", method= RequestMethod.POST)
+    public ResponseOverlays modifyAdOpen(@Validated @RequestBody SEARCH search) {
+        try {
+            if(search.getMember() == null || search.getAd() == null){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "PARAMETER_ERROR", null);
+            } else {
+                int result = mainService.modifyMemberPointAndMemberAdOpen(search);
+                if(result != 0){
+                    return new ResponseOverlays(HttpServletResponse.SC_OK, "CARD_OPEN_SUCCESS", result);
+                } else {
+                    return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "CARD_OPEN_NULL", null);
+                }
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "CARD_OPEN_FAIL", null);
+        }
+    }
 }

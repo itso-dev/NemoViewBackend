@@ -163,6 +163,9 @@
         <if test="birthday != null">
             AND BIRTHDAY = #{birthday}
         </if>
+        <if test="nickname != null">
+            AND NICKNAME = #{nickname}
+        </if>
     </select>
 
     <insert id="insertRemember">
@@ -285,4 +288,8 @@
     <insert id="insertMemberCheckIn">
         INSERT INTO MEMBER_CHECKIN (MEMBER) VALUES (#{member})
     </insert>
+
+    <update id="updateMemberAd">
+        UPDATE MEMBER_AD SET OPEN = TRUE WHERE MEMBER = #{member} AND AD = #{ad} AND DATE_FORMAT(REGDATE, '%Y%m%d') = DATE_FORMAT(NOW(), '%Y%m%d')
+    </update>
 </mapper>

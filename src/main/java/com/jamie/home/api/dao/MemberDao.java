@@ -77,4 +77,6 @@ public interface MemberDao {
     MEMBER getMemberCheckIn(MEMBER member);
 
     Integer insertMemberCheckIn(MEMBER member);
+
+    Integer updateMemberAd(SEARCH search);
 }

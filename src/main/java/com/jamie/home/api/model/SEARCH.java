@@ -23,11 +23,13 @@ public class SEARCH {
     private String name;
     private String birthday;
     private String email;
+    private String nickname;
     private Boolean stopMember;
     private Boolean alertMember;
 
     // 리뷰
     private Integer review;
+    private Integer reply_key;
     private Integer category;
     private Boolean videoYn;
     private String keywords;
@@ -72,6 +74,12 @@ public class SEARCH {
     // push
     private String title;
     private String body;
+
+    // bm
+    private Integer ad;
+
+    // point
+    private Boolean todayCnt;
 
     private List<INFO> info_list;
     public void calStart(){

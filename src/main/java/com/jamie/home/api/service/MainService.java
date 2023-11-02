@@ -111,4 +111,18 @@ public class MainService extends BasicService{
     public List<COMMON_KEYWORD> listCommonKeyword(SEARCH search) {
         return categoryDao.getListCommonKeyword(search);
     }
+
+    public Integer modifyMemberPointAndMemberAdOpen(SEARCH search) {
+        // 포인트 적립
+        MEMBER member = new MEMBER();
+        member.setMember(search.getMember());
+        MEMBER memberInfo = memberDao.getMember(member);
+
+        POINT point = new POINT();
+        point.setValues(memberInfo.getMember(), "1", 5, memberInfo.getPoint() + 5, "카드오픈", "1");
+        pointDao.insertPoint(point);
+
+        // ad open 값 변경
+        return memberDao.updateMemberAd(search);
+    }
 }
