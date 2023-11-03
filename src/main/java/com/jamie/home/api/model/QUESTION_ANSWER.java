@@ -6,6 +6,7 @@ import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -23,7 +24,8 @@ public class QUESTION_ANSWER {
     private Integer reAnswerYn;
     private String files;
     private ArrayList<MultipartFile> files_new;
-
+    private Date regdate;
+    private Date upddate;
     private MEMBER memberVO;
     private List<QUESTION_ANSWER> re_answerList;
 }

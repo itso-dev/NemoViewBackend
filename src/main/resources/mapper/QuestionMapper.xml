@@ -52,7 +52,7 @@
         </if>
         <if test="todayCnt">
             AND MEMBER = #{member}
-            AND DATE_FORMAT(REGDATE, '%Y%m%d') = DATE_FORMAT(NOW(), '%Y%m%d'))
+            AND DATE_FORMAT(REGDATE, '%Y%m%d') = DATE_FORMAT(NOW(), '%Y%m%d')
         </if>
     </sql>
     <sql id="questionListOrder">
@@ -196,7 +196,7 @@
         </if>
         <if test="todayCnt">
             AND MEMBER = #{member}
-            AND DATE_FORMAT(REGDATE, '%Y%m%d') = DATE_FORMAT(NOW(), '%Y%m%d'))
+            AND DATE_FORMAT(REGDATE, '%Y%m%d') = DATE_FORMAT(NOW(), '%Y%m%d')
         </if>
     </select>
 

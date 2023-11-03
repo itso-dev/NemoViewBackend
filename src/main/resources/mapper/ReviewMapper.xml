@@ -38,9 +38,9 @@
         <if test="videoYn">
             AND R.VIDEO != '[]'
         </if>
-        <if test="state != null">
-            AND R.STATE = #{state}
-        </if>
+
+            AND R.STATE = 1 OR  R.STATE = 2
+
         <if test="antiState != null">
             AND R.STATE != #{antiState}
         </if>
@@ -183,11 +183,11 @@
     <insert id="insertReview" parameterType="com.jamie.home.api.model.REVIEW" useGeneratedKeys="true" keyProperty="review">
         INSERT INTO REVIEW (
             MEMBER, TYPE, CATEGORY, BRAND, NAME, MNUMBER, PHOTO, VIDEO,
-            GRADE, MOTIVE, PLUS, MINUS,
+            GRADE, MOTIVE, PLUS, MINUS, state,
             PROPOSER, STORE, PRICE, LINK, USETIME, TIP, KEYWORDS, COMMENT
         ) VALUES (
             #{member}, #{type}, #{category}, #{brand}, #{name}, #{mnumber}, #{photo}, #{video},
-            #{grade}, #{motive}, #{plus}, #{minus},
+            #{grade}, #{motive}, #{plus}, #{minus}, 1,
             #{proposer}, #{store}, #{price}, #{link}, #{usetime}, #{tip}, #{keywords}, #{comment}
         )
     </insert>
@@ -280,7 +280,7 @@
         </if>
         <if test="todayCnt">
             AND MEMBER = #{member}
-            AND DATE_FORMAT(REGDATE, '%Y%m%d') = DATE_FORMAT(NOW(), '%Y%m%d'))
+            AND DATE_FORMAT(REGDATE, '%Y%m%d') = DATE_FORMAT(NOW(), '%Y%m%d')
         </if>
     </select>
 
