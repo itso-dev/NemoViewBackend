@@ -80,6 +80,7 @@ public class SEARCH {
 
     // point
     private Boolean todayCnt;
+    private String content;
 
     private List<INFO> info_list;
     public void calStart(){

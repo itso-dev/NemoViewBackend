@@ -105,14 +105,16 @@ public class QuestionService extends BasicService{
         // 오늘 첫등록 일때 포인트 지급
         SEARCH paramSearch = new SEARCH();
         paramSearch.setMember(question.getMember());
-        paramSearch.setTodayCnt(true);
-        Integer todayCnt = questionDao.getListQuestionCnt(paramSearch);
-        if(todayCnt != null && todayCnt.intValue() == 1){
+        paramSearch.setContent("커뮤니티 글 작성");
+        Integer todayCnt = pointDao.getPointTodayFromContent(paramSearch);
+
+        if(todayCnt != null && todayCnt.intValue() == 0){
             MEMBER member = new MEMBER();
             member.setMember(question.getMember());
             MEMBER memberInfo2 = memberDao.getMember(member);
 
             POINT point = new POINT();
+            // content 바뀔시 위에 paramSearch의 content도 바꿀것
             point.setValues(memberInfo2.getMember(), "1", 10, memberInfo2.getPoint() + 10, "커뮤니티 글 작성", "1");
             pointDao.insertPoint(point);
         }
@@ -184,15 +186,16 @@ public class QuestionService extends BasicService{
             // 오늘 첫등록 일때 포인트 지급
             SEARCH paramSearch = new SEARCH();
             paramSearch.setMember(answer.getMember());
-            paramSearch.setTodayCnt(true);
-            Integer todayCnt = questionDao.getListQuestionAnswerCnt(paramSearch);
+            paramSearch.setContent("커뮤니티 댓글 작성");
+            Integer todayCnt = pointDao.getPointTodayFromContent(paramSearch);
 
-            if(todayCnt != null && todayCnt.intValue() == 1){
+            if(todayCnt != null && todayCnt.intValue() == 0){
                 MEMBER member = new MEMBER();
                 member.setMember(answer.getMember());
                 MEMBER memberInfo = memberDao.getMember(member);
 
                 POINT point = new POINT();
+                // content 바뀔시 위에 paramSearch의 content도 바꿀것
                 point.setValues(memberInfo.getMember(), "1", 3, memberInfo.getPoint() + 3, "커뮤니티 댓글 작성", "1");
                 pointDao.insertPoint(point);
             }

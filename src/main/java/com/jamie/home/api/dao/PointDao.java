@@ -28,4 +28,6 @@ public interface PointDao {
     Integer updateAdminValue(SEARCH search);
 
     POINT getListPointCnts(SEARCH search);
+
+    Integer getPointTodayFromContent(SEARCH search);
 }

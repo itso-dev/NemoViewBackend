@@ -84,4 +84,11 @@
     <select id="getPoint" resultType="com.jamie.home.api.model.POINT">
         SELECT * FROM POINT WHERE POINT = #{point}
     </select>
+
+    <select id="getPointTodayFromContent" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM POINT WHERE MEMBER = #{member}
+            AND CONTENT = #{content}
+            AND DATE_FORMAT(REGDATE, '%Y%m%d') = DATE_FORMAT(NOW(), '%Y%m%d')
+    </select>
 </mapper>

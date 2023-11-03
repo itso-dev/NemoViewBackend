@@ -227,15 +227,16 @@ public class ReviewService extends BasicService{
                 // 오늘 첫등록 일때 포인트 지급
                 SEARCH paramSearch = new SEARCH();
                 paramSearch.setMember(reply.getMember());
-                paramSearch.setTodayCnt(true);
-                Integer todayCnt = reviewDao.getListReviewReplyCnt(paramSearch);
+                paramSearch.setContent("리뷰 댓글 작성");
+                Integer todayCnt = pointDao.getPointTodayFromContent(paramSearch);
 
-                if(todayCnt != null && todayCnt.intValue() == 1){
+                if(todayCnt != null && todayCnt.intValue() == 0){
                     MEMBER member = new MEMBER();
                     member.setMember(reply.getMember());
                     MEMBER memberInfo = memberDao.getMember(member);
 
                     POINT point = new POINT();
+                    // content 바뀔시 위에 paramSearch의 content도 바꿀것
                     point.setValues(memberInfo.getMember(), "1", 3, memberInfo.getPoint() + 3, "리뷰 댓글 작성", "1");
                     pointDao.insertPoint(point);
                 }
