@@ -109,7 +109,7 @@ public class QuestionService extends BasicService{
         Integer todayCnt = questionDao.getListQuestionCnt(paramSearch);
         if(todayCnt != null && todayCnt.intValue() == 1){
             MEMBER member = new MEMBER();
-            member.setMember(search.getMember());
+            member.setMember(question.getMember());
             MEMBER memberInfo2 = memberDao.getMember(member);
 
             POINT point = new POINT();

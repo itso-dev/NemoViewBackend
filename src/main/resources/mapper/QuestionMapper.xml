@@ -51,8 +51,8 @@
             )
         </if>
         <if test="todayCnt">
-            AND MEMBER = #{member}
-            AND DATE_FORMAT(REGDATE, '%Y%m%d') = DATE_FORMAT(NOW(), '%Y%m%d')
+            AND Q.MEMBER = #{member}
+            AND DATE_FORMAT(Q.REGDATE, '%Y%m%d') = DATE_FORMAT(NOW(), '%Y%m%d')
         </if>
     </sql>
     <sql id="questionListOrder">
@@ -187,7 +187,9 @@
         SELECT COUNT(*)
         FROM QUESTION_ANSWER
         WHERE 1=1
+        <if test="question != null">
             AND QUESTION = #{question}
+        </if>
         <if test="answer_key == null">
             AND ANSWER_KEY IS NULL
         </if>

@@ -269,7 +269,7 @@
         SELECT COUNT(*)
         FROM REVIEW_REPLY
         WHERE 1=1
-        <if test="review == null">
+        <if test="review != null">
             AND REVIEW = #{review}
         </if>
         <if test="reply_key == null">
