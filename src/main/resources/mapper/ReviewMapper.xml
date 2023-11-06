@@ -38,9 +38,12 @@
         <if test="videoYn">
             AND R.VIDEO != '[]'
         </if>
-
+        <if test="state == null">
             AND R.STATE = 1 OR  R.STATE = 2
-
+        </if>
+        <if test="state != null">
+            AND R.STATE = #{state}
+        </if>
         <if test="antiState != null">
             AND R.STATE != #{antiState}
         </if>
