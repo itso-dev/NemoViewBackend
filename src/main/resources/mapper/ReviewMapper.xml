@@ -35,15 +35,14 @@
         <if test="videoYn">
             AND R.VIDEO != '[]'
         </if>
-        <if test="state == null">
-                AND R.STATE = 1 OR  R.STATE = 2
+
+        <if test="state != null and state == '6'.toString()"> <!-- 검수대기/노출중 -->
+            AND (R.STATE = 1 OR R.STATE = 2)
         </if>
-        <if test="state != null">
-        <if test="state == '6'.toString()"></if> <!-- All -->
-        <if test="state != '6'.toString()">
+        <if test="state != null and state != '6'.toString()">
             AND R.STATE = #{state}
         </if>
-        </if>
+
         <if test="antiState != null">
             AND R.STATE != #{antiState}
         </if>
@@ -193,7 +192,7 @@
             PROPOSER, STORE, PRICE, LINK, USETIME, TIP, KEYWORDS, COMMENT
         ) VALUES (
             #{member}, #{type}, #{category}, #{brand}, #{name}, #{mnumber}, #{photo}, #{video},
-            #{grade}, #{motive}, #{plus}, #{minus}, 1,
+            #{grade}, #{motive}, #{plus}, #{minus}, #{state},
             #{proposer}, #{store}, #{price}, #{link}, #{usetime}, #{tip}, #{keywords}, #{comment}
         )
     </insert>
