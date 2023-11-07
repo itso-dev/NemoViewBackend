@@ -117,6 +117,9 @@ public class QuestionService extends BasicService{
             // content 바뀔시 위에 paramSearch의 content도 바꿀것
             point.setValues(memberInfo2.getMember(), "1", 10, memberInfo2.getPoint() + 10, "커뮤니티 글 작성", "1");
             pointDao.insertPoint(point);
+
+            memberInfo2.setPoint(point.getValue());
+            memberDao.updateMemberPoint(memberInfo2);
         }
         return result;
     }
@@ -198,6 +201,9 @@ public class QuestionService extends BasicService{
                 // content 바뀔시 위에 paramSearch의 content도 바꿀것
                 point.setValues(memberInfo.getMember(), "1", 3, memberInfo.getPoint() + 3, "커뮤니티 댓글 작성", "1");
                 pointDao.insertPoint(point);
+
+                memberInfo.setPoint(point.getValue());
+                memberDao.updateMemberPoint(memberInfo);
             }
 
             if(answer.getAnswer_key() == null){ // 답변

@@ -117,11 +117,13 @@ public class MainService extends BasicService{
         MEMBER member = new MEMBER();
         member.setMember(search.getMember());
         MEMBER memberInfo = memberDao.getMember(member);
-
+        
         POINT point = new POINT();
         point.setValues(memberInfo.getMember(), "1", 5, memberInfo.getPoint() + 5, "카드오픈", "1");
         pointDao.insertPoint(point);
 
+        memberInfo.setPoint(point.getValue());
+        memberDao.updateMemberPoint(memberInfo);
         // ad open 값 변경
         return memberDao.updateMemberAd(search);
     }

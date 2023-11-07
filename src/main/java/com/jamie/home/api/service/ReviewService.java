@@ -239,6 +239,9 @@ public class ReviewService extends BasicService{
                     // content 바뀔시 위에 paramSearch의 content도 바꿀것
                     point.setValues(memberInfo.getMember(), "1", 3, memberInfo.getPoint() + 3, "리뷰 댓글 작성", "1");
                     pointDao.insertPoint(point);
+
+                    memberInfo.setPoint(point.getValue());
+                    memberDao.updateMemberPoint(memberInfo);
                 }
 
                 if(reply.getReply_key() == null){ // 댓글
